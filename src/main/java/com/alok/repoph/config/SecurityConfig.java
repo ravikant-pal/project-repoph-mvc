@@ -50,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/utilityUser/login").permitAll()
+                .failureUrl("/utilityUser/login-error")
                 .and()
                 .logout().invalidateHttpSession(true)
                 .clearAuthentication(true)

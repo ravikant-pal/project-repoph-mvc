@@ -31,6 +31,15 @@ public class UtilityUserController {
             return "login";
         }
     }
+    @RequestMapping("/login-error")
+    public String loadLogInFormWithError(Principal principal,Model model) {
+        if (principal != null) {
+            return "redirect:/";
+        } else {
+            model.addAttribute("msg","Incorrect username or password");
+            return "login";
+        }
+    }
     @GetMapping("/register")
     public String loadRegisterForm() {
         return "register";
