@@ -1,25 +1,14 @@
 package com.alok.repoph.services;
 
-import com.alok.repoph.exception.UserAlreadyHiredException;
 import com.alok.repoph.models.UtilityUser;
 import com.alok.repoph.repository.UtilityUserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
@@ -35,9 +24,36 @@ public class UtilityUserService {
     @Autowired
     UtilityUserDetailService utilityUserDetailService;
 
-
     @Autowired
     UtilityUserDao utilityUserDao;
+
+
+
+
+//    public ResponseEntity<?> generateAuthenticationToken(AuthenticationRequest authenticationRequest) {
+//        LOGGER.info(">>>>> Entering into jwt token generator ");
+//        try {
+//
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(
+//                            authenticationRequest.getUsername(),
+//                            authenticationRequest.getPassword()
+//                    ));
+//
+//        } catch (BadCredentialsException e) {
+//            LOGGER.error(Arrays.toString(e.getStackTrace()));
+//            LOGGER.info("<<<<< Exiting from jwt token generator ");
+//            return new ResponseEntity<>("Incorrect username or password", HttpStatus.FORBIDDEN);
+//        }
+//
+//
+//        final UserDetails userDetails = utilityUserDetailService
+//                .loadUserByUsername(authenticationRequest.getUsername());
+//
+//        final String jwt = jwtTokenUtil.generateToken(userDetails);
+//        LOGGER.info("<<<<< Exiting from jwt token generator ");
+//        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+//    }
 
     public String registerUtilityUser(UtilityUser utilityUser) throws Exception {
         LOGGER.info(">>>>Entering into registerServiceUserController ");
@@ -63,7 +79,6 @@ public class UtilityUserService {
         LOGGER.info("<<<<<Exiting from registerController ");
         return message;
     }
-
     public UtilityUser findByEmail(String email) {
         return utilityUserDao.findByEmail(email);
     }
