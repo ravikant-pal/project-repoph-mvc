@@ -199,6 +199,16 @@
                 <div class="brand">
                     <img src="https://drive.google.com/uc?id=1kenC2KJ0jyPWPY2OvkLZoidcmsfBP_CR" alt=" circle logo">
                 </div>
+                <span th:if="${msg != null && msg.contains('wrong')}">
+					<div class="alert alert-danger" role="alert">
+						<span th:text="${msg}"></span>
+					</div>
+				</span>
+                <span th:if="${msg != null}">
+					<div class="alert alert-warning" role="alert">
+						<span th:text="${msg}"></span>
+					</div>
+				</span>
                 <div class="card fat">
                     <div class="card-body">
                         <h4 class="card-title">Sign up</h4>
@@ -318,7 +328,7 @@
                                 </button>
                             </div>
                             <div class="mt-4 text-center">
-                                Already have an account? <a href="login.html">Login</a>
+                                Already have an account? <a href="/utilityUser/login">Login</a>
                             </div>
                         </form>
                     </div>

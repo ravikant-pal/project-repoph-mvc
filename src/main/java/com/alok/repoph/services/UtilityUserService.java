@@ -30,9 +30,6 @@ public class UtilityUserService {
 
 
 
-
-
-
 //    public ResponseEntity<?> generateAuthenticationToken(AuthenticationRequest authenticationRequest) {
 //        LOGGER.info(">>>>> Entering into jwt token generator ");
 //        try {
@@ -58,8 +55,30 @@ public class UtilityUserService {
 //        return ResponseEntity.ok(new AuthenticationResponse(jwt));
 //    }
 
+    public String registerUtilityUser(UtilityUser utilityUser) throws Exception {
+        LOGGER.info(">>>>Entering into registerServiceUserController ");
+        UtilityUser utilityUserFromDatabase;
+        utilityUserFromDatabase = utilityUserDao.findByEmail(utilityUser.getEmail());
+        String message = "";
+        if (utilityUserFromDatabase != null) {
+            message = "This username already exists! Please try another ";
+            return message;
+        } else {
+            if(utilityUser.getRole().equalsIgnoreCase("service")) {
+                utilityUser.setRole("SERVICE_USER");
+            }
+            else  {
+                utilityUser.setRole("END_USER");
+            }
+            String encryptedPassword = passwordEncoder.encode(utilityUser.getPassword());
+            utilityUser.setPassword(encryptedPassword);
+            utilityUserDao.save(utilityUser);
+            message = "You are successfully Registered! Please login ";
+        }
 
-
+        LOGGER.info("<<<<<Exiting from registerController ");
+        return message;
+    }
     public UtilityUser findByEmail(String email) {
         return utilityUserDao.findByEmail(email);
     }
