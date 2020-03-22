@@ -78,3 +78,12 @@ h1, p {
     padding: 5px;
     margin-bottom: 10px;
 }
+
+
+.i-circle {
+    background: #048004;
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: 50%;
+    font-size: 20px;
+}

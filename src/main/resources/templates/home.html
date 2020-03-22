@@ -26,7 +26,7 @@
 
         }
     </script>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" type="text/css" href="../static/css/home.css" />
 </head>
 <body>
 <nav class="navbar  sticky-top navbar-light alert-danger justify-content-between ">
@@ -38,8 +38,16 @@
         <form>
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            <a class="btn btn-link my-2 my-sm-0" href="/utilityUser/login">Log in</a>
-            <a class="btn btn-link my-2 my-sm-0" href="/utilityUser/register">Sign up</a>
+
+            <span sec:authorize="isAuthenticated()">
+                <span class="i-circle" th:text="${#authentication.getName().toUpperCase().charAt(0)}"></span>
+                <a class="btn btn-link my-2 my-sm-0" href="/utilityUser/logout">Log out</a>
+            </span>
+            <span sec:authorize="!isAuthenticated()">
+                <a class="btn btn-link my-2 my-sm-0" href="/utilityUser/login">Log in</a>
+                <a class="btn btn-link my-2 my-sm-0" href="/utilityUser/register">Sign up</a>
+            </span>
+
         </form>
     </div>
 </nav>
