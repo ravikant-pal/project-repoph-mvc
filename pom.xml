@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.alok</groupId>
-	<artifactId>p-demo</artifactId>
+	<artifactId>Repoph</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>p-demo</name>
+	<name>Repoph</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
