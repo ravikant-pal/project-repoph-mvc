@@ -22,7 +22,7 @@ public class UtilityUserService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    UtilityUserDetailService utilityUserDetailService;
+    UtilityUserServiceImpl utilityUserServiceImpl;
 
     @Autowired
     UtilityUserDao utilityUserDao;

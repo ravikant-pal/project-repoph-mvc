@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/utilityUser")
 public class UtilityUserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UtilityUserController.class);
@@ -40,12 +39,12 @@ public class UtilityUserController {
             return "login";
         }
     }
-    @GetMapping("/register")
+    @GetMapping("/registration")
     public String loadRegisterForm() {
         return "register";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/registration")
     public String registerEndUser(@ModelAttribute("userForm") UtilityUser utilityUser, @RequestParam( defaultValue = "false", required = false, name ="serviceOrEnd") Boolean serviceOrEnd, Model model , RedirectAttributes redirectAttributes) {
         LOGGER.info(">>>>>Entering into registerController");
         System.out.println(utilityUser.getEmail()+" "+utilityUser.getFullName()+ " "+serviceOrEnd);
@@ -69,6 +68,6 @@ public class UtilityUserController {
         }
         //redirectAttributes.addAttribute("string", "this will be converted into string, if not already");
         redirectAttributes.addFlashAttribute("msg" ,message);
-        return "redirect:/utilityUser/login";
+        return "redirect:/login";
     }
 }
