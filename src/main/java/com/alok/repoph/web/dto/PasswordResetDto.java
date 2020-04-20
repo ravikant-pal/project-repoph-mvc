@@ -1,4 +1,4 @@
-package com.alok.repoph.dto;
+package com.alok.repoph.web.dto;
 import com.alok.repoph.constraint.FieldMatch;
 
 import javax.validation.constraints.NotEmpty;

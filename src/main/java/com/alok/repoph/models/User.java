@@ -16,15 +16,16 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"),name = "app_user")
 @ToString
-public class UtilityUser implements Serializable {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String fullName;
+    private String firstName;
+    private String lastName;
 
     @NotNull(message = "password is mandatory.")
     private String password;
@@ -44,8 +45,6 @@ public class UtilityUser implements Serializable {
 
     private Date hireTime;
 
-    private String role;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",
@@ -59,12 +58,21 @@ public class UtilityUser implements Serializable {
     private List<String> occupations;
 
     @ManyToMany
-    private List<UtilityUser> listOfHiredPeople;
+    private List<User> listOfHiredPeople;
 
-    public UtilityUser(String fullName, String email, String password) {
-        this.fullName = fullName;
+    public User(String firstName,String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName =lastName;
         this.email = email;
         this.password = password;
+    }
+
+    public User(String firstName, String lastName, String email, String password, Collection<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.alok.repoph.controller;
+package com.alok.repoph.web;
 
 import com.alok.repoph.services.UtilityUserService;
 import org.slf4j.Logger;

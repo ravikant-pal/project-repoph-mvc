@@ -1,49 +1,50 @@
-### ===============================
-### = Hibernate datasource
-### ===============================
-#spring:
-#  datasource:
-#    url: jdbc:postgresql://localhost/postgres?characterEncoding=UTF-8
-#    username: postgres
-#    password: V0ldm0tbr0
-#
-###  # ===============================
-###  # = resources configurations
-###  # ===============================
-#  resources:
-#    static-locations: classpath:/static/
-##  # ===============================
-##  # = JPA configurations
-##  # ===============================
-#  jpa:
-#    show-sql: true
-#    hibernate:
-#      ddl-auto: update #create-drop
-#    database-platform: postgres
-#    properties:
-#      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
-#
-##  # ===============================
-##  # = MAIL configurations
-##  # ===============================
-#  mail:
-#    default-encoding: UTF-8
-#    host: smtp.gmail.com
-#    username: ravikantpal010@gmail.com
-#    password: morgaina
-#    port: 587
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
-#    protocol: smtp
-#    test-connection: false
-##
-### ===============================
-### = Logging configurations
-### ===============================
+# ===============================
+# = Hibernate datasource
+# ===============================
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/postgres?characterEncoding=UTF-8
+    username: postgres
+    password: V0ldm0tbr0
+    platform: postgres
+
+  # ===============================
+  # = Resource configurations
+  # ===============================
+  resources:
+    static-locations: classpath:/static/
+
+  # ===============================
+  # = JPA configurations
+  # ===============================
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update #create-drop
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # ===============================
+  # = MAIL configurations
+  # ===============================
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: acgy1029@gmail.com
+    password: p@55W0rds
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    test-connection: false
+
+# ===============================
+# = Logging configurations
+# ===============================
 #logging:
 #  level:
 #    root: WARN

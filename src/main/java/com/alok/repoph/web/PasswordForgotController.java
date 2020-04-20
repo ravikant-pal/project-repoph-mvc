@@ -1,12 +1,12 @@
-package com.alok.repoph.controller;
+package com.alok.repoph.web;
 
-import com.alok.repoph.dto.PasswordForgotDto;
 import com.alok.repoph.models.Mail;
 import com.alok.repoph.models.PasswordResetToken;
-import com.alok.repoph.models.UtilityUser;
+import com.alok.repoph.models.User;
 import com.alok.repoph.repository.PasswordResetTokenDao;
 import com.alok.repoph.services.EmailService;
-import com.alok.repoph.services.UtilityUserService;
+import com.alok.repoph.services.UserService;
+import com.alok.repoph.web.dto.PasswordForgotDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -25,9 +25,8 @@ import java.util.UUID;
 @RequestMapping("/forgot-password")
 public class PasswordForgotController {
 
-    @Autowired
-    private UtilityUserService utilityUserService;
-    @Autowired private PasswordResetTokenDao tokenDao;
+    @Autowired private UserService userService;
+    @Autowired private PasswordResetTokenDao tokenRepository;
     @Autowired private EmailService emailService;
 
     @ModelAttribute("forgotPasswordForm")
@@ -49,7 +48,7 @@ public class PasswordForgotController {
             return "forgot-password";
         }
 
-        UtilityUser user = utilityUserService.findByEmail(form.getEmail());
+        User user = userService.findByEmail(form.getEmail());
         if (user == null){
             result.rejectValue("email", null, "We could not find an account for that e-mail address.");
             return "forgot-password";
@@ -59,20 +58,21 @@ public class PasswordForgotController {
         token.setToken(UUID.randomUUID().toString());
         token.setUser(user);
         token.setExpiryDate(30);
-        tokenDao.save(token);
+        tokenRepository.save(token);
 
         Mail mail = new Mail();
-        mail.setFrom("acgy1029@memorynotfound.com");
+        mail.setFrom("no-reply@repoph.com");
         mail.setTo(user.getEmail());
         mail.setSubject("Password reset request");
 
         Map<String, Object> model = new HashMap<>();
         model.put("token", token);
         model.put("user", user);
-        model.put("signature", "https://memorynotfound.com");
+        model.put("signature", "https://forget-pass-test.herokuapp.com");
         String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
         model.put("resetUrl", url + "/reset-password?token=" + token.getToken());
         mail.setModel(model);
+        System.out.println("reset url is ------> "+model.get("resetUrl"));
         emailService.sendEmail(mail);
 
         return "redirect:/forgot-password?success";

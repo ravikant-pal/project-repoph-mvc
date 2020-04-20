@@ -5,8 +5,7 @@
     <meta name="author" content="Kodinger">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Repoph &mdash; Sign in</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/css/login-register-forget-reset.css">
 </head>
 
@@ -18,15 +17,15 @@
                 <div class="brand">
                     <img src="https://drive.google.com/uc?id=1kenC2KJ0jyPWPY2OvkLZoidcmsfBP_CR" alt="circle logo">
                 </div>
-<!--				<span th:if="${msg != null && msg.length()!=0 && !(msg.contains('wrong') || msg.contains('Incorrect'))}">-->
-<!--					<div class="alert alert-success" role="alert">-->
-<!--						<span th:text="${msg}"></span>-->
-<!--					</div>-->
-<!--				</span>-->
-<!--                <span th:if="${msg != null && msg.length()!=0 && (msg.contains('wrong') || msg.contains('Incorrect'))}">-->
-<!--					<div class="alert alert-danger" role="alert">-->
-<!--						<span th:text="${msg}"></span>-->
-<!--					</div>-->
+				<span th:if="${msg != null && msg.length()!=0 && !(msg.contains('wrong') || msg.contains('Incorrect'))}">
+					<div class="alert alert-success" role="alert">
+						<span th:text="${msg}"></span>
+					</div>
+				</span>
+                <span th:if="${msg != null && msg.length()!=0 && (msg.contains('wrong') || msg.contains('Incorrect'))}">
+					<div class="alert alert-danger" role="alert">
+						<span th:text="${msg}"></span>
+					</div>
 				</span>
                 <div class="card fat">
                     <div class="card-body">
@@ -65,7 +64,7 @@
                                 </button>
                             </div>
                             <div class="mt-4 text-center">
-                                Don't have an account? <a href="/utilityUser/register">Create One</a>
+                                Don't have an account? <a href="/user/register">Create One</a>
                             </div>
                         </form>
                     </div>

@@ -1,7 +1,7 @@
 package com.alok.repoph.services;
 
-import com.alok.repoph.models.UtilityUser;
-import com.alok.repoph.repository.UtilityUserDao;
+import com.alok.repoph.models.User;
+import com.alok.repoph.repository.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,10 @@ public class UtilityUserService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    UtilityUserServiceImpl utilityUserServiceImpl;
+    UserServiceImpl userServiceImpl;
 
     @Autowired
-    UtilityUserDao utilityUserDao;
+    UserDao userDao;
 
 
 
@@ -55,37 +55,37 @@ public class UtilityUserService {
 //        return ResponseEntity.ok(new AuthenticationResponse(jwt));
 //    }
 
-    public String registerUtilityUser(UtilityUser utilityUser) throws Exception {
-        LOGGER.info(">>>>Entering into registerServiceUserController ");
-        UtilityUser utilityUserFromDatabase;
-        utilityUserFromDatabase = utilityUserDao.findByEmail(utilityUser.getEmail());
-        String message = "";
-        if (utilityUserFromDatabase != null) {
-            message = "This username already exists! Please try another ";
-            return message;
-        } else {
-            if(utilityUser.getRole().equalsIgnoreCase("service")) {
-                utilityUser.setRole("SERVICE_USER");
-            }
-            else  {
-                utilityUser.setRole("END_USER");
-            }
-            String encryptedPassword = passwordEncoder.encode(utilityUser.getPassword());
-            utilityUser.setPassword(encryptedPassword);
-            utilityUserDao.save(utilityUser);
-            message = "You are successfully Registered! Please login ";
-        }
-
-        LOGGER.info("<<<<<Exiting from registerController ");
-        return message;
-    }
-    public UtilityUser findByEmail(String email) {
-        return utilityUserDao.findByEmail(email);
-    }
-
-    public List<UtilityUser> findAllUtilityUsers() {
-        return utilityUserDao.findAllByRole("SERVICE_USER");
-    }
+//    public String registerUtilityUser(User user) throws Exception {
+//        LOGGER.info(">>>>Entering into registerServiceUserController ");
+//        User userFromDatabase;
+//        userFromDatabase = userDao.findByEmail(user.getEmail());
+//        String message = "";
+//        if (userFromDatabase != null) {
+//            message = "This username already exists! Please try another ";
+//            return message;
+//        } else {
+//            if(user.getRole().equalsIgnoreCase("service")) {
+//                user.setRole("SERVICE_USER");
+//            }
+//            else  {
+//                user.setRole("END_USER");
+//            }
+//            String encryptedPassword = passwordEncoder.encode(user.getPassword());
+//            user.setPassword(encryptedPassword);
+//            userDao.save(user);
+//            message = "You are successfully Registered! Please login ";
+//        }
+//
+//        LOGGER.info("<<<<<Exiting from registerController ");
+//        return message;
+//    }
+//    public User findByEmail(String email) {
+//        return userDao.findByEmail(email);
+//    }
+//
+//    public List<User> findAllUtilityUsers() {
+//        return userDao.findAllByRole("SERVICE_USER");
+//    }
 
 
 

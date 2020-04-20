@@ -1,4 +1,4 @@
-package com.alok.repoph.dto;
+package com.alok.repoph.web.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

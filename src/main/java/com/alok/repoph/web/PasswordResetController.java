@@ -1,8 +1,8 @@
-package com.alok.repoph.controller;
+package com.alok.repoph.web;
 
-import com.alok.repoph.dto.PasswordResetDto;
+import com.alok.repoph.web.dto.PasswordResetDto;
 import com.alok.repoph.models.PasswordResetToken;
-import com.alok.repoph.models.UtilityUser;
+import com.alok.repoph.models.User;
 import com.alok.repoph.repository.PasswordResetTokenDao;
 import com.alok.repoph.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +62,7 @@ public class PasswordResetController {
         }
 
         PasswordResetToken token = tokenDao.findByToken(form.getToken());
-        UtilityUser user = token.getUser();
+        User user = token.getUser();
         String updatedPassword = passwordEncoder.encode(form.getPassword());
         userService.updatePassword(updatedPassword, user.getId());
         tokenDao.delete(token);
