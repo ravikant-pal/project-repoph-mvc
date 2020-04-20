@@ -41,14 +41,15 @@
 
             <span sec:authorize="isAuthenticated()">
                 <span class="i-circle" th:text="${#authentication.getName().toUpperCase().charAt(0)}"></span>
-                <a class="btn btn-link my-2 my-sm-0" href="/utilityUser/logout">Log out</a>
+                <a class="btn btn-link my-2 my-sm-0" href="/logout">Log out</a>
             </span>
             <span sec:authorize="!isAuthenticated()">
-                <a class="btn btn-link my-2 my-sm-0" href="/utilityUser/login">Log in</a>
-                <a class="btn btn-link my-2 my-sm-0" href="/utilityUser/register">Sign up</a>
+                <a class="btn btn-link my-2 my-sm-0" href="/login">Log in</a>
+                <a class="btn btn-link my-2 my-sm-0" href="/registration">Sign up</a>
             </span>
 
         </form>
+
     </div>
 </nav>
 <div class="wrapper">

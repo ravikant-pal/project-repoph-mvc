@@ -5,9 +5,8 @@
     <meta name="author" content="Kodinger">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Repoph &mdash; Sign in</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="../static/css/login-register-forget-reset.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/login-register-forget-reset.css">
 </head>
 
 <body class="my-login-page">
@@ -31,11 +30,10 @@
                 <div class="card fat">
                     <div class="card-body">
                         <h4 class="card-title">Sign in to Repoph</h4>
-                        <form action="/utilityUser/login" method="POST" class="my-login-validation" novalidate=""
-                              modelattribute="authentication">
+                        <form th:action="@{/login}" th:object="${loginForm}" method="post" class="my-login-validation" novalidate="">
                             <div class="form-group">
                                 <label for="email">E-Mail Address</label>
-                                <input id="email" type="email" class="form-control" name="username" value="" required
+                                <input id="email" type="email" class="form-control" th:field="*{username}" value="" required
                                        autofocus>
                                 <div class="invalid-feedback">
                                     Email is invalid
@@ -43,11 +41,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="password">Password
-                                    <a href="forgot.html" class="float-right">
+                                    <a href="/forgot-password" class="float-right">
                                         Forgot Password?
                                     </a>
                                 </label>
-                                <input id="password" type="password" class="form-control" name="password" required
+                                <input id="password" type="password" class="form-control"  th:field="*{password}" required
                                        data-eye>
                                 <div class="invalid-feedback">
                                     Password is required
@@ -65,7 +63,7 @@
                                 </button>
                             </div>
                             <div class="mt-4 text-center">
-                                Don't have an account? <a href="/utilityUser/register">Create One</a>
+                                Don't have an account? <a href="/registration">Create One</a>
                             </div>
                         </form>
                     </div>
@@ -87,6 +85,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-<script src="../static/js/login-register-forget-reset.js"></script>
+<script type="text/javascript" src="../static/js/login-register-forget-reset.js"></script>
 </body>
 </html>

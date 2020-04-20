@@ -1,26 +1,39 @@
-package com.alok.repoph.controller;
+package com.alok.repoph.web;
 
-import com.alok.repoph.models.UtilityUser;
+import com.alok.repoph.services.UserServiceImpl;
 import com.alok.repoph.services.UtilityUserService;
+import com.alok.repoph.web.dto.UserLoginDto;
+import com.alok.repoph.web.dto.UserRegistrationDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/utilityUser")
-public class UtilityUserController {
+public class UserController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UtilityUserController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     UtilityUserService utilityUserService;
 
+    @Autowired
+    UserServiceImpl userService;
+
+
+
+
+    @ModelAttribute("loginForm")
+    public UserLoginDto loginDto() {
+        return new UserLoginDto();
+    }
 
     @GetMapping("/login")
     public String loadLogInForm(@ModelAttribute("msg") String message,Principal principal,Model model) {
@@ -28,47 +41,51 @@ public class UtilityUserController {
             return "redirect:/";
         } else {
             model.addAttribute("msg",message);
-            return "login";
+            return "user-login";
         }
     }
+
     @RequestMapping("/login-error")
     public String loadLogInFormWithError(Principal principal,Model model) {
         if (principal != null) {
             return "redirect:/";
         } else {
             model.addAttribute("msg","Incorrect username or password");
-            return "login";
+            return "user-login";
         }
-    }
-    @GetMapping("/register")
-    public String loadRegisterForm() {
-        return "register";
     }
 
-    @PostMapping("/register")
-    public String registerEndUser(@ModelAttribute("userForm") UtilityUser utilityUser, @RequestParam( defaultValue = "false", required = false, name ="serviceOrEnd") Boolean serviceOrEnd, Model model , RedirectAttributes redirectAttributes) {
+    @ModelAttribute("registrationForm")
+    public UserRegistrationDto forgotPasswordDto() {
+        return new UserRegistrationDto();
+    }
+
+    @GetMapping("/registration")
+    public String loadRegisterForm() {
+        return "user-registration";
+    }
+
+    @PostMapping("/registration")
+    public String registerEndUser(@ModelAttribute("registrationForm") @Valid UserRegistrationDto form,
+                                  BindingResult result, Model model,@RequestParam( defaultValue = "false", required = false, name ="serviceOrEnd") Boolean role, RedirectAttributes redirectAttributes) {
+        form.setRole(role);
         LOGGER.info(">>>>>Entering into registerController");
-        System.out.println(utilityUser.getEmail()+" "+utilityUser.getFullName()+ " "+serviceOrEnd);
-        String message =null;
-        if ((serviceOrEnd)) {
-            utilityUser.setRole("service");
-        } else {
-            utilityUser.setRole("end");
-        }
+        String message;
         try {
-             message= utilityUserService.registerUtilityUser(utilityUser);
+             message= userService.saveUser(form);
             LOGGER.info("<<<<<Exiting from registerController");
             model.addAttribute("msg",message);
             if(message.contains("already")) {
-                return "register";
+                return "user-registration";
             }
 
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from registerController");
             model.addAttribute("msg","Something went wrong !");
+            return "user-registration";
         }
         //redirectAttributes.addAttribute("string", "this will be converted into string, if not already");
         redirectAttributes.addFlashAttribute("msg" ,message);
-        return "redirect:/utilityUser/login";
+        return "redirect:/login";
     }
 }

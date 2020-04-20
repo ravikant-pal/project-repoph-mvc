@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class UtilityUserDetailImp  implements UserDetails{
+public class UserDetailImp implements UserDetails{
     String ROLE_PREFIX = "ROLE_";
     private String utilityUserName;
     private String password;
     private String role;
 
-    public UtilityUserDetailImp(String utilityUserName, String password, String role) {
+    public UserDetailImp(String utilityUserName, String password, String role) {
         this.utilityUserName = utilityUserName;
         this.password = password;
         this.role = role;

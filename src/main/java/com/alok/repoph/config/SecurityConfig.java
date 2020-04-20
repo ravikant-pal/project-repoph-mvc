@@ -1,15 +1,15 @@
 package com.alok.repoph.config;
 
+import com.alok.repoph.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -18,16 +18,22 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Qualifier("utilityUserDetailService")
+    @Qualifier("userServiceImpl")
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserService userService;
+
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(new BCryptPasswordEncoder());
-        provider.setUserDetailsService(userDetailsService);
-        return provider;
+    public DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+        auth.setUserDetailsService(userService);
+        auth.setPasswordEncoder(passwordEncoder());
+        return auth;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
     }
 
     @Bean
@@ -38,23 +44,43 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests().antMatchers("/").permitAll()
+                .authorizeRequests()
+                .antMatchers("/registration/**","/forgot-password/**","/reset-password/**").permitAll()
+                .antMatchers(
+                        "/static/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                    .formLogin()
+                        .loginPage("/login")
+                            .permitAll()
+                                .failureUrl("/login-error")
+                .and()
+                    .logout()
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/login?logout")
+                .permitAll();
+
+//        /login?logout
+//        http
+//                .csrf().disable()
+//                .authorizeRequests().antMatchers("/").permitAll()
 //                .anyRequest().authenticated()
 //                .antMatchers("/create-post/**").authenticated()
 //                .antMatchers("/create-category/**").authenticated()
 //                .antMatchers("/delete-post/**").authenticated()
 //                .antMatchers("/update-post/**").authenticated()
-                .and()
-                .rememberMe()
-                .and()
-                .formLogin()
-                .loginPage("/utilityUser/login").permitAll()
-                .failureUrl("/utilityUser/login-error")
-                .and()
-                .logout().invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/utilityUser/logout"))
-                .logoutSuccessUrl("/").permitAll();
+//                .and()
+//                .rememberMe()
+//                .and()
+//                .formLogin()
+//                .loginPage("/utilityUser/login").permitAll()
+//                .failureUrl("/utilityUser/login-error")
+//                .and()
+//                .logout().invalidateHttpSession(true)
+//                .clearAuthentication(true)
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/utilityUser/logout"))
+//                .logoutSuccessUrl("/").permitAll();
     }
 }
