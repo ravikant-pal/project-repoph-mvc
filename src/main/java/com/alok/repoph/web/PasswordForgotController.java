@@ -72,7 +72,6 @@ public class PasswordForgotController {
         String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
         model.put("resetUrl", url + "/reset-password?token=" + token.getToken());
         mail.setModel(model);
-        System.out.println("reset url is ------> "+model.get("resetUrl"));
         emailService.sendEmail(mail);
 
         return "redirect:/forgot-password?success";

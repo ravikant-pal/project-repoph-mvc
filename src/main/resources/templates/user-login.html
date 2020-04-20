@@ -30,11 +30,10 @@
                 <div class="card fat">
                     <div class="card-body">
                         <h4 class="card-title">Sign in to Repoph</h4>
-                        <form action="/login" method="POST" class="my-login-validation" novalidate=""
-                              modelattribute="authentication">
+                        <form th:action="@{/login}" th:object="${loginForm}" method="post" class="my-login-validation" novalidate="">
                             <div class="form-group">
                                 <label for="email">E-Mail Address</label>
-                                <input id="email" type="email" class="form-control" name="username" value="" required
+                                <input id="email" type="email" class="form-control" th:field="*{username}" value="" required
                                        autofocus>
                                 <div class="invalid-feedback">
                                     Email is invalid
@@ -46,7 +45,7 @@
                                         Forgot Password?
                                     </a>
                                 </label>
-                                <input id="password" type="password" class="form-control" name="password" required
+                                <input id="password" type="password" class="form-control"  th:field="*{password}" required
                                        data-eye>
                                 <div class="invalid-feedback">
                                     Password is required
@@ -64,7 +63,7 @@
                                 </button>
                             </div>
                             <div class="mt-4 text-center">
-                                Don't have an account? <a href="/user/register">Create One</a>
+                                Don't have an account? <a href="/registration">Create One</a>
                             </div>
                         </form>
                     </div>

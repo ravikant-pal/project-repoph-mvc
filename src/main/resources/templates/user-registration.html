@@ -33,7 +33,7 @@
 						<span th:text="${msg}"></span>
 					</div>
 				</span>
-                <span th:if="${msg != null}">
+                <span th:if="${msg != null && !msg.contains('wrong')}">
 					<div class="alert alert-warning" role="alert">
 						<span th:text="${msg}"></span>
 					</div>

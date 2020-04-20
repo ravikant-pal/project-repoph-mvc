@@ -2,6 +2,7 @@ package com.alok.repoph.web;
 
 import com.alok.repoph.services.UserServiceImpl;
 import com.alok.repoph.services.UtilityUserService;
+import com.alok.repoph.web.dto.UserLoginDto;
 import com.alok.repoph.web.dto.UserRegistrationDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,24 +30,31 @@ public class UserController {
 
 
 
+    @ModelAttribute("loginForm")
+    public UserLoginDto loginDto() {
+        return new UserLoginDto();
+    }
+
     @GetMapping("/login")
     public String loadLogInForm(@ModelAttribute("msg") String message,Principal principal,Model model) {
         if (principal != null) {
             return "redirect:/";
         } else {
             model.addAttribute("msg",message);
-            return "login";
+            return "user-login";
         }
     }
+
     @RequestMapping("/login-error")
     public String loadLogInFormWithError(Principal principal,Model model) {
         if (principal != null) {
             return "redirect:/";
         } else {
             model.addAttribute("msg","Incorrect username or password");
-            return "login";
+            return "user-login";
         }
     }
+
     @ModelAttribute("registrationForm")
     public UserRegistrationDto forgotPasswordDto() {
         return new UserRegistrationDto();
@@ -59,8 +67,8 @@ public class UserController {
 
     @PostMapping("/registration")
     public String registerEndUser(@ModelAttribute("registrationForm") @Valid UserRegistrationDto form,
-                                  BindingResult result, Model model,@RequestParam("serviceOrEnd") Boolean role , RedirectAttributes redirectAttributes) {
-        System.out.println("-------------------"+role);
+                                  BindingResult result, Model model,@RequestParam( defaultValue = "false", required = false, name ="serviceOrEnd") Boolean role, RedirectAttributes redirectAttributes) {
+        form.setRole(role);
         LOGGER.info(">>>>>Entering into registerController");
         String message;
         try {

@@ -66,7 +66,7 @@ public class PasswordResetController {
         String updatedPassword = passwordEncoder.encode(form.getPassword());
         userService.updatePassword(updatedPassword, user.getId());
         tokenDao.delete(token);
-
+        redirectAttributes.addFlashAttribute("msg", "You've successfully reset your password . Please login!");
         return "redirect:/login?resetSuccess";
     }
 

@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin()
                         .loginPage("/login")
                             .permitAll()
-//                                .failureUrl("/login-error")
+                                .failureUrl("/login-error")
                 .and()
                     .logout()
                         .invalidateHttpSession(true)
