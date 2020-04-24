@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Ravikant">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Repoph &mdash; Update Skill</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../static/assets/vendor/icofont/icofont.min.css" rel="stylesheet"/>
+    <link href="../static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"/>
+    <link href="../static/assets/vendor/venobox/venobox.css" rel="stylesheet"/>
+    <link href="../static/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet"/>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../static/css/login-register-forget-reset.css">
+    <script th:inline="javascript">
+        let skills = [];
+        skills = [[${skills}]];
+        (function () {
+            console.log(skills);
+        })();
+    </script>
+</head>
+<body class="my-login-page">
+<section class="h-100">
+    <div class="container h-100">
+        <div class="row justify-content-md-center ">
+            <div class="card-wrapper w-75">
+                <div class="brand">
+                    <img src="https://drive.google.com/uc?id=1kenC2KJ0jyPWPY2OvkLZoidcmsfBP_CR" alt=" circle logo">
+                </div>
+                <div class="alert alert-success" id="conformation" role="alert" style="display: none">
+                </div>
+                <span th:if="${msg != null && msg.contains('wrong')}">
+					<div class="alert alert-danger" role="alert">
+						<span th:text="${msg}"></span>
+					</div>
+				</span>
+                <span th:if="${msg != null && !msg.contains('wrong')}">
+					<div class="alert alert-success" role="alert">
+						<span th:text="${msg}"></span>
+					</div>
+				</span>
+                <h4 class="card-title text-center"> Update Skills </h4>
+                <div style="overflow-y: scroll; height:350px;">
+                    <table class="table table-bordered table-striped mb-0" >
+                        <thead>
+                        <tr>
+                            <th style="width: 50%" class="text-center">Skill</th>
+                            <th style="width: 25%" class="text-center">Experience (in months)</th>
+                            <th style="width: 25%" class="text-center">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="dynamic-row">
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="skill" name="skill" required placeholder="Skill">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="number" class="form-control " id="exp" name="exp" required placeholder="Experience">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-outline-success w-100" id="add" onclick="addItem();" ><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;Add</button>
+                    </div>
+
+                </div>
+                <div id="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form th:action="@{/update-skills}" method="post" id="list">
+                                <button id="sub" class="btn btn-outline-success" type="submit" onclick="hideAlert();"  disabled><i class="fa fa-paper-plane" aria-hidden="true"></i>&nbsp;Submit</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <button id="conf" class="btn btn-outline-warning float-right" onclick="storeArrayInHiddenForm();" ><i class="fas fa-check" aria-hidden="true"></i>&nbsp;Confirm</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    Go to <a href="/profile">Profile</a>
+                </div>
+                <div class="footer">
+                    Copyright &copy; 2020 &mdash; All right reserved to Repoph
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="../static/js/login-register-forget-reset.js"></script>
+<script>
+
+    function displaySkills() {
+        let dynamicTable = document.getElementById("dynamic-row");
+        dynamicTable.innerHTML = "";
+        skills.forEach(function (skill, row) {
+            dynamicTable.innerHTML += "<tr id='" + row + "'><td>" + skill.skillName + "</td><td>" + skill.experience + "</td><td class='text-center'><button  class='btn btn-outline-warning m-1' onclick=\"editItem('" + row + "');\"><i class='fas fa-pen-square' aria-hidden='true'></i></button>&nbsp &nbsp<button class='btn btn-outline-danger m-1' onclick=\"deleteItem('dynamic-row','" + row + "');\"><i class='fa fa-trash' aria-hidden='true'></i></button></td></tr>";
+        });
+    }
+    function addItem() {
+        let skillName = document.getElementById("skill");
+        let exp = document.getElementById("exp");
+        const skill = {
+            "skillName": skillName.value,
+            "experience": exp.value
+        };
+        skills.unshift(skill);
+        skillName.value = '';
+        exp.value = '';
+        displaySkills();
+    };
+
+    function deleteItem(tableId, rowId) {
+        skills.splice(rowId, 1);
+        displaySkills();
+    };
+
+    function editItem(rowId) {
+        document.getElementById(rowId).childNodes[0].innerHTML = "<input type='text' class='form-control' id='skill" + rowId + "'" + "value=" + document.getElementById(rowId).childNodes[0].innerHTML + " required>";
+        document.getElementById(rowId).childNodes[1].innerHTML = "<input type='number' class='form-control' id='exp" + rowId + "'" + "value=" + document.getElementById(rowId).childNodes[1].innerHTML + " required>";
+        document.getElementById(rowId).childNodes[2].innerHTML = "<button id='save'  class='btn btn-outline-info' onclick='saveItem(" + rowId + ")'><i class='fas fa-save' aria-hidden='true'></i></button>"
+    };
+    function saveItem(rowId) {
+        const skillName = document.getElementById("skill" + rowId).value;
+        const exp = document.getElementById("exp" + rowId).value;
+
+        skills[rowId] = {
+            "skillName": skillName,
+            "experience": exp
+        };
+        displaySkills();
+    };
+
+    function storeArrayInHiddenForm() {
+        const form = document.getElementById("list");
+        console.log(form.getElementsByTagName("input").length);
+        if (form.getElementsByTagName("input").length === 1) {
+            skills.forEach(function (skill) {
+                document.getElementById("list").innerHTML += "<input type='hidden' name='name' value='" + skill.skillName + "'><input type='hidden' name='exp' value='" + skill.experience + "'>";
+            });
+            document.getElementById("conformation").innerHTML = "<span>Your List added successfully, Please Submit the Skills.</span>";
+            document.getElementById("conformation").style.display = "block"
+        } else {
+            document.getElementById("conformation").innerHTML = "<span>All ready List added !, Please Submit the Skills.</span>";
+            document.getElementById("conformation").style.display = "block"
+        }
+        document.getElementById("sub").disabled = false;
+        document.getElementById("conf").disabled = true;
+    }
+    function hideAlert() {
+        document.getElementById("conformation").style.display = "none"
+    }
+    displaySkills();
+</script>
+</body>
+</html>

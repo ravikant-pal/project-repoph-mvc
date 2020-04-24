@@ -16,7 +16,7 @@ public class AppController {
     @Autowired
     UtilityUserService utilityUserService;
 
-    @GetMapping
+    @GetMapping("/home")
     public String loadHomePage() {
         return "home";
     }

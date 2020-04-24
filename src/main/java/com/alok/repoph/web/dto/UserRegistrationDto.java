@@ -12,6 +12,8 @@ public class UserRegistrationDto {
     @NotEmpty
     private String lastName;
 
+    private Boolean gender;
+
     @NotEmpty
     private String email;
 
