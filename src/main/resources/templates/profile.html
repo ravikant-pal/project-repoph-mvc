@@ -9,10 +9,8 @@
     <meta content="" name="keywords"/>
 
     <!-- Favicons -->
-    <link href="../static/assets/img/favicon.png" rel="icon"/>
-    <!--    ../static/css/home.css-->
-    <link href="../static/assets/img/apple-touch-icon.png" rel="apple-touch-icon"/>
-
+    <link href="../static/images/logo.png" rel="icon"/>
+    <link href="../static/images/logo.png" rel="apple-touch-icon"/>
     <!-- Google Fonts -->
     <link
             href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
@@ -64,7 +62,7 @@
                 <a href="#" class="google-plus">
                     <i class="bx bx-current-location"></i>
                 </a>
-                <span style="color: antiquewhite;" th:text="${profile.getAddress().getCity()}">Bengaluru</span>
+                <span style="color: antiquewhite;" th:if="${profile.getAddress()!=null}" th:text="${profile.getAddress().getCity()}">Bengaluru</span>
             </div>
         </div>
 
@@ -91,7 +89,7 @@
                     >
                 </li>
                 <li>
-                    <a href="#skills"><i class='bx bxs-shopping-bags'></i></i>Skills</a>
+                    <a href="#skills"><i class='bx bxs-shopping-bags'></i></i>Skills & Pricing</a>
                 </li>
                 <li>
                     <a href="#role"><i class='bx bx-directions'></i> Role</a>
@@ -136,11 +134,39 @@
             <div class="section-title">
                 <h2>Dashboard</h2>
                 <p>
-                    Magnam dolores commodi suscipit. Necessitatibus eius consequatur
-                    ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam
-                    quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea.
-                    Quia fugiat sit in iste officiis commodi quidem hic quas.
+                    This is the your dashboard where you can configure your profile
+                    according to your need. All the details shown below if not please
+                    add which is necessary. And By navigating to the left navigation
+                    bar you can update the details. And please make sure all the details
+                    should be correct.
                 </p>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 mt-6" data-aos="fade-in">
+                    <div class="shadow-none p-3 mb-5 bg-white rounded" style="width: 96%">
+                        <div class="card-header">
+                            About you
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${profile.getAbout()==null}">
+                                <p class="card-text mb-0">
+                                <p >For example I'm mechanic based on bangalore and I love to make some designed architect into reality. </p>
+                                <footer class="blockquote-footer" > Gopalachary Puttashwami <cite title="Source Title"> Construction Mechanic </cite></footer>
+                                </p>
+                            </div>
+                            <div th:if="${profile.getAbout()!=null}">
+                                <p class="card-text mb-0">
+                                <p th:text="${profile.getAbout().getDescription()}">For example I'm mechanic based on bangalore and I love to make some designed architect into reality. </p>
+                                <footer class="blockquote-footer">
+                                    <span th:text="${profile.getFirstName()+' '+profile.getLastName()}"> Gopalachary Puttashwami </span>
+                                    <cite title="Source Title" th:text="${profile.getAbout().getTitle()}"> Construction Mechanic </cite>
+                                </footer>
+                                </p>
+                            </div>
+                            <a href="/update-about" class="btn btn-light float-right m-2 text-success"><i class='fas fa-pen-square' aria-hidden='true'></i></a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-lg-6 mt-6" data-aos="fade-right">
@@ -232,7 +258,7 @@
                 <div class="col-lg-6 pt-4 pt-lg-0 content" data-aos="fade-left">
                     <div class="card border-light shadow-sm p-3 mb-5 bg-white rounded" style="max-width: 25rem;">
                         <div class="card-body">
-                            <h5 class="card-title">Skills</h5>
+                            <h5 class="card-title">Skills & Pricing Details</h5>
                           <div th:if="${profile.getSkills()!=null && profile.getSkills().size()==0}">
                             <p class="card-text" >
                               No Skills available
@@ -242,18 +268,24 @@
                             </p>
                           </div>
                           <div th:if="${profile.getSkills()!=null && profile.getSkills().size()>0}">
-                            <p class="card-text">
-                              You have below skills :
-                            </p>
-                            <p class="card-text">
+                              <hr/>
+                              <p class="card-text">
+                                  <i class='bx bx-rupee h4 text-warning'></i>
+                                  <span class="float-right"
+                                        th:text="${profile.getPricing()+' '}">100</span>
+                              </p>
+                              <hr/>
+                              <p class="card-text">
+                                  You have below skills :
+                              </p>
+                              <p class="card-text">
                                 <span th:each="skill: ${profile.getSkills()}">
                                     <span class="btn btn-light mt-1">
-                                        <span  th:text="${skill.getSkillName()}" >Java</span>&nbsp;
+                                        <span th:text="${skill.getSkillName()}">Java</span>&nbsp;
                                         <span class="badge badge-pill badge-success" th:text="${skill.getExperience()}">0</span>
                                     </span>
                                 </span>
-                            </p>
-
+                              </p>
                           </div>
 
                         </div>
@@ -442,7 +474,7 @@
     <section id="skills" class="dashboard">
         <div class="container">
             <div class="section-title">
-                <h2>Skills</h2>
+                <h2>Skills & Pricing</h2>
             </div>
 
             <div class="row">
@@ -454,7 +486,7 @@
                     />
                 </div>
                 <div class="col-lg-4 mt-6" data-aos="fade-down">
-                    <a href="/update-skills" class="custom-card">
+                    <a href="/update-skills-pricing" class="custom-card">
                         <div class="card border-light mb-3 shadow p-3 mb-5 bg-white rounded" style="max-width: 18rem;">
                             <div class="card-header">
                                 Status
@@ -471,11 +503,18 @@
                                     <h2 class="text-muted"> Add Skills </h2>
                                 </div>
                                 <div th:if="${profile.getSkills()!=null && profile.getSkills().size()>0}">
-                                    <h5 class="card-title">Skills</h5>
+                                    <h5 class="card-title">Skills & Pricing</h5>
                                     <p class="card-text">
                                         These skills are the tags for you to be on search.
                                         Add as much as possible to be on top.
                                     </p>
+                                    <hr/>
+                                    <p class="card-text">
+                                        <i class='bx bx-rupee h4 text-warning'></i>
+                                        <span class="float-right"
+                                              th:text="${profile.getPricing()+' '}">A108 Adam Street</span>
+                                    </p>
+                                    <hr/>
                                     <p class="card-text">
                                         <span th:each="skill: ${profile.getSkills()}">
                                             <span class="btn btn-light mt-1">

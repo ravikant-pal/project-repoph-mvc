@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="author" content="Ravikant">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Repoph &mdash; Update Skill</title>
+    <title>Repoph &mdash; Update Skill & Pricing</title>
+
+    <link href="../static/images/logo.png" rel="icon"/>
+    <link href="../static/images/logo.png" rel="apple-touch-icon"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../static/assets/vendor/icofont/icofont.min.css" rel="stylesheet"/>
@@ -42,7 +45,7 @@
 						<span th:text="${msg}"></span>
 					</div>
 				</span>
-                <h4 class="card-title text-center"> Update Skills </h4>
+                <h4 class="card-title text-center"> Update Skills & Pricing</h4>
                 <div style="overflow-y: scroll; height:350px;">
                     <table class="table table-bordered table-striped mb-0" >
                         <thead>
@@ -61,11 +64,17 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <input type="text" class="form-control" id="skill" name="skill" required placeholder="Skill">
+                            <div class="invalid-feedback" id="if-skill">
+                                Skill is invalid!
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <input type="number" class="form-control " id="exp" name="exp" required placeholder="Experience">
+                            <div class="invalid-feedback" id="if-exp">
+                                Experience id invalid!
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -73,16 +82,13 @@
                     </div>
 
                 </div>
-                <div id="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <form th:action="@{/update-skills}" method="post" id="list">
-                                <button id="sub" class="btn btn-outline-success" type="submit" onclick="hideAlert();"  disabled><i class="fa fa-paper-plane" aria-hidden="true"></i>&nbsp;Submit</button>
-                            </form>
-                        </div>
-                        <div class="col-md-6">
-                            <button id="conf" class="btn btn-outline-warning float-right" onclick="storeArrayInHiddenForm();" ><i class="fas fa-check" aria-hidden="true"></i>&nbsp;Confirm</button>
-                        </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form th:action="@{/update-skills-pricing}" method="post" id="list">
+                            <input type="number" class="form-control mt-2" name="pricing" required placeholder="Pricing per day in &#8377;">
+                            <button id="sub" class="btn btn-outline-success w-100 mt-2" type="submit" onclick="hideAlert();" style="display: none"><i class="fa fa-paper-plane" aria-hidden="true"></i>&nbsp;Submit</button>
+                        </form>
+                        <button id="conf" class="btn btn-outline-warning w-100 mt-2" onclick="storeArrayInHiddenForm();" ><i class="fas fa-check" aria-hidden="true"></i>&nbsp;Confirm</button>
                     </div>
                 </div>
                 <div class="mt-4 text-center">
@@ -115,13 +121,23 @@
     function addItem() {
         let skillName = document.getElementById("skill");
         let exp = document.getElementById("exp");
-        const skill = {
-            "skillName": skillName.value,
-            "experience": exp.value
-        };
-        skills.unshift(skill);
-        skillName.value = '';
-        exp.value = '';
+        if(skillName.value==='' || exp.value==='') {
+            document.getElementById('if-skill').style.display = 'block';
+            document.getElementById('if-exp').style.display = 'block';
+        } else if(skillName.value==='') {
+            document.getElementById('if-skill').style.display = 'block';
+        } if(exp.value==='') {
+            document.getElementById('if-exp').style.display = 'block';
+        }
+        else  {
+            const skill = {
+                "skillName": skillName.value,
+                "experience": exp.value
+            };
+            skills.unshift(skill);
+            skillName.value = '';
+            exp.value = '';
+        }
         displaySkills();
     };
 
@@ -149,7 +165,7 @@
     function storeArrayInHiddenForm() {
         const form = document.getElementById("list");
         console.log(form.getElementsByTagName("input").length);
-        if (form.getElementsByTagName("input").length === 1) {
+        if (form.getElementsByTagName("input").length === 2) {
             skills.forEach(function (skill) {
                 document.getElementById("list").innerHTML += "<input type='hidden' name='name' value='" + skill.skillName + "'><input type='hidden' name='exp' value='" + skill.experience + "'>";
             });
@@ -159,8 +175,8 @@
             document.getElementById("conformation").innerHTML = "<span>All ready List added !, Please Submit the Skills.</span>";
             document.getElementById("conformation").style.display = "block"
         }
-        document.getElementById("sub").disabled = false;
-        document.getElementById("conf").disabled = true;
+        document.getElementById("sub").style.display = "block";
+        document.getElementById("conf").style.display = "none";
     }
     function hideAlert() {
         document.getElementById("conformation").style.display = "none"

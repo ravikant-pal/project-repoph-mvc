@@ -1,11 +1,13 @@
 package com.alok.repoph.web;
 
 import com.alok.repoph.models.User;
+import com.alok.repoph.pojo.About;
 import com.alok.repoph.pojo.Address;
 import com.alok.repoph.pojo.NationalId;
 import com.alok.repoph.pojo.Skill;
 import com.alok.repoph.services.UserServiceImpl;
-import com.alok.repoph.services.UtilityUserService;
+import com.alok.repoph.services.AppService;
+import com.alok.repoph.web.dto.AboutDto;
 import com.alok.repoph.web.dto.ContactDto;
 import com.alok.repoph.web.dto.UserLoginDto;
 import com.alok.repoph.web.dto.UserRegistrationDto;
@@ -29,13 +31,7 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    UtilityUserService utilityUserService;
-
-    @Autowired
     UserServiceImpl userService;
-
-
-
 
     @ModelAttribute("loginForm")
     public UserLoginDto loginDto() {
@@ -45,7 +41,7 @@ public class UserController {
     @GetMapping("/login")
     public String loadLogInForm(@ModelAttribute("msg") String message,Principal principal,Model model) {
         if (principal != null) {
-            return "redirect:/";
+            return "redirect:/home";
         } else {
             model.addAttribute("msg",message);
             return "user-login";
@@ -53,13 +49,14 @@ public class UserController {
     }
 
     @RequestMapping("/login-error")
-    public String loadLogInFormWithError(Principal principal,Model model) {
+    public String loadLogInFormWithError(Principal principal, Model model) {
         if (principal != null) {
-            return "redirect:/";
+            return "redirect:/home";
         } else {
             model.addAttribute("msg","Incorrect username or password");
             return "user-login";
         }
+//        return "user-login";
     }
 
     @ModelAttribute("registrationForm")
@@ -68,7 +65,10 @@ public class UserController {
     }
 
     @GetMapping("/registration")
-    public String loadRegisterForm() {
+    public String loadRegisterForm(Principal principal) {
+        if(principal!=null) {
+            return "redirect:/profile";
+        }
         return "user-registration";
     }
 
@@ -223,7 +223,7 @@ public class UserController {
         return "update-national-id";
     }
 
-    @GetMapping("/update-skills")
+    @GetMapping("/update-skills-pricing")
     public String loadUpdateSkillsForm(Principal principal,Model model) {
         if(principal==null) {
             return "redirect:/login";
@@ -235,13 +235,14 @@ public class UserController {
             model.addAttribute("skills",skills);
 
         }
-        return "update-skills";
+        return "update-skills-pricing";
     }
 
-    @PostMapping("/update-skills")
-    public String updateSkills(
+    @PostMapping("/update-skills-pricing")
+    public String updateSkillsAndPricing(
             @RequestParam("name") String name,
             @RequestParam("exp") String exp,
+            @RequestParam("pricing") Double pricing,
             Principal principal,
             RedirectAttributes redirectAttributes,
             Model model) {
@@ -259,15 +260,15 @@ public class UserController {
         }
         String message;
         try {
-            message= userService.saveSkills(skillList,principal);
+            message= userService.saveSkillsAndPricing(skillList,pricing,principal);
             LOGGER.info("<<<<<Exiting from updateSkillsController");
             redirectAttributes.addFlashAttribute("msg", message);
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from updateSkillsController");
             model.addAttribute("msg","Something went wrong !");
-            return "update-skills";
+            return "update-skills-pricing";
         }
-        return "redirect:/update-skills";
+        return "redirect:/update-skills-pricing";
     }
 
     @GetMapping("/update-role")
@@ -280,7 +281,7 @@ public class UserController {
     }
 
     @PostMapping("/update-role")
-    public String updateRoleController(
+    public String updateController(
             Principal principal,
             Model model,
             @RequestParam( defaultValue = "false", required = false, name ="serviceOrEnd") Boolean role,
@@ -298,5 +299,41 @@ public class UserController {
         }
         redirectAttributes.addFlashAttribute("msg" ,message);
         return "update-role";
+    }
+
+    @GetMapping("/update-about")
+    public String loadUpdateAbout(Principal principal,Model model) {
+        if(principal==null) {
+            return "redirect:/login";
+        } else  {
+            About about = userService.findByEmail(principal.getName()).getAbout();
+            if(about==null) {
+                about = new About();
+            }
+            model.addAttribute("aboutForm",about);
+
+        }
+        return "update-about";
+    }
+
+    @PostMapping("/update-about")
+    public String updateAboutController(
+            Principal principal,
+            Model model,
+            @ModelAttribute("aboutForm") @Valid AboutDto form,
+            RedirectAttributes redirectAttributes) {
+        LOGGER.info(">>>>>Entering into updateAboutController");
+        String message;
+        try {
+            message= userService.updateAbout(form,principal);
+            LOGGER.info("<<<<<Exiting from updateAboutController");
+            model.addAttribute("msg",message);
+        } catch (Exception e) {
+            LOGGER.info("<<<<<Exiting from updateAboutController");
+            model.addAttribute("msg","Something went wrong !");
+            return "update-about";
+        }
+        redirectAttributes.addFlashAttribute("msg" ,message);
+        return "update-about";
     }
 }

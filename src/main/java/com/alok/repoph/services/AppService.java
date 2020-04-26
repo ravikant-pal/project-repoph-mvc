@@ -14,15 +14,9 @@ import java.util.List;
 
 @Service
 @Transactional
-public class UtilityUserService {
+public class AppService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UtilityUserService.class);
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
-    UserServiceImpl userServiceImpl;
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppService.class);
 
     @Autowired
     UserDao userDao;
@@ -82,10 +76,10 @@ public class UtilityUserService {
 //    public User findByEmail(String email) {
 //        return userDao.findByEmail(email);
 //    }
-//
-//    public List<User> findAllUtilityUsers() {
-//        return userDao.findAllByRole("SERVICE_USER");
-//    }
+
+    public List<User> getAllUsers() {
+        return userDao.findAll();
+    }
 
 
 

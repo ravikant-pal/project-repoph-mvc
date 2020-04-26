@@ -1,9 +1,11 @@
 package com.alok.repoph.services;
 
 
+import com.alok.repoph.pojo.About;
 import com.alok.repoph.pojo.Address;
 import com.alok.repoph.pojo.NationalId;
 import com.alok.repoph.pojo.Skill;
+import com.alok.repoph.web.dto.AboutDto;
 import com.alok.repoph.web.dto.ContactDto;
 import com.alok.repoph.web.dto.UserRegistrationDto;
 import com.alok.repoph.models.Role;
@@ -99,10 +101,11 @@ public class UserServiceImpl implements UserService {
         return message;
     }
 
-    public String saveSkills(List<Skill> skills, Principal principal){
+    public String saveSkillsAndPricing(List<Skill> skills,Double pricing, Principal principal){
         LOGGER.info(">>>>Entering into saveSkills ");
         User user = userDao.findByEmail(principal.getName());
         user.setSkills(skills);
+        user.setPricing(pricing);
         userDao.save(user);
         String message ="You are successfully Updated Skills.";
         LOGGER.info("<<<<<Exiting from saveSkills ");
@@ -124,6 +127,15 @@ public class UserServiceImpl implements UserService {
         return message;
     }
 
+    public String updateAbout(AboutDto form, Principal principal){
+        LOGGER.info(">>>>Entering into updateAbout ");
+        User user = userDao.findByEmail(principal.getName());
+        user.setAbout(new About(form.getTitle(),form.getDescription()));
+        String message ="You are successfully Updated About yourself.";
+        LOGGER.info("<<<<<Exiting from updateAbout ");
+        return message;
+    }
+
     @Override
     public void updatePassword(String password, Long userId) {
         userDao.updatePassword(password, userId);
@@ -131,7 +143,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.println("email------->"+email);
         User user = userDao.findByEmail(email);
+        System.out.println("pass--->"+user.getPassword());
         if(user ==null) {
             throw  new UsernameNotFoundException("Invalid username or password.");
         }

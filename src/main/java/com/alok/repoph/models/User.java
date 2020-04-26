@@ -1,5 +1,6 @@
 package com.alok.repoph.models;
 
+import com.alok.repoph.pojo.About;
 import com.alok.repoph.pojo.Address;
 import com.alok.repoph.pojo.NationalId;
 import com.alok.repoph.pojo.Skill;
@@ -37,6 +38,8 @@ public class User implements Serializable {
 
     private Boolean gender;
 
+    private About about;
+
     private String mobileNumber;
 
 
@@ -46,7 +49,7 @@ public class User implements Serializable {
     private String email;
 
 
-    private String pricing;
+    private Double pricing;
 
     private Boolean hireStatus = false;
 

@@ -1,58 +1,56 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
-    <meta name="author" content="Ravikant">
+    <meta name="author" content="Kodinger">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Repoph &mdash; Update National Id</title>
+    <title>Repoph &mdash; About</title>
 
     <link href="../static/images/logo.png" rel="icon"/>
     <link href="../static/images/logo.png" rel="apple-touch-icon"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/css/login-register-forget-reset.css">
 </head>
+
 <body class="my-login-page">
 <section class="h-100">
     <div class="container h-100">
         <div class="row justify-content-md-center h-100">
             <div class="card-wrapper">
                 <div class="brand">
-                    <img src="https://drive.google.com/uc?id=1kenC2KJ0jyPWPY2OvkLZoidcmsfBP_CR" alt=" circle logo">
+                    <img src="https://drive.google.com/uc?id=1kenC2KJ0jyPWPY2OvkLZoidcmsfBP_CR" alt="circle logo">
                 </div>
-                <span th:if="${msg != null && msg.contains('wrong')}">
-					<div class="alert alert-danger" role="alert">
+                <span th:if="${msg != null && msg.length()!=0 && !(msg.contains('wrong') || msg.contains('Incorrect'))}">
+					<div class="alert alert-success" role="alert">
 						<span th:text="${msg}"></span>
 					</div>
 				</span>
-                <span th:if="${msg != null && !msg.contains('wrong')}">
-					<div class="alert alert-success" role="alert">
+                <span th:if="${msg != null && msg.length()!=0 && (msg.contains('wrong') || msg.contains('Incorrect'))}">
+					<div class="alert alert-danger" role="alert">
 						<span th:text="${msg}"></span>
 					</div>
 				</span>
                 <div class="card fat">
                     <div class="card-body">
-                        <h4 class="card-title">Update your National Id </h4>
-                        <p class="hint-text">It will only takes a minute.</p>
-                        <form th:action="@{/update-national-id}" th:object="${nationalIdFrom}" method="post" class="my-login-validation" novalidate="">
+                        <h4 class="card-title">Update about yourself</h4>
+                        <form th:action="@{/update-about}" th:object="${aboutForm}" method="post" class="my-login-validation" novalidate="">
                             <div class="form-group">
-                                <label for="email">Id Type</label>
-<!--                                <input id="email" type="email" th:field="*{type}" class="form-control" readonly="readonly">-->
-                                <select id="email" th:field="*{type}" class="form-control form-control-sm">
-                                    <option th:value="'Aadhar'" th:text="Aadhar_Card"></option>
-                                    <option th:value="'Pan'" th:text="Pan_Card"></option>
-                                </select>
+                                <label for="email">Title (what you do ?)</label>
+                                <input id="email" type="text" class="form-control" th:field="*{title}" value="" required
+                                       autofocus>
                                 <div class="invalid-feedback">
-                                    What's your type of Id ?
+                                    Title is invalid !
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Tell us about yourself </label>
+                                <textarea class="form-control" id="password" rows="5" th:field="*{description}" required></textarea>
+<!--                                <input id="password" type="texta" class="form-control"  th:field="*{description}" required>-->
+                                <div class="invalid-feedback">
+                                    This field is required !
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="phone">Id Number</label>
-                                <input id="phone" type="text" th:field="*{number}" class="form-control" required autofocus>
-                                <div class="invalid-feedback">
-                                    What's your Id number ?
-                                </div>
-                            </div>
                             <div class="form-group m-0">
                                 <button type="submit" class="btn btn-primary btn-block">
                                     Update
@@ -65,7 +63,7 @@
                     </div>
                 </div>
                 <div class="footer">
-                    Copyright &copy; 2020 &mdash; All right reserved to Repoph
+                    Copyright &copy; 2017 &mdash; All right reserved to Repoph
                 </div>
             </div>
         </div>
@@ -75,9 +73,12 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-<script src="../static/js/login-register-forget-reset.js"></script>
+<script type="text/javascript" src="../static/js/login-register-forget-reset.js"></script>
 </body>
 </html>
