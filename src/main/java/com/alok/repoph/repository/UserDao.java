@@ -16,7 +16,7 @@ public interface UserDao extends JpaRepository<User,Long> {
 
     Optional<User> findById(Long id);
 
-    List<User> findAll();
+    List<User> findAllByIsProfileCompleted(Boolean flag);
 
     @Modifying
     @Query("update User u set u.password = :password where u.id = :id")

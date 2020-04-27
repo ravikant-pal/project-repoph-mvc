@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+    <!-- Font Awesome JS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="../static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"/>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <style>
+        .star-rating, .back-stars, .front-stars {
+            display: flex;
+        }
+
+        .star-rating {
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .back-stars {
+            color: #403e3f;
+            position: relative;
+            text-shadow: 4px 4px 10px #292728;
+        }
+
+        .front-stars {
+            color: #ffbc0b;
+            overflow: hidden;
+            position: absolute;
+            text-shadow: 2px 2px 5px #d29b09;
+            top: 0;
+            transition: all 0.5s;
+        }
+    </style>
+    <title>User Info</title>
+</head>
+
+<body>
+<header>
+    <nav class="navbar  sticky-top navbar-light alert-danger justify-content-between ">
+        <a class="navbar-brand" href="/home">
+            <img src="https://drive.google.com/uc?id=1frQ5BUkE8juBjskOSlWc01PyQg7hI0nF" height="50" width="200">
+        </a>
+
+        <div class="form-inline">
+            <a class="btn btn-link my-2 my-sm-0" href="/login">Log in</a>
+            <a class="btn btn-link my-2 my-sm-0" href="/registration">Sign up</a>
+        </div>
+    </nav>
+</header>
+
+<section>
+    <div class="container text-center">
+        <div class="row mt-5 mb-5 text-center">
+            <div class="col-lg-12 col-md-12 col-sm-12 mb-2 text-center">
+                <div class="card border">
+                    <div class="card-body d-flex flex-row">
+                        <div class="card-body text-right">
+                            <img src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-fill-circle-512.png"
+                                 class="rounded-circle" height="150px" width="150px" alt="avatar">
+                        </div>
+                        <div class="card-body text-left mt-5">
+                            <h4 class="card-title text-dark"
+                                th:text=" ${publicProfile.getFirstName()+' '+publicProfile.getLastName()}">name</h4>
+                            <p class="card-text">
+                                <i class='bx bxs-map bx-tada h5 text-warning' ></i>
+                                <span class="ml-2 text-muted"
+                                      th:text="${publicProfile.getAddress().getCity()+ ', '+publicProfile.getAddress().getCountry()}">California, US</span>
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="font-weight-bold text-muted">
+                        <small>Pricing : <i class='fas fa-rupee-sign text-warning ml-2'></i></small>
+                        <small class="ml-2" th:text="${publicProfile.getPricing()+' '}">100</small>
+                    </p>
+                    <div>
+                        <i class="fa fa-users"></i>
+                        <small class="mb-0 text-info ">79</small> &nbsp; &nbsp;
+                        <small class="text-muted">ratings</small>
+                    </div>
+                    <div class="star-rating">
+                        <div class="back-stars">
+                            <i class="fa fa-star m-1" aria-hidden="true"></i>
+                            <i class="fa fa-star m-1" aria-hidden="true"></i>
+                            <i class="fa fa-star m-1" aria-hidden="true"></i>
+                            <i class="fa fa-star m-1" aria-hidden="true"></i>
+                            <i class="fa fa-star m-1" aria-hidden="true"></i>
+
+                            <div class="front-stars" style="width: 50%;">
+                                <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                <i class="fa fa-star m-1" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <div class="row mt-5 mb-5">
+            <div class="col-lg-3 col-md-3 col-sm-12 mb-2">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-fill-circle-512.png"
+                             class="rounded w-100" alt="avatar">
+                    </div>
+                    <div class="card-footer">
+                        <h6 class="text-muted"
+                            th:text="${publicProfile.getFirstName()+' '+publicProfile.getLastName()}">Name</h6>
+                        <p th:text="${publicProfile.getAddress().getCity()}">Address</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-6 col-sm-12 mb-2">
+                <div class="row mb-5">
+                    <div class="col-lg-12 " data-aos="fade-left">
+                        <div class="shadow-none  bg-white rounded">
+                            <div class="card-header">
+                                About
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${publicProfile.getAbout()!=null}">
+                                    <p class="card-text mb-0">
+                                    <p th:text="${publicProfile.getAbout().getDescription()}">For example I'm mechanic
+                                        based on bangalore and I love to make some designed architect into reality. </p>
+                                    <footer class="blockquote-footer">
+                                        <span th:text="${publicProfile.getFirstName()+' '+publicProfile.getLastName()}"> Gopalachary Puttashwami </span>
+                                        <cite title="Source Title" th:text="${publicProfile.getAbout().getTitle()}">
+                                            Construction Mechanic </cite>
+                                    </footer>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-lg-12" data-aos="fade-in">
+                        <div class="shadow-nonebg-white rounded">
+                            <div class="card-header">
+                                Address
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${publicProfile.getAddress()!=null}">
+                                    <p class="card-text d-inline">
+                                        <i class='bx bx-map h4 text-warning'></i>
+                                        <span class="ml-5"
+                                              th:text="${publicProfile.getAddress().getHouseNumber()+ ' '+publicProfile.getAddress().getStreet()}">A108 Adam Street</span>
+                                    </p>
+                                    <p class="card-text d-inline ml-lg-5">
+                                        <i class='bx bxs-city h4 text-warning'></i>
+                                        <span class="ml-5"
+                                              th:text="${publicProfile.getAddress().getCity()+ ', '+publicProfile.getAddress().getCountry()+' '+publicProfile.getAddress().getPinCode()}">New York, NY 535022</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row  mb-5">
+                    <div class="col-lg-12 " data-aos="fade-in">
+                        <div class="shadow-none  bg-white rounded">
+                            <div class="card-header">
+                                Contact
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text d-inline">
+                                    <i class='bx bx-mail-send h4 text-warning'></i>
+                                    <span class="ml-5" th:text="${publicProfile.getEmail()}">info@example.com</span>
+                                </p>
+                                <p class="card-text d-inline ml-lg-5">
+                                    <i class='bx bxs-phone h4 text-warning'></i>
+                                    <span class="ml-5"
+                                          th:text="${publicProfile.getMobileNumber()}">+1 5589 55488 55s</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row  mb-5">
+                    <div class="col-lg-12 " data-aos="fade-in">
+                        <div class="shadow-none  bg-white rounded">
+                            <div class="card-header">
+                                National Id
+                            </div>
+                            <div class="card-body" th:if="${publicProfile.getNationalId()!=null}">
+                                <p class="card-text d-inline ">
+                                    <i class='bx bx-id-card h4 text-warning'></i>
+                                    <span class="ml-5"
+                                          th:text="${publicProfile.getNationalId().getType()}">Aadhar</span>
+                                </p>
+                                <p class="card-text d-inline ml-lg-5">
+                                    <i class='bx bx-credit-card-front h4 text-warning'></i>
+                                    <span class="ml-5" th:text="${publicProfile.getNationalId().getNumber()}">9067 - 7834 - 9012</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row  mb-5">
+                    <div class="col-lg-12 " data-aos="fade-in">
+                        <div class="shadow-none  bg-white rounded">
+                            <div class="card-header">
+                                Skills
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                <span th:if="${publicProfile.getSkills()!=null}"
+                                      th:each="skill: ${publicProfile.getSkills()}">
+                                    <span class="badge badge-pill badge-light mt-1 h6">
+                                        <span th:text="${skill.getSkillName()}">Java</span>&nbsp;
+                                        <span class="badge badge-pill badge-success" th:text="${skill.getExperience()}">0</span>
+                                    </span>
+                                </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+
+</html>

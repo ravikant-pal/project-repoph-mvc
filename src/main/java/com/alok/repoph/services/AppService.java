@@ -73,13 +73,14 @@ public class AppService {
 //        LOGGER.info("<<<<<Exiting from registerController ");
 //        return message;
 //    }
-//    public User findByEmail(String email) {
-//        return userDao.findByEmail(email);
-//    }
+    public User getUserById(Long id) {
+        return userDao.findById(id).get();
+    }
 
     public List<User> getAllUsers() {
-        return userDao.findAll();
+        return userDao.findAllByIsProfileCompleted(true);
     }
+
 
 
 

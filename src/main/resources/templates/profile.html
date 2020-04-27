@@ -280,7 +280,7 @@
                               </p>
                               <p class="card-text">
                                 <span th:each="skill: ${profile.getSkills()}">
-                                    <span class="btn btn-light mt-1">
+                                    <span class="badge badge-pill badge-light mt-1 h6">
                                         <span th:text="${skill.getSkillName()}">Java</span>&nbsp;
                                         <span class="badge badge-pill badge-success" th:text="${skill.getExperience()}">0</span>
                                     </span>
@@ -517,7 +517,7 @@
                                     <hr/>
                                     <p class="card-text">
                                         <span th:each="skill: ${profile.getSkills()}">
-                                            <span class="btn btn-light mt-1">
+                                            <span class="badge badge-pill badge-light mt-1 h6">
                                                 <span  th:text="${skill.getSkillName()}" >Java</span>&nbsp;
                                                 <span class="badge badge-pill badge-success" th:text="${skill.getExperience()}">0</span>
                                             </span>

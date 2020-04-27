@@ -51,6 +51,8 @@ public class User implements Serializable {
 
     private Double pricing;
 
+    private Boolean isProfileCompleted = false;
+
     private Boolean hireStatus = false;
 
     private Date hireTime;

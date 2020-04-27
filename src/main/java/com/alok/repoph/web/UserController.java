@@ -6,7 +6,6 @@ import com.alok.repoph.pojo.Address;
 import com.alok.repoph.pojo.NationalId;
 import com.alok.repoph.pojo.Skill;
 import com.alok.repoph.services.UserServiceImpl;
-import com.alok.repoph.services.AppService;
 import com.alok.repoph.web.dto.AboutDto;
 import com.alok.repoph.web.dto.ContactDto;
 import com.alok.repoph.web.dto.UserLoginDto;
@@ -56,7 +55,6 @@ public class UserController {
             model.addAttribute("msg","Incorrect username or password");
             return "user-login";
         }
-//        return "user-login";
     }
 
     @ModelAttribute("registrationForm")
@@ -128,7 +126,7 @@ public class UserController {
     }
 
     @PostMapping("/update-address")
-    public String updateAddress(
+    public String updateAddressController(
             @ModelAttribute("addressFrom") @Valid Address form,
             BindingResult result,
             Principal principal,
@@ -136,7 +134,7 @@ public class UserController {
         LOGGER.info(">>>>>Entering into updateAddressController ");
         String message;
         try {
-            message= userService.saveAddress(form,principal);
+            message= userService.updateAddress(form,principal);
             LOGGER.info("<<<<<Exiting from registerController");
             model.addAttribute("msg",message);
 
@@ -167,7 +165,7 @@ public class UserController {
     }
 
     @PostMapping("/update-contact")
-    public String updateContact(
+    public String updateContactController(
             @ModelAttribute("contactFrom") @Valid ContactDto form,
             BindingResult result,
             Principal principal,
@@ -175,7 +173,7 @@ public class UserController {
         LOGGER.info(">>>>>Entering into updateContactController ");
         String message;
         try {
-            message= userService.saveContact(form,principal);
+            message= userService.updateContact(form,principal);
             LOGGER.info("<<<<<Exiting from updateContactController");
             model.addAttribute("msg",message);
 
@@ -203,7 +201,7 @@ public class UserController {
     }
 
     @PostMapping("/update-national-id")
-    public String updateNationalId(
+    public String updateNationalIdController(
             @ModelAttribute("nationalIdFrom") @Valid NationalId form,
             BindingResult result,
             Principal principal,
@@ -211,7 +209,7 @@ public class UserController {
         LOGGER.info(">>>>>Entering into updateNationalIdController ");
         String message;
         try {
-            message= userService.saveNationalId(form,principal);
+            message= userService.updateNationalId(form,principal);
             LOGGER.info("<<<<<Exiting from updateNationalIdController");
             model.addAttribute("msg",message);
 
@@ -239,7 +237,7 @@ public class UserController {
     }
 
     @PostMapping("/update-skills-pricing")
-    public String updateSkillsAndPricing(
+    public String updateSkillsAndPricingController(
             @RequestParam("name") String name,
             @RequestParam("exp") String exp,
             @RequestParam("pricing") Double pricing,
@@ -260,7 +258,7 @@ public class UserController {
         }
         String message;
         try {
-            message= userService.saveSkillsAndPricing(skillList,pricing,principal);
+            message= userService.updateSkillsAndPricing(skillList,pricing,principal);
             LOGGER.info("<<<<<Exiting from updateSkillsController");
             redirectAttributes.addFlashAttribute("msg", message);
         } catch (Exception e) {
@@ -281,7 +279,7 @@ public class UserController {
     }
 
     @PostMapping("/update-role")
-    public String updateController(
+    public String updateRoleController(
             Principal principal,
             Model model,
             @RequestParam( defaultValue = "false", required = false, name ="serviceOrEnd") Boolean role,
