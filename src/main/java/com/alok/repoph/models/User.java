@@ -1,5 +1,9 @@
 package com.alok.repoph.models;
 
+import com.alok.repoph.pojo.About;
+import com.alok.repoph.pojo.Address;
+import com.alok.repoph.pojo.NationalId;
+import com.alok.repoph.pojo.Skill;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,16 +34,24 @@ public class User implements Serializable {
     @NotNull(message = "password is mandatory.")
     private String password;
 
-    private String address;
+    private Address address;
 
+    private Boolean gender;
+
+    private About about;
 
     private String mobileNumber;
 
 
-    private String aadharNumber;
+    private NationalId nationalId;
 
     @NotNull(message = "email is mandatory.")
     private String email;
+
+
+    private Double pricing;
+
+    private Boolean isProfileCompleted = false;
 
     private Boolean hireStatus = false;
 
@@ -55,7 +67,7 @@ public class User implements Serializable {
     private Collection<Role> roles;
 
     @ElementCollection
-    private List<String> occupations;
+    private List<Skill> skills;
 
     @ManyToMany
     private List<User> listOfHiredPeople;

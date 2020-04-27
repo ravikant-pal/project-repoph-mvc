@@ -5,6 +5,9 @@
     <meta name="author" content="Kodinger">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Repoph &mdash; Sign in</title>
+
+    <link href="../static/images/logo.png" rel="icon"/>
+    <link href="../static/images/logo.png" rel="apple-touch-icon"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/css/login-register-forget-reset.css">
 </head>
@@ -33,7 +36,7 @@
                         <form th:action="@{/login}" th:object="${loginForm}" method="post" class="my-login-validation" novalidate="">
                             <div class="form-group">
                                 <label for="email">E-Mail Address</label>
-                                <input id="email" type="email" class="form-control" th:field="*{username}" value="" required
+                                <input id="email" type="email" class="form-control" th:field="*{username}" value="" required="required"
                                        autofocus>
                                 <div class="invalid-feedback">
                                     Email is invalid
@@ -45,7 +48,7 @@
                                         Forgot Password?
                                     </a>
                                 </label>
-                                <input id="password" type="password" class="form-control"  th:field="*{password}" required
+                                <input id="password" type="password" class="form-control"  th:field="*{password}" required="required"
                                        data-eye>
                                 <div class="invalid-feedback">
                                     Password is required

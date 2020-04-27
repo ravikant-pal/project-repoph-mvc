@@ -165,3 +165,8 @@ div.checkbox.switcher label input:checked + span small, div.radio.switcher label
 .trigger-btn {
     display: inline-block;
 }
+
+.form-group.required .control-label:after {
+    content: "*";
+    color: #ff3a0f;
+}

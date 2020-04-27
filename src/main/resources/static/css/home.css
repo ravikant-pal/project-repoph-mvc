@@ -87,3 +87,31 @@ h1, p {
     border-radius: 50%;
     font-size: 20px;
 }
+
+/*---------- star rating ----------*/
+
+.star-rating, .back-stars, .front-stars {
+    display: flex;
+}
+
+.star-rating {
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.back-stars {
+    color: #403e3f;
+    position: relative;
+    text-shadow: 4px 4px 10px #292728;
+}
+
+.front-stars {
+    color: #ffbc0b;
+    overflow: hidden;
+    position: absolute;
+    text-shadow: 2px 2px 5px #d29b09;
+    top: 0;
+    transition: all 0.5s;
+}

@@ -6,26 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta content="text/css; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />
     <title>Repoph &mdash; Home</title>
+
+    <link href="../static/images/logo.png" rel="icon"/>
+    <link href="../static/images/logo.png" rel="apple-touch-icon"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-        function changeColorOfStar(obj) {
-
-            if (obj.classList.contains("fa-star")) {
-                obj.classList.remove("fa-star");
-                obj.classList.add("fa-star-o");
-                obj.classList.remove("text-success");
-            } else {
-                obj.classList.remove("fa-star-o");
-                obj.classList.add("fa-star");
-                obj.classList.add("text-success");
-            }
-
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <style>
+        .sidebar-item {
+            position: absolute;
         }
-    </script>
+
+        .make-me-sticky {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 15%;
+        }
+
+    </style>
     <link rel="stylesheet" type="text/css" href="../static/css/home.css" />
 </head>
 <body>
@@ -40,7 +41,7 @@
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 
             <span sec:authorize="isAuthenticated()">
-                <span class="i-circle" th:text="${#authentication.getName().toUpperCase().charAt(0)}"></span>
+                <a href="/profile"><span class="i-circle" th:text="${#authentication.getName().toUpperCase().charAt(0)}"></span></a>
                 <a class="btn btn-link my-2 my-sm-0" href="/logout">Log out</a>
             </span>
             <span sec:authorize="!isAuthenticated()">
@@ -70,21 +71,15 @@
                                         <form>
                                             <label class="form-check">
                                                 <input class="form-check-input" type="checkbox" value="">
-                                                <span class="form-check-label">
-				    Mersedes Benz
-				  </span>
+                                                <span class="form-check-label">Mersedes Benz</span>
                                             </label> <!-- form-check.// -->
                                             <label class="form-check">
                                                 <input class="form-check-input" type="checkbox" value="">
-                                                <span class="form-check-label">
-				    Nissan Altima
-				  </span>
+                                                <span class="form-check-label">Nissan Altima</span>
                                             </label>  <!-- form-check.// -->
                                             <label class="form-check">
                                                 <input class="form-check-input" type="checkbox" value="">
-                                                <span class="form-check-label">
-				    Another Brand
-				  </span>
+                                                <span class="form-check-label">Another Brand</span>
                                             </label>  <!-- form-check.// -->
                                         </form>
 
@@ -100,21 +95,15 @@
                                     <div class="card-body">
                                         <label class="form-check">
                                             <input class="form-check-input" type="radio" name="exampleRadio" value="">
-                                            <span class="form-check-label">
-			    First hand items
-			  </span>
+                                            <span class="form-check-label">First hand items</span>
                                         </label>
                                         <label class="form-check">
                                             <input class="form-check-input" type="radio" name="exampleRadio" value="">
-                                            <span class="form-check-label">
-			    Brand new items
-			  </span>
+                                            <span class="form-check-label">Brand new items</span>
                                         </label>
                                         <label class="form-check">
                                             <input class="form-check-input" type="radio" name="exampleRadio" value="">
-                                            <span class="form-check-label">
-			    Some other option
-			  </span>
+                                            <span class="form-check-label">Some other option</span>
                                         </label>
                                     </div> <!-- card-body.// -->
                                 </div>
@@ -240,23 +229,26 @@
         </div>
     </aside>
     <article class="content">
-
         <div class="container shadow-sm p-3 bg-white rounded">
-            <div class="row">
+            <div class="row" th:each="user: ${data}">
                 <div class="col-12">
                     <div class="card shadow p-3 mb-5  bg-white rounded border-0">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12 col-lg-8 col-md-6">
-                                    <h3 class="mb-0 text-truncated">Mike Anamendolla</h3>
-                                    <p class="lead">Web / UI Designer</p>
-                                    <p>
+                                    <h3 class="mb-0 text-truncated" th:text="${user.getFirstName()+' '+user.getLastName()}">Mike Anamendolla</h3>
+                                    <p class="lead" th:text="${user.getAbout().getTitle()}">Web / UI Designer</p>
+                                    <p  class="card-text" th:text="${user.getAbout().getDescription()}">
                                         I love to read, hang out with friends, watch football, listen to music, and
                                         learn new things.
                                     </p>
-                                    <p><span class="badge badge-info tags">html5</span>
-                                        <span class="badge badge-info tags">css3</span>
-                                        <span class="badge badge-info tags">nodejs</span>
+                                    <p>
+                                        <span th:each="skill: ${user.getSkills()}">
+                                            <span class="badge badge-pill badge-light mt-1 h6">
+                                                <small th:text="${skill.getSkillName()}">Java</small>&nbsp;
+                                                <small class="badge badge-pill badge-success" th:text="${skill.getExperience()}">0</small>
+                                            </span>
+                                        </span>
                                     </p>
                                 </div>
                                 <div class="col-12 col-lg-4 col-md-6 text-center">
@@ -265,104 +257,67 @@
                                          class="mx-auto rounded-circle img-fluid">
                                     <br>
                                     <ul class="list-inline ratings text-center" title="Ratings">
-                                        <li class="list-inline-item star1"><i class="fa fa-star-o favourite_icon"
-                                                                              onclick="changeColorOfStar(this)"></i>
-                                        </li>
-                                        <li class="list-inline-item star2"><i class="fa fa-star-o favourite_icon"
-                                                                              onclick="changeColorOfStar(this)"></i>
-                                        </li>
-                                        <li class="list-inline-item star3"><i class="fa fa-star-o favourite_icon"
-                                                                              onclick="changeColorOfStar(this)"></i>
-                                        </li>
-                                        <li class="list-inline-item star4"><i class="fa fa-star-o favourite_icon"
-                                                                              onclick="changeColorOfStar(this)"></i>
-                                        </li>
-                                        <li class="list-inline-item star5"><i class="fa fa-star-o favourite_icon"
-                                                                              onclick="changeColorOfStar(this)"></i>
-                                        </li>
+                                        <li>
+                                            <div class="star-rating">
+                                                <div class="back-stars">
+                                                    <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                                    <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                                    <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                                    <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                                    <i class="fa fa-star m-1" aria-hidden="true"></i>
 
+                                                    <div class="front-stars" style="width: 50%;">
+                                                        <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                                        <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                                        <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                                        <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                                        <i class="fa fa-star m-1" aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
                                         <li>
                                             <i class="fa fa-users"></i>
                                             <small class="mb-0 text-info ">79</small> &nbsp; &nbsp;
                                             <small class="text-muted">ratings</small>
                                         </li>
-                                    </ul>
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    <small>Profile</small>
-                                    <button class="btn btn-outline-warning btn-block"><span class="fa fa-user"></span>
-                                        View Profile
-                                    </button>
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    <small>Status</small>
-                                    <span class="btn btn-outline-primary btn-block active"><span
-                                            class="fa fa-check"></span> hired </span>
-                                </div>
-                                <!--/col-->
-                            </div>
-                            <!--/row-->
-                        </div>
-                        <!--/card-block-->
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="card shadow p-3 mb-5  bg-white rounded border-0">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12 col-lg-8 col-md-6">
-                                    <h3 class="mb-0 text-truncated">Mike Anamendolla</h3>
-                                    <p class="lead">Web / UI Designer</p>
-                                    <p>
-                                        I love to read, hang out with friends, watch football, listen to music, and
-                                        learn new things.
-                                    </p>
-                                    <p><span class="badge badge-info tags">html5</span>
-                                        <span class="badge badge-info tags">css3</span>
-                                        <span class="badge badge-info tags">nodejs</span>
-                                    </p>
-                                </div>
-                                <div class="col-12 col-lg-4 col-md-6 text-center">
-                                    <img src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-fill-circle-512.png"
-                                         alt="" class="mx-auto rounded-circle img-fluid">
-                                    <br>
-                                    <ul class="list-inline ratings text-center" title="Ratings">
-                                        <li class="list-inline-item"><i class="fa fa-star-o favourite_icon"
-                                                                        onclick="changeColorOfStar(this)"></i>
-                                        </li>
-                                        <li class="list-inline-item"><i class="fa fa-star-o favourite_icon"
-                                                                        onclick="changeColorOfStar(this)"></i>
-                                        </li>
-                                        <li class="list-inline-item"><i class="fa fa-star-o favourite_icon"
-                                                                        onclick="changeColorOfStar(this)"></i>
-                                        </li>
-                                        <li class="list-inline-item"><i class="fa fa-star-o favourite_icon"
-                                                                        onclick="changeColorOfStar(this)"></i>
-                                        </li>
-                                        <li class="list-inline-item"><i class="fa fa-star-o favourite_icon"
-                                                                        onclick="changeColorOfStar(this)"></i>
-                                        </li>
                                         <li>
-                                            <i class="fa fa-users"></i>
-                                            <small class="mb-0 text-info ">45</small> &nbsp; &nbsp;
-                                            <small class="text-muted">ratings</small>
+                                            <small>Pricing : <i class='fas fa-rupee-sign text-warning ml-2'></i>
+                                            </small>
+                                            <small class="ml-2"
+                                                   th:text="${user.getPricing()+'/day'}">100</small>
                                         </li>
-
                                     </ul>
-
                                 </div>
                                 <div class="col-12 col-lg-6">
                                     <small>Profile</small>
-                                    <button class="btn btn-outline-warning btn-block"><span class="fa fa-user"></span>
+                                    <a  th:href="${'/public-profile/'+user.getId()}" class="btn btn-outline-warning btn-block"><span class="fa fa-user"></span>
                                         View Profile
-                                    </button>
+                                    </a>
                                 </div>
                                 <div class="col-12 col-lg-6">
                                     <small>Status</small>
-                                    <button type="button" class="btn btn-outline-primary btn-block"><span
-                                            class="fa fa-arrow-circle-right"></span> hire him/her
-                                    </button>
+                                    <div th:if="${user.getHireStatus()}">
+                                        <button class="btn btn-outline-primary btn-block active" disabled><span
+                                                class="fa fa-check"></span> hired </button>
+                                    </div>
+                                    <div th:if="${!user.getHireStatus()}">
+                                        <div th:if="${user.getGender()}">
+                                            <button type="button" class="btn btn-outline-primary btn-block" >
+                                                <span class="fa fa-arrow-circle-right"></span> hire Him
+                                            </button>
+                                        </div>
+                                        <div th:if="${!user.getGender()}">
+                                            <button type="button" class="btn btn-outline-primary btn-block" >
+                                                <span class="fa fa-arrow-circle-right"></span> hire Her
+                                            </button>
+                                        </div>
+
+                                    </div>
+
                                 </div>
+
+
                                 <!--/col-->
                             </div>
                             <!--/row-->
@@ -373,9 +328,9 @@
             </div>
         </div>
     </article>
-    <aside class="sidebar-right">
-        <div class="col-lg-12 col-md-12 col-sm-12 cart" id="cart">
-            <div class="card">
+    <aside class="sidebar-right sidebar-item">
+        <div class="col-lg-12 col-md-12 col-sm-12 cart  make-me-sticky" id="cart">
+            <div class="card ">
                 <div class="card-body">
                     <div class="card-header">
                         <h4>Your hiring</h4>

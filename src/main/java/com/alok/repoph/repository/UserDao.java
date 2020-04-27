@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 @Repository
 public interface UserDao extends JpaRepository<User,Long> {
@@ -14,6 +15,8 @@ public interface UserDao extends JpaRepository<User,Long> {
     User findByEmail(String email);
 
     Optional<User> findById(Long id);
+
+    List<User> findAllByIsProfileCompleted(Boolean flag);
 
     @Modifying
     @Query("update User u set u.password = :password where u.id = :id")

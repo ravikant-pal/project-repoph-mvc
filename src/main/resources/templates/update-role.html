@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Ravikant">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Repoph &mdash; Change Role</title>
+
+    <link href="../static/images/logo.png" rel="icon"/>
+    <link href="../static/images/logo.png" rel="apple-touch-icon"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/login-register-forget-reset.css">
+</head>
+<body class="my-login-page">
+<section class="h-100">
+    <div class="container h-100">
+        <div class="row justify-content-md-center h-100">
+            <div class="card-wrapper">
+                <div class="brand">
+                    <img src="https://drive.google.com/uc?id=1kenC2KJ0jyPWPY2OvkLZoidcmsfBP_CR" alt=" circle logo">
+                </div>
+                <span th:if="${msg != null && msg.contains('wrong')}">
+					<div class="alert alert-danger" role="alert">
+						<span th:text="${msg}"></span>
+					</div>
+				</span>
+                <span th:if="${msg != null && !msg.contains('wrong')}">
+					<div class="alert alert-success" role="alert">
+						<span th:text="${msg}"></span>
+					</div>
+				</span>
+                <div class="card fat">
+                    <div class="card-body">
+                        <h4 class="card-title">Change Your Role </h4>
+                        <p class="hint-text">Great Roles comes with great responsibilities.</p>
+                        <form th:action="@{/update-role}" method="post" class="my-login-validation" novalidate="">
+                            <div class="container">
+                                <div class="col-md-12 col-md-offset-12">
+                                    <div class="checkbox switcher inline">
+                                        <small class="mr-3">
+                                            <a href="#modelServiceP" class="trigger-btn" data-toggle="modal">Service provider</a>
+                                        </small>
+                                        <label for="test">
+                                            <input type="checkbox" id="test" name="serviceOrEnd" checked>
+                                            <span><small></small></span>
+                                        </label>
+                                        <small>
+                                            <a href="#modelServiceC" class="trigger-btn" data-toggle="modal">Service consumer</a>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+<!--                            models start-->
+                            <div id="modelServiceP" class="modal fade">
+                                <div class="modal-dialog modal-login">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title"> About Service Providers </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p> <strong>Service Provider</strong>  provides service to <strong>Service Consumer</strong> .</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            Copyright &copy; 2020 &mdash; All right reserved to Repoph
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="modelServiceC" class="modal fade">
+                                <div class="modal-dialog modal-login">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title"> About Service Consumers </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p> <strong>Service Consumers</strong>  Consume service from <strong>Service Providers</strong> .</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            Copyright &copy; 2020 &mdash; All right reserved to Repoph
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+<!--                            models end-->
+                            <div class="form-group m-0">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    Update
+                                </button>
+                            </div>
+                            <div class="mt-4 text-center">
+                                Go to <a href="/profile">Profile</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="footer">
+                    Copyright &copy; 2020 &mdash; All right reserved to Repoph
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="../static/js/login-register-forget-reset.js"></script>
+</body>
+</html>

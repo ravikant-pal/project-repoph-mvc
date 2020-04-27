@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <title>Repoph - User Dashboard</title>
+    <meta content="" name="descriptison"/>
+    <meta content="" name="keywords"/>
+
+    <!-- Favicons -->
+    <link href="../static/images/logo.png" rel="icon"/>
+    <link href="../static/images/logo.png" rel="apple-touch-icon"/>
+    <!-- Google Fonts -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+            rel="stylesheet"
+    />
+
+    <!-- Vendor CSS Files -->
+    <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../static/assets/vendor/icofont/icofont.min.css" rel="stylesheet"/>
+    <link href="../static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"/>
+    <link href="../static/assets/vendor/venobox/venobox.css" rel="stylesheet"/>
+    <link
+            href="../static/assets/vendor/owl.carousel/assets/owl.carousel.min.css"
+            rel="stylesheet"
+    />
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link href="../static/assets/vendor/aos/aos.css" rel="stylesheet"/>
+
+    <!-- Template Main CSS File -->
+    <link href="../static/assets/css/style.css" rel="stylesheet"/>
+    <style>
+        a.custom-card,
+        a.custom-card:hover {
+            color: inherit;
+            max-width: 18rem;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+<!-- ======= Mobile nav toggle button ======= -->
+<button type="button" class="mobile-nav-toggle d-xl-none">
+    <i class="icofont-navigation-menu"></i>
+</button>
+
+<!-- ======= Status ======= -->
+<header id="header">
+    <div class="d-flex flex-column">
+        <div class="profile">
+            <img
+                    src="https://i7.pngguru.com/preview/527/663/825/logo-person-user-person-icon.jpg"
+                    alt=""
+                    class="img-fluid rounded-circle"
+            />
+            <h1 class="text-light" th:text="${profile.firstName + ' ' + profile.lastName}">Nikita Singh</h1>
+            <div class="social-links mt-3 text-center">
+                <a href="#" class="google-plus">
+                    <i class="bx bx-current-location"></i>
+                </a>
+                <span style="color: antiquewhite;" th:if="${profile.getAddress()!=null}" th:text="${profile.getAddress().getCity()}">Bengaluru</span>
+            </div>
+        </div>
+
+        <nav class="nav-menu overflow-auto">
+            <ul>
+                <li class="active">
+                    <a href="#dashboard"
+                    ><i class="bx bx-home"></i> <span>Dashboard</span></a
+                    >
+                </li>
+                <li>
+                    <a href="#address"
+                    ><i class="bx bxl-periscope"></i> <span>Address</span></a
+                    >
+                </li>
+                <li>
+                    <a href="#contact"
+                    ><i class="bx bxs-contact"></i> <span>Contact</span></a
+                    >
+                </li>
+                <li>
+                    <a href="#national_id"
+                    ><i class="bx bx-id-card"></i>National Id</a
+                    >
+                </li>
+                <li>
+                    <a href="#skills"><i class='bx bxs-shopping-bags'></i></i>Skills & Pricing</a>
+                </li>
+                <li>
+                    <a href="#role"><i class='bx bx-directions'></i> Role</a>
+                </li>
+                <li>
+                    <a href="#user_review"><i class='bx bx-message-alt-detail'></i> User review</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- .nav-menu -->
+        <button type="button" class="mobile-nav-toggle d-xl-none">
+            <i class="icofont-navigation-menu"></i>
+        </button>
+    </div>
+</header>
+<!-- End Status -->
+
+<!-- ======= Hero Section ======= -->
+<section
+        id="hero"
+        class="d-flex flex-column justify-content-center align-items-center section-bg"
+>
+    <div class="hero-container" data-aos="fade-in">
+        <h1>Welcome</h1>
+        <p>
+          <span th:if="${profile.getGender()}">
+            Mr.
+          </span>
+            <span th:if="${!profile.getGender()}">
+            Mrs.
+          </span>
+            <span class="typed" th:data-typed-items="${profile.firstName + ' ' + profile.lastName}"></span>
+        </p>
+    </div>
+</section>
+<!-- End Hero -->
+
+<main id="main">
+    <!-- ======= Dashboard Section ======= -->
+    <section id="dashboard" class="dashboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>Dashboard</h2>
+                <p>
+                    This is the your dashboard where you can configure your profile
+                    according to your need. All the details shown below if not please
+                    add which is necessary. And By navigating to the left navigation
+                    bar you can update the details. And please make sure all the details
+                    should be correct.
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 mt-6" data-aos="fade-in">
+                    <div class="shadow-none p-3 mb-5 bg-white rounded" style="width: 96%">
+                        <div class="card-header">
+                            About you
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${profile.getAbout()==null}">
+                                <p class="card-text mb-0">
+                                <p >For example I'm mechanic based on bangalore and I love to make some designed architect into reality. </p>
+                                <footer class="blockquote-footer" > Gopalachary Puttashwami <cite title="Source Title"> Construction Mechanic </cite></footer>
+                                </p>
+                            </div>
+                            <div th:if="${profile.getAbout()!=null}">
+                                <p class="card-text mb-0">
+                                <p th:text="${profile.getAbout().getDescription()}">For example I'm mechanic based on bangalore and I love to make some designed architect into reality. </p>
+                                <footer class="blockquote-footer">
+                                    <span th:text="${profile.getFirstName()+' '+profile.getLastName()}"> Gopalachary Puttashwami </span>
+                                    <cite title="Source Title" th:text="${profile.getAbout().getTitle()}"> Construction Mechanic </cite>
+                                </footer>
+                                </p>
+                            </div>
+                            <a href="/update-about" class="btn btn-light float-right m-2 text-success"><i class='fas fa-pen-square' aria-hidden='true'></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 mt-6" data-aos="fade-right">
+                    <div class="card border-light shadow-sm p-3 mb-5 bg-white rounded" style="max-width: 25rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Address Details</h5>
+                            <div th:if="${profile.getAddress()==null}">
+                                <p class="card-text">
+                                    No address available
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">When you added, it will show up here</small>
+                                </p>
+                            </div>
+                            <div th:if="${profile.getAddress()!=null}">
+                                <p class="card-text">
+                                    Your Address details is here.
+                                </p>
+                                <p class="card-text">
+                                    <i class='bx bx-map h4 text-warning'></i>
+                                    <span class="ml-5"
+                                          th:text="${profile.getAddress().getHouseNumber()+ ' '+profile.getAddress().getStreet()}">A108 Adam Street</span>
+                                </p>
+                                <p class="card-text">
+                                    <i class='bx bxs-city h4 text-warning'></i>
+                                    <span class="ml-5"
+                                          th:text="${profile.getAddress().getCity()+ ', '+profile.getAddress().getCountry()+' '+profile.getAddress().getPinCode()}">New York, NY 535022</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 pt-4 pt-lg-0 content" data-aos="fade-left">
+                    <div class="card border-light shadow-sm p-3 mb-5 bg-white rounded" style="max-width: 25rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">Contact Details</h5>
+                        <p class="card-text">
+                          Your contact details is here.
+                        </p>
+                        <p class="card-text">
+                          <i class='bx bx-mail-send h4 text-warning'></i>
+                          <span class="ml-5" th:text="${profile.getEmail()}">info@example.com</span>
+                        </p>
+                        <div th:if="${profile.getMobileNumber()==null}">
+                          <p class="card-text">
+                            <i class='bx bxs-phone h4 text-warning'></i>
+                            <small class="text-muted ml-2">When you added, it will show up here</small>
+                          </p>
+                        </div>
+                        <div th:if="${profile.getMobileNumber()!=null}">
+                          <p class="card-text">
+                            <i class='bx bxs-phone h4 text-warning'></i>
+                            <span class="ml-5" th:text="${profile.getMobileNumber()}">+1 5589 55488 55s</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 mt-6" data-aos="fade-right">
+                    <div class="card border-light shadow-sm p-3 mb-5 bg-white rounded" style="max-width: 25rem;">
+                        <div class="card-body">
+                          <h5 class="card-title">National Id Details</h5>
+                          <div th:if="${profile.getNationalId()==null}">
+                            <p class="card-text">
+                              No National Id available
+                            </p>
+                            <p class="card-text">
+                              <small class="text-muted">When you added, it will show up here</small>
+                            </p>
+                          </div>
+                          <div th:if="${profile.getNationalId()!=null}">
+                            <p class="card-text">
+                              Your National Id details is here.
+                            </p>
+                            <p class="card-text">
+                              <i class='bx bx-id-card h4 text-warning'></i>
+                              <span class="ml-5" th:text="${profile.getNationalId().getType()}">Aadhar</span>
+                            </p>
+                            <p class="card-text">
+                              <i class='bx bx-credit-card-front h4 text-warning'></i>
+                              <span class="ml-5"th:text="${profile.getNationalId().getNumber()}">9067 - 7834 - 9012</span>
+                            </p>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 pt-4 pt-lg-0 content" data-aos="fade-left">
+                    <div class="card border-light shadow-sm p-3 mb-5 bg-white rounded" style="max-width: 25rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Skills & Pricing Details</h5>
+                          <div th:if="${profile.getSkills()!=null && profile.getSkills().size()==0}">
+                            <p class="card-text" >
+                              No Skills available
+                            </p>
+                            <p class="card-text">
+                              <small class="text-muted">When you added, it will show up here</small>
+                            </p>
+                          </div>
+                          <div th:if="${profile.getSkills()!=null && profile.getSkills().size()>0}">
+                              <hr/>
+                              <p class="card-text">
+                                  <i class='bx bx-rupee h4 text-warning'></i>
+                                  <span class="float-right"
+                                        th:text="${profile.getPricing()+' '}">100</span>
+                              </p>
+                              <hr/>
+                              <p class="card-text">
+                                  You have below skills :
+                              </p>
+                              <p class="card-text">
+                                <span th:each="skill: ${profile.getSkills()}">
+                                    <span class="badge badge-pill badge-light mt-1 h6">
+                                        <span th:text="${skill.getSkillName()}">Java</span>&nbsp;
+                                        <span class="badge badge-pill badge-success" th:text="${skill.getExperience()}">0</span>
+                                    </span>
+                                </span>
+                              </p>
+                          </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End About Section -->
+    <!-- ======= Card  left ======= -->
+  <section id="address" class="dashboard">
+    <div class="container">
+      <div class="section-title">
+        <h2>Address</h2>
+          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 mt-6" data-aos="fade-right">
+          <a href="/update-address" class="custom-card">
+            <div class="card border-light mb-3 shadow p-3 mb-3 bg-white rounded" style="max-width: 18rem;">
+              <div class="card-header">
+                Status
+                <span th:if="${profile.getAddress()!=null}">
+                  <span class="badge badge-pill badge-success"><i class="fas fa-check"></i></span>
+                </span>
+                <span th:if="${profile.getAddress()==null}">
+                  <i class="fas fa-exclamation-triangle text-warning"></i>
+                </span>
+
+                <i class="fas fa-cog float-right"></i>
+              </div>
+                <div class="card-body">
+                    <div th:if="${profile.getAddress()==null}">
+                        <h2 class="text-muted"> Add Address </h2>
+                    </div>
+                    <div th:if="${profile.getAddress()!=null}">
+                        <h5 class="card-title"> Address </h5>
+                        <p class="card-text">
+                            This address is visible to the other users.
+                            On the basis of this they will hire you if you are near them.
+                        </p>
+                        <p class="card-text">
+                            <strong>House No</strong> : <small class="text-muted" th:text="${profile.getAddress().getHouseNumber()}">247/23 V9 Baikunthpur</small>
+                        </p>
+                        <p class="card-text">
+                            <strong>Street</strong> : <small class="text-muted" th:text="${profile.getAddress().getStreet()}">Mangari</small>
+                        </p>
+                        <p class="card-text">
+                            <strong>City</strong> : <small class="text-muted" th:text="${profile.getAddress().getCity()}">Varanasi</small>
+                        </p>
+                        <p class="card-text">
+                            <strong>Pin Code</strong> : <small class="text-muted" th:text="${profile.getAddress().getPinCode()}">221202</small>
+                        </p>
+                        <p class="card-text">
+                            <strong>Country</strong> : <small class="text-muted" th:text="${profile.getAddress().getCountry()}">India</small>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">Last updated 3 mins ago</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
+          <img
+                  src="https://cdn.droggol.com/web/image/535/web.svg"
+                  class="img-fluid"
+                  alt=""
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <!-- ======= Card right ======= -->
+    <section id="contact" class="dashboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact</h2>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
+                    <img
+                            src="https://cdn.droggol.com/web/image/theme_droggol.contact_us_image_01"
+                            class="img-fluid"
+                            alt=""
+                    />
+                </div>
+                <div class="col-lg-4 mt-6" data-aos="fade-right">
+                    <a href="/update-contact" class="custom-card">
+                        <div class="card border-light mb-3 shadow p-3 mb-5 bg-white rounded" style="max-width: 18rem;">
+                            <div class="card-header">
+                                Status
+                                <span th:if="${profile.getMobileNumber()!=null}">
+                                    <span class="badge badge-pill badge-success"><i class="fas fa-check"></i></span>
+                                </span>
+                                <span th:if="${profile.getMobileNumber()==null}">
+                                    <span class="badge badge-pill badge-success"><i class="fas fa-check"></i></span>
+                                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                                </span>
+                                <i class="fas fa-cog float-right"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Contact</h5>
+                                <p class="card-text">
+                                    This Email and Mobile number should be Valid and On.
+                                    Because you will get notification and call on this email and mobile number.
+                                </p>
+                                <p class="card-text">
+                                    <strong>Email Address</strong> : <small class="text-muted" th:text="${profile.getEmail()}">no-reply@Repoph.com</small>
+                                </p>
+                                <p class="card-text" th:if="${profile.getMobileNumber()!=null}">
+                                    <strong>Mobile No</strong> : <small class="text-muted" th:text="${profile.getMobileNumber()}">India</small>
+                                </p>
+                                <p class="card-text" th:if="${profile.getMobileNumber()==null}">
+                                    <strong>Mobile No</strong> : <small class="text-muted">Add Mobile Number</small>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">Last updated 3 mins ago</small>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ======= Card up down ======= -->
+    <section id="national_id" class="dashboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>National Id</h2>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 mt-6" data-aos="fade-down">
+                    <a href="/update-national-id" class="custom-card">
+                        <div class="card border-light mb-3 shadow p-3 mb-5 bg-white rounded" style="max-width: 18rem;">
+                            <div class="card-header">
+                                Status
+                                <span th:if="${profile.getNationalId()!=null}">
+                                    <span class="badge badge-pill badge-success"><i class="fas fa-check"></i></span>
+                                </span>
+                                <span th:if="${profile.getNationalId()==null}">
+                                     <i class="fas fa-exclamation-triangle text-warning"></i>
+                                </span>
+                                <i class="fas fa-cog float-right"></i>
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${profile.getNationalId()==null}">
+                                    <h2 class="text-muted"> Add national Id </h2>
+                                </div>
+                                <div th:if="${profile.getNationalId()!=null}">
+                                    <h5 class="card-title">National Id</h5>
+                                    <p class="card-text">
+                                        This id is to verify your identity.
+                                        Please provide the National Id.
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Id Type</strong> : <small class="text-muted" th:text="${profile.getNationalId().getType()}">Aadhar</small>
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Id Number</strong> : <small class="text-muted" th:text="${profile.getNationalId().getNumber()}">9067-1278-9034</small>
+                                    </p>
+                                    <p class="card-text">
+                                        <small class="text-muted">Last updated 3 mins ago</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-up">
+                    <img
+                            src="https://cdn.droggol.com/web/image/603/hero.svg"
+                            class="img-fluid"
+                            alt=""
+                    />
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ======= Card up down ======= -->
+    <section id="skills" class="dashboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>Skills & Pricing</h2>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-up">
+                    <img
+                            src="https://cdn.droggol.com/web/image/637/mobile.svg"
+                            class="img-fluid"
+                            alt=""
+                    />
+                </div>
+                <div class="col-lg-4 mt-6" data-aos="fade-down">
+                    <a href="/update-skills-pricing" class="custom-card">
+                        <div class="card border-light mb-3 shadow p-3 mb-5 bg-white rounded" style="max-width: 18rem;">
+                            <div class="card-header">
+                                Status
+                                <span th:if="${profile.getSkills()!=null && profile.getSkills().size()>0}">
+                                    <span class="badge badge-pill badge-success"><i class="fas fa-check"></i></span>
+                                </span>
+                                <span th:if="${profile.getSkills()!=null && profile.getSkills().size()==0}">
+                                     <i class="fas fa-exclamation-triangle text-warning"></i>
+                                </span>
+                                <i class="fas fa-cog float-right"></i>
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${profile.getSkills()!=null && profile.getSkills().size()==0}">
+                                    <h2 class="text-muted"> Add Skills </h2>
+                                </div>
+                                <div th:if="${profile.getSkills()!=null && profile.getSkills().size()>0}">
+                                    <h5 class="card-title">Skills & Pricing</h5>
+                                    <p class="card-text">
+                                        These skills are the tags for you to be on search.
+                                        Add as much as possible to be on top.
+                                    </p>
+                                    <hr/>
+                                    <p class="card-text">
+                                        <i class='bx bx-rupee h4 text-warning'></i>
+                                        <span class="float-right"
+                                              th:text="${profile.getPricing()+' '}">A108 Adam Street</span>
+                                    </p>
+                                    <hr/>
+                                    <p class="card-text">
+                                        <span th:each="skill: ${profile.getSkills()}">
+                                            <span class="badge badge-pill badge-light mt-1 h6">
+                                                <span  th:text="${skill.getSkillName()}" >Java</span>&nbsp;
+                                                <span class="badge badge-pill badge-success" th:text="${skill.getExperience()}">0</span>
+                                            </span>
+                                        </span>
+                                    </p>
+                                    <p class="card-text">
+                                        <small class="text-muted">Last updated 3 mins ago</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="role" class="dashboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>Role</h2>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 mt-6" data-aos="fade-right">
+                    <a href="/update-role" class="custom-card">
+                        <div class="card border-light mb-3 shadow p-3 mb-5 bg-white rounded" style="max-width: 18rem;">
+                            <div class="card-header">
+                                Status
+                                <span class="badge badge-pill badge-success"><i class="fas fa-check"></i></span>
+                                <i class="fas fa-cog float-right"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Role</h5>
+                                <p class="card-text">
+                                    Great Roles comes with great responsibilities.
+                                    You can change role any time.
+                                </p>
+                                <p class="card-text" th:each="role : ${profile.getRoles()}">
+                                    <span th:if="${role.getName().equals('SERVICE_USER')}">
+                                     <strong>Role</strong> : <small class="text-muted">Service Provider</small>
+                                    </span>
+                                    <span th:if="${role.getName().equals('END_USER')}">
+                                     <strong>Role</strong> : <small class="text-muted">Service Consumer</small>
+                                    </span>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">Last updated 3 mins ago</small>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
+                    <img
+                            src="https://cdn.droggol.com/web/image/537/web.svg"
+                            class="img-fluid"
+                            alt=""
+                    />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======= Facts Section ======= -->
+    <!-- <section id="facts" class="facts">
+      <div class="container">
+        <div class="section-title">
+          <h2>Facts</h2>
+          <p>
+            Magnam dolores commodi suscipit. Necessitatibus eius consequatur
+            ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam
+            quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea.
+            Quia fugiat sit in iste officiis commodi quidem hic quas.
+          </p>
+        </div>
+
+        <div class="row no-gutters">
+          <div
+            class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch"
+            data-aos="fade-up"
+          >
+            <div class="count-box">
+              <i class="icofont-simple-smile"></i>
+              <span data-toggle="counter-up">232</span>
+              <p><strong>Happy Clients</strong> consequuntur quae</p>
+            </div>
+          </div>
+
+          <div
+            class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            <div class="count-box">
+              <i class="icofont-document-folder"></i>
+              <span data-toggle="counter-up">521</span>
+              <p><strong>Projects</strong> adipisci atque cum quia aut</p>
+            </div>
+          </div>
+
+          <div
+            class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            <div class="count-box">
+              <i class="icofont-live-support"></i>
+              <span data-toggle="counter-up">1,463</span>
+              <p><strong>Hours Of Support</strong> aut commodi quaerat</p>
+            </div>
+          </div>
+
+          <div
+            class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch"
+            data-aos="fade-up"
+            data-aos-delay="300"
+          >
+            <div class="count-box">
+              <i class="icofont-users-alt-5"></i>
+              <span data-toggle="counter-up">15</span>
+              <p><strong>Hard Workers</strong> rerum asperiores dolor</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+    <!-- End Facts Section -->
+
+    <!-- ======= Skills Section ======= -->
+    <!-- <section id="skills" class="skills section-bg">
+      <div class="container">
+        <div class="section-title">
+          <h2>Skills</h2>
+          <p>
+            Magnam dolores commodi suscipit. Necessitatibus eius consequatur
+            ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam
+            quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea.
+            Quia fugiat sit in iste officiis commodi quidem hic quas.
+          </p>
+        </div>
+
+        <div class="row skills-content">
+          <div class="col-lg-6" data-aos="fade-up">
+            <div class="progress">
+              <span class="skill">HTML <i class="val">100%</i></span>
+              <div class="progress-bar-wrap">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="100"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+
+            <div class="progress">
+              <span class="skill">CSS <i class="val">90%</i></span>
+              <div class="progress-bar-wrap">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="90"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+
+            <div class="progress">
+              <span class="skill">JavaScript <i class="val">75%</i></span>
+              <div class="progress-bar-wrap">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="75"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="progress">
+              <span class="skill">PHP <i class="val">80%</i></span>
+              <div class="progress-bar-wrap">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="80"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+
+            <div class="progress">
+              <span class="skill">WordPress/CMS <i class="val">90%</i></span>
+              <div class="progress-bar-wrap">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="90"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+
+            <div class="progress">
+              <span class="skill">Photoshop <i class="val">55%</i></span>
+              <div class="progress-bar-wrap">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="55"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+    <!-- End Skills Section -->
+    <!-- ======= Testimonials Section ======= -->
+    <section id="user_review" class="testimonials section-bg">
+        <div class="container">
+            <div class="section-title">
+                <h2>User review</h2>
+                <p>
+                    Magnam dolores commodi suscipit. Necessitatibus eius consequatur
+                    ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam
+                    quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea.
+                    Quia fugiat sit in iste officiis commodi quidem hic quas.
+                </p>
+            </div>
+
+            <div class="owl-carousel testimonials-carousel">
+                <div class="testimonial-item" data-aos="fade-up">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Proin iaculis purus consequat sem cure digni ssim donec
+                        porttitora entum suscipit rhoncus. Accusantium quam, ultricies
+                        eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img
+                            src="assets/img/testimonials/testimonials-1.jpg"
+                            class="testimonial-img"
+                            alt=""
+                    />
+                    <h3>Saul Goodman</h3>
+                    <h4>Ceo &amp; Founder</h4>
+                </div>
+
+                <div
+                        class="testimonial-item"
+                        data-aos="fade-up"
+                        data-aos-delay="100"
+                >
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Export tempor illum tamen malis malis eram quae irure esse
+                        labore quem cillum quid cillum eram malis quorum velit fore eram
+                        velit sunt aliqua noster fugiat irure amet legam anim culpa.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img
+                            src="assets/img/testimonials/testimonials-2.jpg"
+                            class="testimonial-img"
+                            alt=""
+                    />
+                    <h3>Sara Wilsson</h3>
+                    <h4>Designer</h4>
+                </div>
+
+                <div
+                        class="testimonial-item"
+                        data-aos="fade-up"
+                        data-aos-delay="200"
+                >
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Enim nisi quem export duis labore cillum quae magna enim sint
+                        quorum nulla quem veniam duis minim tempor labore quem eram duis
+                        noster aute amet eram fore quis sint minim.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img
+                            src="assets/img/testimonials/testimonials-3.jpg"
+                            class="testimonial-img"
+                            alt=""
+                    />
+                    <h3>Jena Karlis</h3>
+                    <h4>Store Owner</h4>
+                </div>
+
+                <div
+                        class="testimonial-item"
+                        data-aos="fade-up"
+                        data-aos-delay="300"
+                >
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Fugiat enim eram quae cillum dolore dolor amet nulla culpa
+                        multos export minim fugiat minim velit minim dolor enim duis
+                        veniam ipsum anim magna sunt elit fore quem dolore labore illum
+                        veniam.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img
+                            src="assets/img/testimonials/testimonials-4.jpg"
+                            class="testimonial-img"
+                            alt=""
+                    />
+                    <h3>Matt Brandon</h3>
+                    <h4>Freelancer</h4>
+                </div>
+
+                <div
+                        class="testimonial-item"
+                        data-aos="fade-up"
+                        data-aos-delay="400"
+                >
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Quis quorum aliqua sint quem legam fore sunt eram irure aliqua
+                        veniam tempor noster veniam enim culpa labore duis sunt culpa
+                        nulla illum cillum fugiat legam esse veniam culpa fore nisi
+                        cillum quid.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img
+                            src="assets/img/testimonials/testimonials-5.jpg"
+                            class="testimonial-img"
+                            alt=""
+                    />
+                    <h3>John Larson</h3>
+                    <h4>Entrepreneur</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Testimonials Section -->
+</main>
+<!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer">
+    <div class="container">
+        <div class="copyright">
+            &copy; Copyright <strong><span>Repoph</span></strong>
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/ -->
+            Designed by <a href="https://pol-alok.github.io/portfolio/">Ravikant</a>
+        </div>
+    </div>
+</footer>
+<!-- End  Footer -->
+
+<a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="../static/assets/vendor/jquery/jquery.min.js"></script>
+<script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../static/assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+<script src="../static/assets/vendor/php-email-form/validate.js"></script>
+<script src="../static/assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+<script src="../static/assets/vendor/counterup/counterup.min.js"></script>
+<script src="../static/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="../static/assets/vendor/venobox/venobox.min.js"></script>
+<script src="../static/assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+<script src="../static/assets/vendor/typed.js/typed.min.js"></script>
+<script src="../static/assets/vendor/aos/aos.js"></script>
+
+<!-- Template Main JS File -->
+<script src="../static/assets/js/main.js"></script>
+</body>
+</html>
