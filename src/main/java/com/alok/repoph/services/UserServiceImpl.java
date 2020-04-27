@@ -70,42 +70,54 @@ public class UserServiceImpl implements UserService {
         return message;
     }
 
-    public String saveAddress(Address address, Principal principal){
+    public String updateAddress(Address address, Principal principal){
         LOGGER.info(">>>>Entering into saveAddress ");
         User user = userDao.findByEmail(principal.getName());
         user.setAddress(address);
+        if(user.getAbout()!=null && user.getMobileNumber()!=null && user.getNationalId()!=null && user.getPricing()!=null && user.getSkills().size()>0) {
+            user.setIsProfileCompleted(true);
+        }
         userDao.save(user);
         String message ="You are successfully Updated Address.";
         LOGGER.info("<<<<<Exiting from saveAddress ");
         return message;
     }
 
-    public String saveContact(ContactDto contact, Principal principal){
+    public String updateContact(ContactDto contact, Principal principal){
         LOGGER.info(">>>>Entering into saveContact ");
         User user = userDao.findByEmail(principal.getName());
         user.setEmail(contact.getEmail());
         user.setMobileNumber(contact.getMobileNumber());
+        if(user.getAbout()!=null && user.getAddress()!=null && user.getNationalId()!=null && user.getPricing()!=null && user.getSkills().size()>0) {
+            user.setIsProfileCompleted(true);
+        }
         userDao.save(user);
         String message ="You are successfully Updated Contact.";
         LOGGER.info("<<<<<Exiting from saveContact ");
         return message;
     }
 
-    public String saveNationalId(NationalId nationalId, Principal principal){
+    public String updateNationalId(NationalId nationalId, Principal principal){
         LOGGER.info(">>>>Entering into saveNationalId ");
         User user = userDao.findByEmail(principal.getName());
         user.setNationalId(nationalId);
+        if(user.getAbout()!=null && user.getMobileNumber()!=null && user.getAddress()!=null && user.getPricing()!=null && user.getSkills().size()>0) {
+            user.setIsProfileCompleted(true);
+        }
         userDao.save(user);
         String message ="You are successfully Updated National Id.";
         LOGGER.info("<<<<<Exiting from saveContact ");
         return message;
     }
 
-    public String saveSkillsAndPricing(List<Skill> skills,Double pricing, Principal principal){
+    public String updateSkillsAndPricing(List<Skill> skills, Double pricing, Principal principal){
         LOGGER.info(">>>>Entering into saveSkills ");
         User user = userDao.findByEmail(principal.getName());
         user.setSkills(skills);
         user.setPricing(pricing);
+        if(user.getAbout()!=null && user.getMobileNumber()!=null && user.getAddress()!=null && user.getPricing()!=null && user.getNationalId()!=null) {
+            user.setIsProfileCompleted(true);
+        }
         userDao.save(user);
         String message ="You are successfully Updated Skills.";
         LOGGER.info("<<<<<Exiting from saveSkills ");
@@ -131,6 +143,9 @@ public class UserServiceImpl implements UserService {
         LOGGER.info(">>>>Entering into updateAbout ");
         User user = userDao.findByEmail(principal.getName());
         user.setAbout(new About(form.getTitle(),form.getDescription()));
+        if(user.getSkills().size()>0 && user.getMobileNumber()!=null && user.getAddress()!=null && user.getPricing()!=null && user.getNationalId()!=null) {
+            user.setIsProfileCompleted(true);
+        }
         String message ="You are successfully Updated About yourself.";
         LOGGER.info("<<<<<Exiting from updateAbout ");
         return message;

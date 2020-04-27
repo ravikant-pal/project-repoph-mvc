@@ -36,7 +36,7 @@
                         <form th:action="@{/login}" th:object="${loginForm}" method="post" class="my-login-validation" novalidate="">
                             <div class="form-group">
                                 <label for="email">E-Mail Address</label>
-                                <input id="email" type="email" class="form-control" th:field="*{username}" value="" required
+                                <input id="email" type="email" class="form-control" th:field="*{username}" value="" required="required"
                                        autofocus>
                                 <div class="invalid-feedback">
                                     Email is invalid
@@ -48,7 +48,7 @@
                                         Forgot Password?
                                     </a>
                                 </label>
-                                <input id="password" type="password" class="form-control"  th:field="*{password}" required
+                                <input id="password" type="password" class="form-control"  th:field="*{password}" required="required"
                                        data-eye>
                                 <div class="invalid-feedback">
                                     Password is required
