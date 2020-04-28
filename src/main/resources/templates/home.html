@@ -11,6 +11,7 @@
     <link href="../static/images/logo.png" rel="apple-touch-icon"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="../static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -28,6 +29,7 @@
 
     </style>
     <link rel="stylesheet" type="text/css" href="../static/css/home.css" />
+
 </head>
 <body>
 <nav class="navbar  sticky-top navbar-light alert-danger justify-content-between ">
@@ -236,15 +238,15 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12 col-lg-8 col-md-6">
-                                    <h3 class="mb-0 text-truncated" th:text="${user.getFirstName()+' '+user.getLastName()}">Mike Anamendolla</h3>
-                                    <p class="lead" th:text="${user.getAbout().getTitle()}">Web / UI Designer</p>
+                                    <h3 class="mb-0 text-truncated" th:id="'name' + ${user.getId()}" th:text="${user.getFirstName()+' '+user.getLastName()}">Mike Anamendolla</h3>
+                                    <p class="lead" th:id="'title' + ${user.getId()}" th:text="${user.getAbout().getTitle()}">Web / UI Designer</p>
                                     <p  class="card-text" th:text="${user.getAbout().getDescription()}">
                                         I love to read, hang out with friends, watch football, listen to music, and
                                         learn new things.
                                     </p>
                                     <p>
                                         <span th:each="skill: ${user.getSkills()}">
-                                            <span class="badge badge-pill badge-light mt-1 h6">
+                                            <span class="badge badge-pill badge-light mt-1 h4">
                                                 <small th:text="${skill.getSkillName()}">Java</small>&nbsp;
                                                 <small class="badge badge-pill badge-success" th:text="${skill.getExperience()}">0</small>
                                             </span>
@@ -284,8 +286,8 @@
                                         <li>
                                             <small>Pricing : <i class='fas fa-rupee-sign text-warning ml-2'></i>
                                             </small>
-                                            <small class="ml-2"
-                                                   th:text="${user.getPricing()+'/day'}">100</small>
+                                            <small class="ml-2" th:id="'price' + ${user.getId()}"
+                                                   th:text="${user.getPricing()}">100</small>/day
                                         </li>
                                     </ul>
                                 </div>
@@ -302,13 +304,13 @@
                                                 class="fa fa-check"></span> hired </button>
                                     </div>
                                     <div th:if="${!user.getHireStatus()}">
-                                        <div th:if="${user.getGender()}">
-                                            <button type="button" class="btn btn-outline-primary btn-block" >
+                                        <div th:if="${user.getGender()}" th:id="'hire-btn' + ${user.getId()}">
+                                            <button type="button"  class="btn btn-outline-primary btn-block" th:onclick="'disableHireButton(\'hire-btn'+${user.getId()}+'\');'+'addItemToCart('+${user.getId()}+');'">
                                                 <span class="fa fa-arrow-circle-right"></span> hire Him
                                             </button>
                                         </div>
-                                        <div th:if="${!user.getGender()}">
-                                            <button type="button" class="btn btn-outline-primary btn-block" >
+                                        <div th:if="${!user.getGender()}" th:id="'hire-btn' + ${user.getId()}">
+                                            <button type="button" class="btn btn-outline-primary btn-block" th:onclick="'disableHireButton(\'hire-btn'+${user.getId()}+'\');'+'addItemToCart('+${user.getId()}+');'">
                                                 <span class="fa fa-arrow-circle-right"></span> hire Her
                                             </button>
                                         </div>
@@ -331,7 +333,7 @@
     <aside class="sidebar-right sidebar-item">
         <div class="col-lg-12 col-md-12 col-sm-12 cart  make-me-sticky" id="cart">
             <div class="card ">
-                <div class="card-body">
+                <div class="card-body" style="padding: 0.70rem;">
                     <div class="card-header">
                         <h4>Your hiring</h4>
                     </div>
@@ -340,13 +342,12 @@
 
                 </div>
                 <div class="card-footer">
-                    <span>Grand Subtotal : ₹</span>&nbsp;&nbsp;&nbsp;<span id="grand"></span>
+                    <span>Grand Subtotal : ₹</span>&nbsp;&nbsp;&nbsp;<span id="grand">0</span>.00/day
                 </div>
-                <form id="list" action="#" method="post">
-
-                    <div class="card-footer">
-                        <button class="btn btn-outline-success w-100" id="btn-conformation"
-                                onclick="storeArrayInHiddenForm()">Continue
+                <form id="list" th:action="@{/add-to-cart}" method="post">
+                    <div class="card-footer" id="action-btn">
+                        <button  class="btn btn-outline-warning w-100" id="btn-conformation"
+                                onclick="storeArrayInHiddenForm()">Conform
                         </button>
                     </div>
                 </form>
@@ -432,6 +433,100 @@
 <!-- jQuery Custom Scroller CDN -->
 <script
         src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js">
+</script>
+<script>
+    let users = [];
+    let grandTotal = 0;
+
+    function addItemToCart(id) {
+        const name = document.getElementById("name" + id);
+        const title = document.getElementById("title" + id);
+        const price = document.getElementById("price" + id);
+
+        const user = {
+            "id": id,
+            "name": name.innerHTML,
+            "title": title.innerHTML,
+            "price": price.innerHTML
+        };
+        users.unshift(user);
+        displayItems();
+        calGrandTotal();
+    }
+    function displayItems() {
+        const dynamicList = document.getElementById("dynamic-row");
+        dynamicList.innerHTML = "";
+        users.forEach(function (user) {
+            dynamicList.innerHTML +=
+                "<div class='container'>" +
+                "    <div class='card-body '>" +
+                "        <div class='row'>" +
+                "           <div class='col-md-9'>" +
+                        "        <span>" +
+                        "            <i class='fa fa-user text-success' aria-hidden='true'></i>" +
+                        "        </span>" +
+                        "        <span class='name'>" + user.name +
+                        "        </span><br><small><cite title='Title' class='text-muted'>("+ user.title+ ")</cite></small><br>" +
+                        "                <span class='mr-2'>Price:</span>" +
+                        "                 <span>₹ </span><span id='" + "cal-price" + user.id + "'>" + user.price + "</span>" +
+                        "    </div>" +
+                "            <div class='col-md-3'>" +
+                "                 <button class='btn btn-outline-danger' onclick='" + "remove(" + user.id + ");'><i class='bx bxs-trash bx-tada '  aria-hidden='true'></i></button>" +
+                "            </div>" +
+                "         </div>" +
+                "    </div>" +
+                "    <hr/>" +
+                "</div>";
+        });
+
+    }
+
+    function calGrandTotal() {
+        grandTotal = users.reduce((a, c) => {
+            return a + parseFloat(c.price);
+        }, 0);
+        document.getElementById('grand').innerHTML = grandTotal;
+        grandTotal = 0;
+    }
+
+    function storeArrayInHiddenForm() {
+        const form = document.getElementById("list");
+        if (form.getElementsByTagName("input").length === 1) {
+            users.forEach(function (user) {
+                document.getElementById("list").innerHTML +=
+                    "<input type='hidden' name='id' value='" + user.id + "'>";
+            });
+        }
+        changePropertyOfConformButton();
+    }
+
+    function changePropertyOfConformButton() {
+        let button = document.getElementById("btn-conformation");
+        button.removeAttribute("onclick");
+        button.setAttribute("type", "submit");
+        button.innerHTML = "Continue";
+        button.classList.remove('btn-outline-warning');
+        button.classList.add('btn-outline-success');
+    }
+
+
+    function remove(id) {
+        users = users.filter(usr => !(usr.id===id));
+        enableHireButton('hire-btn'+id);
+        displayItems();
+        calGrandTotal();
+    }
+
+
+
+
+    function disableHireButton(addBtn) {
+        document.getElementById(addBtn).firstElementChild.disabled = true;
+    }
+
+    function enableHireButton(addBtn) {
+        document.getElementById(addBtn).firstElementChild.disabled = false;
+    }
 </script>
 </body>
 </html>
