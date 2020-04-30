@@ -70,6 +70,10 @@ public class UserServiceImpl implements UserService {
         return message;
     }
 
+    public void save(User user) {
+        userDao.save(user);
+    }
+
     public String updateAddress(Address address, Principal principal){
         LOGGER.info(">>>>Entering into saveAddress ");
         User user = userDao.findByEmail(principal.getName());
