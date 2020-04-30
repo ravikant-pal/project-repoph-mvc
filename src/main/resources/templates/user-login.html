@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Repoph &mdash; Sign in</title>
 
-    <link href="../static/images/logo.png" rel="icon"/>
-    <link href="../static/images/logo.png" rel="apple-touch-icon"/>
+    <link href="../static/assets/img/logo.png" rel="icon"/>
+    <link href="../static/assets/img/logo.png" rel="apple-touch-icon"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/css/login-register-forget-reset.css">
 </head>
@@ -18,7 +18,7 @@
         <div class="row justify-content-md-center h-100">
             <div class="card-wrapper">
                 <div class="brand">
-                    <img src="https://drive.google.com/uc?id=1kenC2KJ0jyPWPY2OvkLZoidcmsfBP_CR" alt="circle logo">
+                    <img src="../static/assets/img/logo.png" alt="circle logo">
                 </div>
 				<span th:if="${msg != null && msg.length()!=0 && !(msg.contains('wrong') || msg.contains('Incorrect'))}">
 					<div class="alert alert-success" role="alert">

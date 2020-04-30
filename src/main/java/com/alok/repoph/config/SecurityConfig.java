@@ -44,11 +44,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/registration/**","/forgot-password/**","/reset-password/**","/home/**","/public-profile/**").permitAll()
                 .antMatchers(
                         "/static/**").permitAll()
                 .anyRequest().authenticated()
+                .and()
+                .rememberMe()
+                .key("uniqueAndSecret")
+                .userDetailsService(userService)
                 .and()
                     .formLogin()
                         .loginPage("/login")

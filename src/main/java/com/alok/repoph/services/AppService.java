@@ -90,6 +90,7 @@ public class AppService {
         Arrays.asList(usersIdsList).forEach(id -> {
             User user = userDao.findById(Long.parseLong(id)).get();
             user.setEstimatedTime(estTime);
+            user.setStatus("pending");
             user.setHireStatus(true);
             user.setWhoHiredMe(endUser);
             hiredUser.add(user);

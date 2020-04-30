@@ -67,9 +67,9 @@ paytm.payment:
 # ===============================
 # = Logging configurations
 # ===============================
-#logging:
-#  level:
-#    root: WARN
-#    com.memorynotfound: DEBUG
-#    org.springframework.web: INFO
-#    org.springframework.security: INFO
+logging:
+  level:
+    root: WARN
+    com.alok.repoph: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO

@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Repoph &mdash; Sign up</title>
 
-    <link href="../static/images/logo.png" rel="icon"/>
-    <link href="../static/images/logo.png" rel="apple-touch-icon"/>
+    <link href="../static/assets/img/logo.png" rel="icon"/>
+    <link href="../static/assets/img/logo.png" rel="apple-touch-icon"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/css/login-register-forget-reset.css">
 </head>
 <body class="my-login-page">
 <nav class="navbar  navbar-light alert-danger justify-content-between ">
     <a class="navbar-brand" href="/">
-        <img src="https://drive.google.com/uc?id=1frQ5BUkE8juBjskOSlWc01PyQg7hI0nF" height="50" width="200">
+        <img src="../static/assets/img/repoph_flat_nav_logo.png" height="50" width="200">
     </a>
     <div class="form-inline">
         <form>
@@ -29,7 +29,7 @@
         <div class="row justify-content-md-center h-100">
             <div class="card-wrapper">
                 <div class="brand">
-                    <img src="https://drive.google.com/uc?id=1kenC2KJ0jyPWPY2OvkLZoidcmsfBP_CR" alt=" circle logo">
+                    <img src="../static/assets/img/logo.png" alt=" circle logo">
                 </div>
                 <span th:if="${msg != null && msg.contains('wrong')}">
 					<div class="alert alert-danger" role="alert">

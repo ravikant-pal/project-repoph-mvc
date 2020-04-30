@@ -78,6 +78,8 @@ public class User implements Serializable {
 
     private String status = "pending";
 
+    private Boolean requestedForEnd = false;
+
 
     private LocalTime hiredStartTime;
 

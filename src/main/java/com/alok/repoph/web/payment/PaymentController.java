@@ -1,5 +1,6 @@
 package com.alok.repoph.web.payment;
 
+
 import com.alok.repoph.models.User;
 import com.alok.repoph.services.AppService;
 import com.alok.repoph.services.UserServiceImpl;
@@ -24,8 +25,10 @@ import java.util.TreeMap;
 
 @Controller
 public class PaymentController {
+
     @Autowired
     private PaytmDetails paytmDetails;
+
     @Autowired
     private Environment environment;
 
@@ -43,9 +46,8 @@ public class PaymentController {
         User serviceUser = appService.getUserById(userId);
         User endUser = userService.findByEmail(principal.getName());
 //        master.getMapOfHiredPeople().remove(id);
-        serviceUser.setHireStatus(false);
-
-
+        serviceUser.setRequestedForEnd(true);
+        userService.save(serviceUser);
         LocalTime end = LocalTime.now();
         Duration duration = Duration.between(serviceUser.getHiredStartTime(), end);
         Long seconds = duration.getSeconds();
@@ -58,7 +60,7 @@ public class PaymentController {
         minutes %= 60;
         System.out.printf("Seconds between %s and %s is: %s hour %s minutes %s seconds.%n", serviceUser.getHiredStartTime(), end, hour,minutes,seconds);
         long randomNumber = getRandomNumber();
-        String txId = "Txn_"+randomNumber;
+        String txId = "TXN_"+randomNumber;
         model.addAttribute("transactionId",txId);
         model.addAttribute("userId",endUser.getId());
         model.addAttribute("startTime",serviceUser.getHiredStartTime());
@@ -86,9 +88,6 @@ public class PaymentController {
         System.out.println(paytmDetails.getPaytmUrl());
         System.out.println(paytmDetails.getMerchantId());
         System.out.println("#####------------------------------------------------->");
-//        orderService.save(orderr);
-//        System.out.println("order saved");
-//        orderr = null;
         ModelAndView modelAndView = new ModelAndView("redirect:" + paytmDetails.getPaytmUrl());
         TreeMap<String, String> parameters = new TreeMap<>();
         paytmDetails.getDetails().forEach((k, v) -> parameters.put(k, v));
@@ -102,11 +101,12 @@ public class PaymentController {
         modelAndView.addAllObjects(parameters);
         return modelAndView;
     }
-    @PostMapping("/pgresponse")
+
+    @PostMapping(value = "/pgresponse")
     public String getResponseRedirect(HttpServletRequest request, Model model, Principal principal) {
-        System.out.println("----sdrfjdsfgbsdfgbjsdfbgjjsdbfgjsdbfgjb--------");
+
         Map<String, String[]> mapData = request.getParameterMap();
-        TreeMap<String, String> parameters = new TreeMap<>();
+        TreeMap<String, String> parameters = new TreeMap<String, String>();
         mapData.forEach((key, val) -> parameters.put(key, val[0]));
         String paytmChecksum = "";
         if (mapData.containsKey("CHECKSUMHASH")) {
@@ -119,9 +119,26 @@ public class PaymentController {
             isValideChecksum = validateCheckSum(parameters, paytmChecksum);
             if (isValideChecksum && parameters.containsKey("RESPCODE")) {
                 if (parameters.get("RESPCODE").equals("01")) {
+
+
+                    User user = userService.findByEmail(principal.getName());
+                    User userToRelease = null;
+                    for (User usr : user.getListOfHiredPeople()) {
+                        if(usr.getRequestedForEnd()) {
+                            userToRelease = usr;
+                            break;
+                        }
+                    }
+                    assert userToRelease != null;
+                    userToRelease.setHireStatus(false);
+                    userToRelease.setRequestedForEnd(false);
+                    userToRelease.setStatus("finished");
+                    userService.save(userToRelease);
+
+
                     result = "Payment Successful";
                 } else {
-                    result = "Payment Failed";
+                    result = "Payment failed";
                 }
             } else {
                 result = "Checksum mismatched";
@@ -132,9 +149,9 @@ public class PaymentController {
         model.addAttribute("result",result);
         parameters.remove("CHECKSUMHASH");
         model.addAttribute("parameters",parameters);
-//        model.addAttribute("customer",customerService.getBySub(principal.getName()));
         return "payment/report";
     }
+
     private boolean validateCheckSum(TreeMap<String, String> parameters, String paytmChecksum) throws Exception {
         return CheckSumServiceHelper.getCheckSumServiceHelper().verifycheckSum(paytmDetails.getMerchantKey(),
                 parameters, paytmChecksum);
