@@ -8,10 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -51,11 +54,12 @@ public class User implements Serializable {
 
     private Double pricing;
 
+
+    private Double estimatedTime;
+
     private Boolean isProfileCompleted = false;
 
     private Boolean hireStatus = false;
-
-    private Date hireTime;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -70,7 +74,16 @@ public class User implements Serializable {
     private List<Skill> skills;
 
     @ManyToMany
-    private List<User> listOfHiredPeople;
+    private List<User> listOfHiredPeople = new ArrayList<>();
+
+    private String status = "pending";
+
+
+    private LocalTime hiredStartTime;
+
+    @OneToOne
+    private  User whoHiredMe;
+
 
     public User(String firstName,String lastName, String email, String password) {
         this.firstName = firstName;

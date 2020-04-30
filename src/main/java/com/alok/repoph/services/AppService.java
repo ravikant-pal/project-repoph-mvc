@@ -5,10 +5,12 @@ import com.alok.repoph.repository.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -20,7 +22,6 @@ public class AppService {
 
     @Autowired
     UserDao userDao;
-
 
 
 
@@ -81,8 +82,21 @@ public class AppService {
         return userDao.findAllByIsProfileCompleted(true);
     }
 
-
-
-
-
+    public String hire(Double estTime,String ids, Principal principal){
+        LOGGER.info(">>>>Entering into hire ");
+        User endUser = userDao.findByEmail(principal.getName());
+        List<User> hiredUser = new ArrayList<>();
+        String[] usersIdsList = ids.split(",");
+        Arrays.asList(usersIdsList).forEach(id -> {
+            User user = userDao.findById(Long.parseLong(id)).get();
+            user.setEstimatedTime(estTime);
+            user.setHireStatus(true);
+            user.setWhoHiredMe(endUser);
+            hiredUser.add(user);
+        });
+        endUser.setListOfHiredPeople(hiredUser);
+        String message ="Your hiring is successful !";
+        LOGGER.info("<<<<<Exiting from updateAbout ");
+        return message;
+    }
 }

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+    <!-- Font Awesome JS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="../static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"/>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    <title>User Info</title>
+<body>
+<section>
+    <div class="container">
+        <div class="row mt-5 mb-5">
+            <div class="col-lg-12 col-md-12 col-sm-12 mb-2">
+                <div class="card border border-dark">
+                    <div class="card-body d-flex flex-row">
+                        <span class="ml-5">
+                            <span>
+                                <span>
+                                    <a class="btn btn-success ml-5 text-light"
+                                       th:href="@{/profile}">My Profile</a>
+                                </span>
+                                <span>
+                                    <a class="btn btn-success ml-5 text-light" th:href="@{/home}"> Home</a>
+                                </span>
+                            </span>
+
+                        </span>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5>Your Hiring:</h5>
+
+                        <div class="card-body d-flex flex-column">
+                            <div class="card items" >
+                                <div class="card-body d-flex flex-row">
+                                    <div class="card-body">
+                                        <h6 class="card-title text-dark" >User Details:</h6>
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col"> User Name </th>
+                                                <th scope="col"> Email </th>
+                                                <th scope="col"> Mobile No </th>
+                                                <th scope="col"> Address </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th scope="row" th:text="${me.getWhoHiredMe().getFirstName()+' '+me.getWhoHiredMe().getLastName()}"></th>
+                                                <td th:text="${me.getWhoHiredMe().getEmail()}"></td>
+                                                <td th:text="${me.getWhoHiredMe().getMobileNumber()}"></td>
+                                                <td  th:text="${me.getWhoHiredMe().getAddress().getHouseNumber()+' '+
+                                                me.getWhoHiredMe().getAddress().getStreet()+' '+
+                                                me.getWhoHiredMe().getAddress().getCity()+' '+
+                                                me.getWhoHiredMe().getAddress().getCountry()}">Not accepted yet</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <hr>
+                                        <span class="ml-5">
+                                                <span class="text-info font-weight-bold">Status: &nbsp;&nbsp;
+                                                    <span th:if="${me.getStatus().equals('pending')}"
+                                                          class="text-warning font-weight-normal">Pending</span>
+                                                    <span th:if="${me.getStatus().equals('running')}"
+                                                          class="text-warning font-weight-normal">Running</span>
+                                                    <span th:if="${me.getStatus().equals('cancel')}"
+                                                          class="text-warning font-weight-normal">Canceled by opponent</span>
+                                                    <span th:if="${me.getStatus().equals('declined')}"
+                                                          class="text-warning font-weight-normal">Declined by you</span>
+                                                    <span th:if="${me.getStatus().equals('finished')}"
+                                                          class="text-warning font-weight-normal">Finished</span>
+                                                </span>
+                                                <a class="btn btn-outline-success ml-5"
+                                                   th:if="${me.getStatus().equals('pending')}"
+                                                   th:href="@{/accept}">Accept
+                                                </a>
+                                                <a class="btn btn-outline-danger ml-5 "
+                                                   th:if="${me.getStatus().equals('pending')}"
+                                                   th:href="@{/decline}">Decline
+                                                </a>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

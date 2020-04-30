@@ -67,10 +67,15 @@
         </div>
 
         <nav class="nav-menu overflow-auto">
-            <ul>
+            <li>
+                <li>
+                    <a href="/home"
+                    ><i class="bx bx-home"></i> <span>Home</span></a
+                    >
+                </li>
                 <li class="active">
                     <a href="#dashboard"
-                    ><i class="bx bx-home"></i> <span>Dashboard</span></a
+                    ><i class="bx bxs-dashboard"></i> <span>Dashboard</span></a
                     >
                 </li>
                 <li>
@@ -94,8 +99,20 @@
                 <li>
                     <a href="#role"><i class='bx bx-directions'></i> Role</a>
                 </li>
+
+                <div th:each="role : ${profile.getRoles()}">
+                    <li th:if="${role.getName().equals('END_USER')}">
+                        <a href="/my-hiring"><i class='bx bx-user-check'></i>My hiring</a>
+                    </li>
+                    <li th:if="${role.getName().equals('SERVICE_USER')}">
+                        <a href="/who-hire-me"><i class='bx bx-user-check'></i>Who hire me</a>
+                    </li>
+                </div>
                 <li>
                     <a href="#user_review"><i class='bx bx-message-alt-detail'></i> User review</a>
+                </li>
+                <li>
+                    <a href="#user_review"><i class='bx bx-message-alt-detail'></i>Test</a>
                 </li>
             </ul>
         </nav>
