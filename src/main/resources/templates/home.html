@@ -248,8 +248,9 @@
                                         <span th:each="skill: ${user.getSkills()}">
                                             <span class="badge badge-pill badge-light mt-1 h4">
                                                 <small th:text="${skill.getSkillName()}">Java</small>&nbsp;
-                                                <small class="badge badge-pill badge-success" th:if="${skill.getExperience()<=12}" th:text="${(skill.getExperience()/12.0)+' y'}">0</small>
-                                                <small class="badge badge-pill badge-success" th:if="!${skill.getExperience()<=12}" th:text="${(skill.getExperience()/1.0)+' m'}">0</small>
+                                                <small class="badge badge-pill badge-success" th:if="!${skill.getExperience()<=12}" th:text="${(skill.getExperience()/12.0)+' y'}">0</small>
+                                                <small class="badge badge-pill badge-success" th:if="${skill.getExperience()<=12}" th:text="${(skill.getExperience()/1.0)+' m'}">0</small>
+<!--                                                <small th:text="${user.averageScore} % 1 == 0? ${user.averageScore} :${#numbers.formatDecimal(user.averageScore, 0, 2)}"/>-->
                                             </span>
                                         </span>
                                     </p>
