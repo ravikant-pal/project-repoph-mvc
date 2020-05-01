@@ -172,6 +172,7 @@ public class AppController {
         try {
             User user = appService.getUserById(id);
             user.setStatus("cancel");
+            user.setHireStatus(false);
             userService.save(user);
             LOGGER.info("<<<<<Exiting from cancelController");
             model.addAttribute("me",user);
@@ -182,24 +183,4 @@ public class AppController {
         }
         return "redirect:/my-hiring";
     }
-
-//    @GetMapping("/endSession/{id}")
-//    public String endSessionController(
-//            Model model,
-//            Principal principal, @PathVariable Long id) {
-//        LOGGER.info(">>>>>Entering into endSessionController");
-//        try {
-//            User user = appService.getUserById(id);
-//            user.setStatus("cancel");
-//            userService.save(user);
-//            LOGGER.info("<<<<<Exiting from endSessionController");
-//            model.addAttribute("me",user);
-//        } catch (Exception e) {
-//            LOGGER.info("<<<<<Exiting from endSessionController");
-//            model.addAttribute("msg","Something went wrong !");
-//            return "redirect:/my-hiring";
-//        }
-//        return "redirect:/my-hiring";
-//    }
-
 }
