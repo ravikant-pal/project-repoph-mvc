@@ -32,29 +32,25 @@
 
 </head>
 <body>
-<nav class="navbar  sticky-top navbar-light alert-danger justify-content-between ">
-    <a class="navbar-brand" href="#">
-    <img src="../static/assets/img/repoph_flat_nav_logo.png" height="50" width="200">
-    </a>
-
-    <div class="form-inline">
-        <form>
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-
-            <span sec:authorize="isAuthenticated()">
+    <nav class="d-flex sticky-top flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+        <a href="#" class="my-0 mr-md-auto font-weight-normal">
+            <img src="../static/assets/img/repoph_flat_nav_logo.png" height="50" width="200">
+        </a>
+<!--        <nav class="my-2 my-md-0 mr-md-3">-->
+<!--            <a class="p-2 text-dark" href="#">Features</a>-->
+<!--            <a class="p-2 text-dark" href="#">Enterprise</a>-->
+<!--            <a class="p-2 text-dark" href="#">Support</a>-->
+<!--            <a class="p-2 text-dark" href="#">Pricing</a>-->
+<!--        </nav>-->
+        <span sec:authorize="isAuthenticated()">
                 <a href="/profile"><span class="i-circle" th:text="${#authentication.getName().toUpperCase().charAt(0)}"></span></a>
-                <a class="btn btn-link my-2 my-sm-0" href="/logout">Log out</a>
-            </span>
-            <span sec:authorize="!isAuthenticated()">
-                <a class="btn btn-link my-2 my-sm-0" href="/login">Log in</a>
-                <a class="btn btn-link my-2 my-sm-0" href="/registration">Sign up</a>
-            </span>
-
-        </form>
-
-    </div>
-</nav>
+                <a class="btn btn-outline-danger mr-2 ml-2" href="/logout">Log out</a>
+        </span>
+        <span sec:authorize="!isAuthenticated()">
+                <a class="btn btn-outline-primary mr-2" href="/login">Log in</a>
+                <a class="btn btn-outline-primary" href="/registration">Sign up</a>
+        </span>
+    </nav>
 <div class="wrapper">
     <aside class="sidebar-left">
         <div class="list-group">
