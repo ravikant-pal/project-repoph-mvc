@@ -165,7 +165,7 @@
     function storeArrayInHiddenForm() {
         const form = document.getElementById("list");
         console.log(form.getElementsByTagName("input").length);
-        if (form.getElementsByTagName("input").length === 2) {
+        if (form.getElementsByTagName("input").length <= 2) {
             skills.forEach(function (skill) {
                 document.getElementById("list").innerHTML += "<input type='hidden' name='name' value='" + skill.skillName + "'><input type='hidden' name='exp' value='" + skill.experience + "'>";
             });
