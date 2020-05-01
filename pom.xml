@@ -23,19 +23,18 @@
 
 	<repositories>
 		<!--other repositories if any-->
-<!--		<repository>-->
-<!--			<id>project.local</id>-->
-<!--			<name>project</name>-->
-<!--			<url>file:${project.basedir}/repo</url>-->
-<!--		</repository>-->
+		<repository>
+			<id>project.local</id>
+			<name>project</name>
+			<url>file:${project.basedir}/repo</url>
+		</repository>
 	</repositories>
 	<dependencies>
-
-<!--		<dependency>-->
-<!--			<groupId>com.alok</groupId>-->
-<!--			<artifactId>PaytmChecksum</artifactId>-->
-<!--			<version>1.0</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>com.alok</groupId>
+			<artifactId>PaytmChecksum</artifactId>
+			<version>1.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
