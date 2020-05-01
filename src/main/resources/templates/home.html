@@ -291,6 +291,14 @@
                                             <small class="ml-2" th:id="'price' + ${user.getId()}"
                                                    th:text="${user.getPricing()}">100</small>/day
                                         </li>
+                                        <li th:if="${user.getEstimatedTime()!=null}">
+                                            <small>
+                                                <span class="text-info" > Will free in : </span>
+                                                <i class="fa fa-clock-o text-warning ml-1" aria-hidden="true"></i>
+                                                <span class="ml-2" th:text="${user.getEstimatedTime()}">100</span> hours
+                                            </small>
+
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="col-12 col-lg-6">
@@ -346,7 +354,7 @@
                 <div class="card-footer">
                     <span>Grand Subtotal : ₹</span>&nbsp;&nbsp;&nbsp;<span id="grand">0</span>.00/day
                 </div>
-                <form id="list" th:action="@{/add-to-cart}" method="post">
+                <form id="list" action="/add-to-cart" method="post">
                     <div class="card-footer" id="action-btn">
                         <button  class="btn btn-outline-warning w-100" id="btn-conformation"
                                 onclick="storeArrayInHiddenForm()">Conform
@@ -471,7 +479,7 @@
 
     function storeArrayInHiddenForm() {
         const form = document.getElementById("list");
-        if (form.getElementsByTagName("input").length === 1) {
+        if (form.getElementsByTagName("input").length <= 1) {
             users.forEach(function (user) {
                 document.getElementById("list").innerHTML +=
                     "<input type='hidden' name='id' value='" + user.id + "'>";
