@@ -8,15 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -73,8 +70,9 @@ public class User implements Serializable {
     @ElementCollection
     private List<Skill> skills;
 
-    @ManyToMany
-    private List<User> listOfHiredPeople = new ArrayList<>();
+
+    @ElementCollection
+    private List<Long> listOfHiredPeople;
 
     private String status = "pending";
 
@@ -83,8 +81,7 @@ public class User implements Serializable {
 
     private LocalTime hiredStartTime;
 
-    @OneToOne
-    private  User whoHiredMe;
+    private  Long consumerId;
 
 
     public User(String firstName,String lastName, String email, String password) {

@@ -85,15 +85,15 @@ public class AppService {
     public String hire(Double estTime,String ids, Principal principal){
         LOGGER.info(">>>>Entering into hire ");
         User endUser = userDao.findByEmail(principal.getName());
-        List<User> hiredUser = new ArrayList<>();
+        List<Long> hiredUser = new ArrayList<>();
         String[] usersIdsList = ids.split(",");
         Arrays.asList(usersIdsList).forEach(id -> {
             User user = userDao.findById(Long.parseLong(id)).get();
             user.setEstimatedTime(estTime);
             user.setStatus("pending");
             user.setHireStatus(true);
-            user.setWhoHiredMe(endUser);
-            hiredUser.add(user);
+            user.setConsumerId(endUser.getId());
+            hiredUser.add(Long.parseLong(id));
         });
         endUser.setListOfHiredPeople(hiredUser);
         String message ="Your hiring is successful !";

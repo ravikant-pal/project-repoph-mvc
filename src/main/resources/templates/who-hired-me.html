@@ -76,13 +76,13 @@
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <th scope="row" th:text="${me.getWhoHiredMe().getFirstName()+' '+me.getWhoHiredMe().getLastName()}"></th>
-                                                <td th:text="${me.getWhoHiredMe().getEmail()}"></td>
-                                                <td th:text="${me.getWhoHiredMe().getMobileNumber()}"></td>
-                                                <td  th:text="${me.getWhoHiredMe().getAddress().getHouseNumber()+' '+
-                                                me.getWhoHiredMe().getAddress().getStreet()+' '+
-                                                me.getWhoHiredMe().getAddress().getCity()+' '+
-                                                me.getWhoHiredMe().getAddress().getCountry()}">Not accepted yet</td>
+                                                <th scope="row" th:text="${consumer.getFirstName()+' '+consumer.getLastName()}"></th>
+                                                <td th:text="${consumer.getEmail()}"></td>
+                                                <td th:text="${consumer.getMobileNumber()}"></td>
+                                                <td  th:text="${consumer.getAddress().getHouseNumber()+' '+
+                                                consumer.getAddress().getStreet()+' '+
+                                                consumer.getAddress().getCity()+' '+
+                                                consumer.getAddress().getCountry()}">Not accepted yet</td>
                                             </tr>
                                             </tbody>
                                         </table>

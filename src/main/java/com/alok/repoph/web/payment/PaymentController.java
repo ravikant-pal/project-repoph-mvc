@@ -123,9 +123,10 @@ public class PaymentController {
 
                     User user = userService.findByEmail(principal.getName());
                     User userToRelease = null;
-                    for (User usr : user.getListOfHiredPeople()) {
-                        if(usr.getRequestedForEnd()) {
-                            userToRelease = usr;
+                    for (Long id : user.getListOfHiredPeople()) {
+                        User temp = appService.getUserById(id);
+                        if(temp.getRequestedForEnd()) {
+                            userToRelease = temp;
                             break;
                         }
                     }

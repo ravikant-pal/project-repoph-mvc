@@ -92,8 +92,15 @@ public class AppController {
             Model model,
             Principal principal) {
         LOGGER.info(">>>>>Entering into myOrderController");
+
         try {
-            List<User> listOfHiredPeople= userService.findByEmail(principal.getName()).getListOfHiredPeople();
+            List<User> listOfHiredPeople = new ArrayList<>();
+            List<Long> idsOfHiredUser = userService.findByEmail(principal.getName()).getListOfHiredPeople();
+            idsOfHiredUser.forEach(id -> {
+                 User user = appService.getUserById(id);
+                 System.out.println("hired user --> "+user.toString());
+                 listOfHiredPeople.add(user);
+            });
             LOGGER.info("<<<<<Exiting from myOrderController");
             model.addAttribute("listOfHiredPeople",listOfHiredPeople);
         } catch (Exception e) {
@@ -111,8 +118,10 @@ public class AppController {
         LOGGER.info(">>>>>Entering into whoHireMeController");
         try {
             User user = userService.findByEmail(principal.getName());
+            User opponent = appService.getUserById(user.getConsumerId());
             LOGGER.info("<<<<<Exiting from whoHireMeController");
             model.addAttribute("me",user);
+            model.addAttribute("consumer",opponent);
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from whoHireMeController");
             model.addAttribute("msg","Something went wrong !");
@@ -174,6 +183,7 @@ public class AppController {
             user.setStatus("cancel");
             user.setHireStatus(false);
             userService.save(user);
+
             LOGGER.info("<<<<<Exiting from cancelController");
             model.addAttribute("me",user);
         } catch (Exception e) {
