@@ -26,6 +26,10 @@ public class AppController {
     @Autowired
     UserServiceImpl userService;
 
+    @GetMapping("/")
+    public String redirectToHome() {
+        return "redirect:/home";
+    }
     @GetMapping("/home")
     public String loadHomePage(Model model) {
         List<User> userList = new ArrayList<>();
