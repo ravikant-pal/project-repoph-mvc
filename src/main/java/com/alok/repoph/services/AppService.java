@@ -1,6 +1,8 @@
 package com.alok.repoph.services;
 
 import com.alok.repoph.models.User;
+import com.alok.repoph.pojo.HireHistory;
+import com.alok.repoph.pojo.ServiceHistory;
 import com.alok.repoph.repository.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,4 +102,179 @@ public class AppService {
         LOGGER.info("<<<<<Exiting from updateAbout ");
         return message;
     }
+
+    public User cancelOrder(Principal principal,Long id) {
+        LOGGER.info(">>>>Entering into cancelOrder ");
+        User endUser = userDao.findByEmail(principal.getName());
+        User serviceUser = userDao.findById(id).get();
+        //firstly put the details in both history and then delete from each other
+
+        // save history of service user
+        List<ServiceHistory> serviceHistoryList;
+        if(serviceUser.getServiceHistories().size() < 1) {
+            serviceHistoryList = new ArrayList<>();
+            System.out.println("create new array service list");
+        } else  {
+            serviceHistoryList = new ArrayList<>(serviceUser.getServiceHistories());
+            System.out.println("used old array service list");
+        }
+        ServiceHistory serviceHistory =
+                new ServiceHistory(
+                        endUser.getFirstName()+" "+endUser.getLastName(),
+                        endUser.getEmail(),serviceUser.getHiredStartTime(),"cancel");
+
+        HireHistory hireHistory =
+                new HireHistory(serviceUser.getFirstName()+" "+serviceUser.getLastName(),
+                        serviceUser.getAbout().getTitle(),serviceUser.getEmail(),serviceUser.getPricing(),serviceUser.getHiredStartTime(),
+                        "cancel");
+
+        serviceHistoryList.add(serviceHistory);
+        serviceUser.setServiceHistories(serviceHistoryList);
+        //delete reference from opponent
+        serviceUser.setStatus(null);
+        serviceUser.setHireStatus(false);
+        serviceUser.setEstimatedTime(null);
+        serviceUser.setConsumerId(null);
+        System.out.println(" service history ---->"+serviceHistoryList.toString());
+        //save the history of end user
+
+        List<HireHistory> hireHistoryList;
+        if(endUser.getHireHistories().size() < 1) {
+            hireHistoryList = new ArrayList<>();
+            System.out.println("create new array  hire list");
+        } else  {
+            hireHistoryList = new ArrayList<>(endUser.getHireHistories());
+            System.out.println("used old array hire list");
+        }
+
+        hireHistoryList.add(hireHistory);
+        endUser.setHireHistories(hireHistoryList);
+        System.out.println(" hire history ---->"+hireHistoryList.toString());
+
+       //delete from your side
+        System.out.println("list of hired people before remove ---------------#"+endUser.getListOfHiredPeople().toString());
+        endUser.getListOfHiredPeople().removeIf(uid -> uid.equals(serviceUser.getId()));
+        System.out.println("list of hired people after remove ---------------#"+endUser.getListOfHiredPeople().toString());
+
+        System.out.println("end user detail --------------->"+endUser.toString());
+        System.out.println("service user detail --------------->"+serviceUser.toString());
+
+        LOGGER.info("<<<<<Exiting from cancelOrder ");
+        return endUser;
+    }
+
+    public User declineOrder(Principal principal) {
+        LOGGER.info(">>>>Entering into declineOrder ");
+        User serviceUser = userDao.findByEmail(principal.getName());
+        User endUser = userDao.findById(serviceUser.getConsumerId()).get();
+        //firstly put the details in both history and then delete from each other
+
+        // save history of service user
+        List<ServiceHistory> serviceHistoryList;
+        if(serviceUser.getServiceHistories().size() < 1) {
+            serviceHistoryList = new ArrayList<>();
+            System.out.println("create new array service list");
+        } else  {
+            serviceHistoryList = new ArrayList<>(serviceUser.getServiceHistories());
+            System.out.println("used old array service list");
+        }
+        ServiceHistory serviceHistory =
+                new ServiceHistory(
+                        endUser.getFirstName()+" "+endUser.getLastName(),
+                        endUser.getEmail(),serviceUser.getHiredStartTime(),"declined");
+
+        HireHistory hireHistory =
+                new HireHistory(serviceUser.getFirstName()+" "+serviceUser.getLastName(),
+                        serviceUser.getAbout().getTitle(),serviceUser.getEmail(),serviceUser.getPricing(),serviceUser.getHiredStartTime(),
+                        "declined");
+
+        serviceHistoryList.add(serviceHistory);
+        serviceUser.setServiceHistories(serviceHistoryList);
+        //delete reference from opponent
+        serviceUser.setStatus(null);
+        serviceUser.setHireStatus(false);
+        serviceUser.setEstimatedTime(null);
+        serviceUser.setConsumerId(null);
+        System.out.println(" service history ---->"+serviceHistoryList.toString());
+        //save the history of end user
+
+        List<HireHistory> hireHistoryList;
+        if(endUser.getHireHistories().size() < 1) {
+            hireHistoryList = new ArrayList<>();
+            System.out.println("create new array  hire list");
+        } else  {
+            hireHistoryList = new ArrayList<>(endUser.getHireHistories());
+            System.out.println("used old array hire list");
+        }
+
+        hireHistoryList.add(hireHistory);
+        endUser.setHireHistories(hireHistoryList);
+        System.out.println(" hire history ---->"+hireHistoryList.toString());
+
+        //delete from your side
+        System.out.println("list of hired people before remove ---------------#"+endUser.getListOfHiredPeople().toString());
+        endUser.getListOfHiredPeople().removeIf(uid -> uid.equals(serviceUser.getId()));
+        System.out.println("list of hired people after remove ---------------#"+endUser.getListOfHiredPeople().toString());
+
+        System.out.println("end user detail --------------->"+endUser.toString());
+        System.out.println("service user detail --------------->"+serviceUser.toString());
+
+        LOGGER.info("<<<<<Exiting from declineOrder ");
+        return serviceUser;
+    }
+
+//LOGGER.info(">>>>>Entering into cancelController");
+//        try {
+//        User endUser = userService.findByEmail(principal.getName());
+//        User serviceUser = appService.getUserById(id);
+//        List<ServiceHistory> serviceHistoryList;
+//        if (serviceUser.getServiceHistories().size() < 1) {
+//            serviceHistoryList = new ArrayList<>();
+//            System.out.println("create new array service list");
+//        } else {
+//            serviceHistoryList = new ArrayList<>(serviceUser.getServiceHistories());
+//            System.out.println("used old array service list");
+//        }
+//        ServiceHistory serviceHistory =
+//                new ServiceHistory(
+//                        endUser.getFirstName() + " " + endUser.getLastName(),
+//                        endUser.getEmail(), serviceUser.getHiredStartTime(), "cancel");
+//
+//        HireHistory hireHistory =
+//                new HireHistory(serviceUser.getFirstName() + " " + serviceUser.getLastName(),
+//                        serviceUser.getAbout().getTitle(), serviceUser.getEmail(), serviceUser.getPricing(), serviceUser.getHiredStartTime(),
+//                        "cancel");
+//
+//        serviceHistoryList.add(serviceHistory);
+//        serviceUser.setServiceHistories(serviceHistoryList);
+//        serviceUser.setStatus(null);
+//        serviceUser.setHireStatus(false);
+//        serviceUser.setEstimatedTime(null);
+//        serviceUser.setConsumerId(null);
+//        userService.save(serviceUser);
+//
+//        List<HireHistory> hireHistoryList;
+//        if (endUser.getHireHistories().size() < 1) {
+//            hireHistoryList = new ArrayList<>();
+//            System.out.println("create new array  hire list");
+//        } else {
+//            hireHistoryList = new ArrayList<>(endUser.getHireHistories());
+//            System.out.println("used old array hire list");
+//        }
+//
+//        hireHistoryList.add(hireHistory);
+//        endUser.setHireHistories(hireHistoryList);
+//        endUser.getListOfHiredPeople().removeIf(uid -> uid.equals(serviceUser.getId()));
+//        userService.save(endUser);
+//
+//        User ok = appService.getUserById(endUser.getId());
+//        System.out.println("==========>"+ok.toString());
+//        LOGGER.info("<<<<<Exiting from cancelController");
+//        model.addAttribute("me", ok);
+//    } catch (Exception e) {
+//        LOGGER.info("<<<<<Exiting from cancelController catch");
+//        model.addAttribute("msg", "Something went wrong !");
+//        return "order-details";
+//    }
+//        return "order-details";
 }

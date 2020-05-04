@@ -1,9 +1,6 @@
 package com.alok.repoph.models;
 
-import com.alok.repoph.pojo.About;
-import com.alok.repoph.pojo.Address;
-import com.alok.repoph.pojo.NationalId;
-import com.alok.repoph.pojo.Skill;
+import com.alok.repoph.pojo.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -70,9 +68,14 @@ public class User implements Serializable {
     @ElementCollection
     private List<Skill> skills;
 
+    @ElementCollection
+    private List<HireHistory> hireHistories = new ArrayList<>();
 
     @ElementCollection
-    private List<Long> listOfHiredPeople;
+    private List<ServiceHistory> serviceHistories = new ArrayList<>();
+
+    @ElementCollection
+    private List<Long> listOfHiredPeople = new ArrayList<>();
 
     private String status = "pending";
 

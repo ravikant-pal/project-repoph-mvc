@@ -2,6 +2,8 @@ package com.alok.repoph.web.payment;
 
 
 import com.alok.repoph.models.User;
+import com.alok.repoph.pojo.HireHistory;
+import com.alok.repoph.pojo.ServiceHistory;
 import com.alok.repoph.services.AppService;
 import com.alok.repoph.services.UserServiceImpl;
 import com.paytm.pg.merchant.CheckSumServiceHelper;
@@ -20,6 +22,8 @@ import java.security.Principal;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -121,22 +125,72 @@ public class PaymentController {
                 if (parameters.get("RESPCODE").equals("01")) {
 
 
-                    User user = userService.findByEmail(principal.getName());
+                    User endUser = userService.findByEmail(principal.getName());
                     User userToRelease = null;
-                    for (Long id : user.getListOfHiredPeople()) {
+                    for (Long id : endUser.getListOfHiredPeople()) {
                         User temp = appService.getUserById(id);
                         if(temp.getRequestedForEnd()) {
                             userToRelease = temp;
                             break;
                         }
                     }
-                    assert userToRelease != null;
+
+                    //firstly put the details in both history and then delete from each other
+
+                    // save history of service user
+                    List<ServiceHistory> serviceHistoryList;
+                    if(userToRelease.getServiceHistories().size() < 1) {
+                        serviceHistoryList = new ArrayList<>();
+                        System.out.println("create new array service list");
+                    } else  {
+                        serviceHistoryList = new ArrayList<>(userToRelease.getServiceHistories());
+                        System.out.println("used old array service list");
+                    }
+                    ServiceHistory serviceHistory =
+                            new ServiceHistory(
+                                    endUser.getFirstName()+" "+endUser.getLastName(),
+                                    endUser.getEmail(),userToRelease.getHiredStartTime(),"finished");
+
+                    HireHistory hireHistory =
+                            new HireHistory(userToRelease.getFirstName()+" "+userToRelease.getLastName(),
+                                    userToRelease.getAbout().getTitle(),userToRelease.getEmail(),userToRelease.getPricing(),userToRelease.getHiredStartTime(),
+                                    "finished");
+
+                    serviceHistoryList.add(serviceHistory);
+                    userToRelease.setServiceHistories(serviceHistoryList);
+                    //delete reference from opponent
+                    userToRelease.setStatus(null);
                     userToRelease.setHireStatus(false);
+                    userToRelease.setEstimatedTime(null);
                     userToRelease.setRequestedForEnd(false);
-                    userToRelease.setStatus("finished");
+                    userToRelease.setConsumerId(null);
+                    System.out.println(" service history ---->"+serviceHistoryList.toString());
+                    //save the history of end user
+
+                    List<HireHistory> hireHistoryList;
+                    if(endUser.getHireHistories().size() < 1) {
+                        hireHistoryList = new ArrayList<>();
+                        System.out.println("create new array  hire list");
+                    } else  {
+                        hireHistoryList = new ArrayList<>(endUser.getHireHistories());
+                        System.out.println("used old array hire list");
+                    }
+
+                    hireHistoryList.add(hireHistory);
+                    endUser.setHireHistories(hireHistoryList);
+                    System.out.println(" hire history ---->"+hireHistoryList.toString());
+
+                    //delete from your side
+                    System.out.println("list of hired people before remove ---------------#"+endUser.getListOfHiredPeople().toString());
+                    User finalUserToRelease = userToRelease;
+                    endUser.getListOfHiredPeople().removeIf(uid -> uid.equals(finalUserToRelease.getId()));
+                    System.out.println("list of hired people after remove ---------------#"+endUser.getListOfHiredPeople().toString());
+
+                    System.out.println("end user detail --------------->"+endUser.toString());
+                    System.out.println("service user detail --------------->"+userToRelease.toString());
+
                     userService.save(userToRelease);
-
-
+                    userService.save(endUser);
                     result = "Payment Successful";
                 } else {
                     result = "Payment failed";

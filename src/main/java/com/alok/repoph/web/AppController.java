@@ -11,12 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -94,8 +91,9 @@ public class AppController {
         LOGGER.info(">>>>>Entering into myOrderController");
 
         try {
+            User me = userService.findByEmail(principal.getName());
             List<User> listOfHiredPeople = new ArrayList<>();
-            List<Long> idsOfHiredUser = userService.findByEmail(principal.getName()).getListOfHiredPeople();
+            List<Long> idsOfHiredUser = me.getListOfHiredPeople();
             idsOfHiredUser.forEach(id -> {
                  User user = appService.getUserById(id);
                  System.out.println("hired user --> "+user.toString());
@@ -103,6 +101,7 @@ public class AppController {
             });
             LOGGER.info("<<<<<Exiting from myOrderController");
             model.addAttribute("listOfHiredPeople",listOfHiredPeople);
+            model.addAttribute("me",me);
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from myOrderController");
             model.addAttribute("msg","Something went wrong !");
@@ -118,12 +117,17 @@ public class AppController {
         LOGGER.info(">>>>>Entering into whoHireMeController");
         try {
             User user = userService.findByEmail(principal.getName());
-            User opponent = appService.getUserById(user.getConsumerId());
             LOGGER.info("<<<<<Exiting from whoHireMeController");
+            System.out.println("========>me =>"+user.toString());
             model.addAttribute("me",user);
-            model.addAttribute("consumer",opponent);
+            if(user.getConsumerId()!=null) {
+                model.addAttribute("consumer",appService.getUserById(user.getConsumerId()));
+            } else  {
+                model.addAttribute("consumer",null);
+            }
+
         } catch (Exception e) {
-            LOGGER.info("<<<<<Exiting from whoHireMeController");
+            LOGGER.info("<<<<<Exiting from whoHireMeController catch");
             model.addAttribute("msg","Something went wrong !");
             return "who-hired-me";
         }
@@ -136,17 +140,15 @@ public class AppController {
             Principal principal) {
         LOGGER.info(">>>>>Entering into declineController");
         try {
-            User user = userService.findByEmail(principal.getName());
-            user.setStatus("declined");
-            userService.save(user);
+            User user = appService.declineOrder(principal);
             LOGGER.info("<<<<<Exiting from declineController");
             model.addAttribute("me",user);
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from declineController");
             model.addAttribute("msg","Something went wrong !");
-            return "who-hired-me";
+            return "redirect:/who-hired-me";
         }
-        return "who-hired-me";
+        return "redirect:/who-hired-me";
     }
 
     @GetMapping("/accept")
@@ -168,9 +170,9 @@ public class AppController {
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from acceptController");
             model.addAttribute("msg","Something went wrong !");
-            return "who-hired-me";
+            return "redirect:/who-hired-me";
         }
-        return "who-hired-me";
+        return "redirect:/who-hired-me";
     }
 
     @GetMapping("/cancel/{id}")
@@ -179,16 +181,12 @@ public class AppController {
             Principal principal, @PathVariable Long id) {
         LOGGER.info(">>>>>Entering into cancelController");
         try {
-            User user = appService.getUserById(id);
-            user.setStatus("cancel");
-            user.setHireStatus(false);
-            userService.save(user);
-
-            LOGGER.info("<<<<<Exiting from cancelController");
-            model.addAttribute("me",user);
+            User me = appService.cancelOrder(principal,id);
+            LOGGER.info("user after cancel --->"+me);
+            model.addAttribute("me", me);
         } catch (Exception e) {
-            LOGGER.info("<<<<<Exiting from cancelController");
-            model.addAttribute("msg","Something went wrong !");
+            LOGGER.info("<<<<<Exiting from cancelController catch");
+            model.addAttribute("msg", "Something went wrong !");
             return "redirect:/my-hiring";
         }
         return "redirect:/my-hiring";
