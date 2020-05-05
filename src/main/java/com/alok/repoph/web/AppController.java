@@ -98,7 +98,10 @@ public class AppController {
             List<Role> theList = new ArrayList<>(roles);
             if(theList.get(0).getName().equals("SERVICE_USER")) {
                 redirectAttributes.addFlashAttribute("userType","sp");
+                model.addAttribute("userType","sp");
                 return "redirect:/home";
+            } else {
+                model.addAttribute("userType","");
             }
             if(ids.contains(active.getId().toString())) {
                 redirectAttributes.addFlashAttribute("userType","can");

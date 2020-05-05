@@ -56,7 +56,7 @@
                     </a>
                     <div class="dropdown-menu" id="abd" aria-labelledby="navbarDropdownMenuLink">
                         <h6 class="dropdown-header"  th:if="${userType.equals('sp')}" th:text="${activeUsername+' ( Service Provider )'}">Rakul preat singh ( Service Provider )</h6>
-                        <h6 class="dropdown-header"  th:if="${userType.equals('')}" th:text="${activeUsername+' ( Service Consumer )'}">Rakul preat singh ( Service Provider )</h6>
+                        <h6 class="dropdown-header"  th:if="!${userType.equals('sp')}" th:text="${activeUsername+' ( Service Consumer )'}">Rakul preat singh ( Service Provider )</h6>
                         <small class="dropdown-header" th:text="${#authentication.getName()}" >example234@gmail.com</small>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item bx-burst-hover" href="/home">Home</a>
