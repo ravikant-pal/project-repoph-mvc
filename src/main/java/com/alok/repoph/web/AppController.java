@@ -36,30 +36,28 @@ public class AppController {
     @GetMapping("/home")
     public String loadHomePage(Model model,@ModelAttribute("userType") String userType,Principal principal) {
         List<User> userList = new ArrayList<>();
-        User active = null;
+        User active;
         try {
             if(principal!=null) {
                 active = userService.findByEmail(principal.getName());
+                if(userType.equals("")) {
+                    Collection<Role> roles = active.getRoles();
+                    List<Role> theList = new ArrayList<>(roles);
+                    if(theList.get(0).getName().equals("SERVICE_USER")) {
+                        model.addAttribute("userType","sp");
+                    } else  {
+                        model.addAttribute("userType","");
+                    }
+                } else  {
+                    model.addAttribute("userType",userType);
+                }
+                model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
             }
             userList = appService.getAllUsers();
         } catch (Exception e) {
             LOGGER.info("Something went wrong");
         }
         model.addAttribute("data",userList);
-        assert active != null;
-
-        model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
-        if(userType.equals("")) {
-            Collection<Role> roles = active.getRoles();
-            List<Role> theList = new ArrayList<>(roles);
-            if(theList.get(0).getName().equals("SERVICE_USER")) {
-                model.addAttribute("userType","sp");
-            } else  {
-                model.addAttribute("userType","");
-            }
-        } else  {
-            model.addAttribute("userType",userType);
-        }
         return "home";
     }
     @GetMapping("/public-profile/{id}")
