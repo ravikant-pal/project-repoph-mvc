@@ -14,23 +14,11 @@
 </head>
 <body class="my-login-page">
 <nav class="d-flex sticky-top flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-    <a href="#" class="my-0 mr-md-auto font-weight-normal">
+    <a href="/home" class="my-0 mr-md-auto font-weight-normal">
         <img src="../static/assets/img/repoph_flat_nav_logo.png" height="50" width="200">
     </a>
-    <!--        <nav class="my-2 my-md-0 mr-md-3">-->
-    <!--            <a class="p-2 text-dark" href="#">Features</a>-->
-    <!--            <a class="p-2 text-dark" href="#">Enterprise</a>-->
-    <!--            <a class="p-2 text-dark" href="#">Support</a>-->
-    <!--            <a class="p-2 text-dark" href="#">Pricing</a>-->
-    <!--        </nav>-->
-    <span sec:authorize="isAuthenticated()">
-                <a href="/profile"><span class="i-circle" th:text="${#authentication.getName().toUpperCase().charAt(0)}"></span></a>
-                <a class="btn btn-outline-danger mr-2 ml-2" href="/logout">Log out</a>
-        </span>
-    <span sec:authorize="!isAuthenticated()">
-                <a class="btn btn-outline-primary mr-2" href="/login">Log in</a>
-                <a class="btn btn-outline-primary" href="/registration">Sign up</a>
-        </span>
+    <a class="btn btn-outline-primary mr-2" href="/login">Log in</a>
+    <a class="btn btn-outline-primary" href="/registration">Sign up</a>
 </nav>
 <section class="h-100">
     <div class="container h-100">
@@ -91,14 +79,14 @@
                                 <div class="col-md-12 col-md-offset-12">
                                     <div class="checkbox switcher inline text-center">
                                         <small class="mr-3">
-                                            <a class="trigger-btn">Male</a>
+                                            <a class="trigger-btn text-muted" id="male">Male</a>
                                         </small>
                                         <label for="gender">
-                                            <input type="checkbox" id="gender" name="gender">
+                                            <input type="checkbox" id="gender" name="gender" onclick="checkBoxInfoForGender()">
                                             <span><small></small></span>
                                         </label>
                                         <small>
-                                            <a  class="trigger-btn">Female</a>
+                                            <a  class="trigger-btn text-success" id="female">Female</a>
                                         </small>
                                     </div>
                                 </div>
@@ -108,14 +96,14 @@
                                 <div class="col-md-12 col-md-offset-12">
                                     <div class="checkbox switcher inline text-center">
 										<small class="mr-3">
-                                            <a href="#modelServiceP" class="trigger-btn" data-toggle="modal">Service provider</a>
+                                            <a href="#modelServiceP" class="trigger-btn text-success" id="s_p" data-toggle="modal">Service provider</a>
                                         </small>
-                                        <label for="test">
-                                            <input type="checkbox" id="test" name="serviceOrEnd" checked>
+                                        <label for="role">
+                                            <input type="checkbox" id="role" name="serviceOrEnd" checked onclick="checkBoxInfoForRole()">
                                             <span><small></small></span>
                                         </label>
 										<small>
-                                            <a href="#modelServiceC" class="trigger-btn" data-toggle="modal">Service consumer</a>
+                                            <a href="#modelServiceC" class="trigger-btn text-muted" id="s_c" data-toggle="modal">Service consumer</a>
                                         </small>
                                     </div>
                                 </div>
@@ -213,5 +201,43 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 <script src="../static/js/login-register-forget-reset.js"></script>
+<script>
+    function checkBoxInfoForGender() {
+
+        let checkBox = document.getElementById("gender");
+        let male = document.getElementById("male");
+        let female = document.getElementById("female");
+        if (checkBox.checked === true){
+            // text.style.display = "block";
+            female.classList.remove('text-success');
+            female.classList.add('text-muted');
+            male.classList.add('text-success');
+            male.classList.remove('text-muted');
+        } else {
+            female.classList.add('text-success');
+            female.classList.remove('text-muted');
+            male.classList.remove('text-success');
+            male.classList.add('text-muted');
+        }
+    }
+    function checkBoxInfoForRole() {
+
+        let checkBox = document.getElementById("role");
+        let sp = document.getElementById("s_p");
+        let sc = document.getElementById("s_c");
+        if (checkBox.checked === true){
+            // text.style.display = "block";
+            sc.classList.remove('text-success');
+            sc.classList.add('text-muted');
+            sp.classList.add('text-success');
+            sp.classList.remove('text-muted');
+        } else {
+            sc.classList.add('text-success');
+            sc.classList.remove('text-muted');
+            sp.classList.remove('text-success');
+            sp.classList.add('text-muted');
+        }
+    }
+</script>
 </body>
 </html>

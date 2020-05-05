@@ -1,5 +1,6 @@
 package com.alok.repoph.web;
 
+import com.alok.repoph.models.Role;
 import com.alok.repoph.models.User;
 import com.alok.repoph.pojo.About;
 import com.alok.repoph.pojo.Address;
@@ -15,13 +16,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -73,7 +74,6 @@ public class UserController {
     @PostMapping("/registration")
     public String registerEndUser(
             @ModelAttribute("registrationForm") @Valid UserRegistrationDto form,
-            BindingResult result,
             Model model,
             @RequestParam( defaultValue = "false", required = false, name ="serviceOrEnd") Boolean role,
             @RequestParam( defaultValue = "false", required = false, name ="gender") Boolean gender,
@@ -110,129 +110,121 @@ public class UserController {
     }
 
     @GetMapping("/update-address")
-    public String loadUpdateAddressForm(Principal principal,Model model) {
-        if(principal==null) {
-            return "redirect:/login";
+    public String loadUpdateAddressForm(Principal principal,Model model,@ModelAttribute("msg") String message) {
+        User active = userService.findByEmail(principal.getName());
+        Address address = active.getAddress();
+        if(address==null) {
+            model.addAttribute("addressFrom",new Address());
         } else  {
-            Address address = userService.findByEmail(principal.getName()).getAddress();
-            if(address==null) {
-                model.addAttribute("addressFrom",new Address());
-            } else  {
-                model.addAttribute("addressFrom",address);
-            }
-
+            model.addAttribute("addressFrom",address);
         }
+        model.addAttribute("msg",(message.equals(""))? null: message);
+        model.addAttribute("userType",getRoleForModel(active));
+        model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
         return "update-address";
     }
 
     @PostMapping("/update-address")
     public String updateAddressController(
             @ModelAttribute("addressFrom") @Valid Address form,
-            BindingResult result,
             Principal principal,
-            Model model) {
+            RedirectAttributes redirectAttributes) {
         LOGGER.info(">>>>>Entering into updateAddressController ");
         String message;
         try {
             message= userService.updateAddress(form,principal);
             LOGGER.info("<<<<<Exiting from registerController");
-            model.addAttribute("msg",message);
-
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from registerController");
-            model.addAttribute("msg","Something went wrong !");
-            return "update-address";
+            redirectAttributes.addFlashAttribute("msg","Something went wrong !");
+            return "redirect:/update-address";
         }
-        return "update-address";
+         redirectAttributes.addFlashAttribute("msg",message);
+        return "redirect:/update-address";
     }
 
     @GetMapping("/update-contact")
-    public String loadUpdateContactForm(Principal principal,Model model) {
-        if(principal==null) {
-            return "redirect:/login";
+    public String loadUpdateContactForm(Principal principal,Model model,@ModelAttribute("msg") String message) {
+        User active = userService.findByEmail(principal.getName());
+        ContactDto contact;
+        if(active.getMobileNumber()==null) {
+            contact = new ContactDto(active.getEmail(),"");
         } else  {
-            User user = userService.findByEmail(principal.getName());
-            ContactDto contact;
-            if(user.getMobileNumber()==null) {
-                contact = new ContactDto(user.getEmail(),"");
-            } else  {
-                contact = new ContactDto(user.getEmail(),user.getMobileNumber());
-            }
-            model.addAttribute("contactFrom",contact);
-
+            contact = new ContactDto(active.getEmail(),active.getMobileNumber());
         }
+        model.addAttribute("msg",(message.equals(""))? null: message);
+        model.addAttribute("userType",getRoleForModel(active));
+        model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
+        model.addAttribute("contactFrom",contact);
         return "update-contact";
     }
 
     @PostMapping("/update-contact")
     public String updateContactController(
             @ModelAttribute("contactFrom") @Valid ContactDto form,
-            BindingResult result,
             Principal principal,
-            Model model) {
+            RedirectAttributes redirectAttributes) {
         LOGGER.info(">>>>>Entering into updateContactController ");
         String message;
         try {
             message= userService.updateContact(form,principal);
             LOGGER.info("<<<<<Exiting from updateContactController");
-            model.addAttribute("msg",message);
-
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from updateContactController");
-            model.addAttribute("msg","Something went wrong !");
-            return "update-contact";
+            redirectAttributes.addFlashAttribute("msg","Something went wrong !");
+            return "redirect:/update-contact";
         }
-        return "update-contact";
+        redirectAttributes.addFlashAttribute("msg",message);
+        return "redirect:/update-contact";
     }
 
     @GetMapping("/update-national-id")
-    public String loadUpdateNationalIdForm(Principal principal,Model model) {
-        if(principal==null) {
-            return "redirect:/login";
-        } else  {
-            NationalId nationalId = userService.findByEmail(principal.getName()).getNationalId();
-            if(nationalId==null) {
-                nationalId = new NationalId();
-            }
-            model.addAttribute("nationalIdFrom",nationalId);
-
+    public String loadUpdateNationalIdForm(Principal principal,Model model,@ModelAttribute("msg") String message) {
+        User active = userService.findByEmail(principal.getName());
+        NationalId nationalId = active.getNationalId();
+        if(nationalId==null) {
+            nationalId = new NationalId();
         }
+        model.addAttribute("msg",(message.equals(""))? null: message);
+        model.addAttribute("userType",getRoleForModel(active));
+        model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
+        model.addAttribute("nationalIdFrom",nationalId);
         return "update-national-id";
     }
 
     @PostMapping("/update-national-id")
     public String updateNationalIdController(
             @ModelAttribute("nationalIdFrom") @Valid NationalId form,
-            BindingResult result,
             Principal principal,
-            Model model) {
+            RedirectAttributes redirectAttributes) {
         LOGGER.info(">>>>>Entering into updateNationalIdController ");
         String message;
         try {
             message= userService.updateNationalId(form,principal);
             LOGGER.info("<<<<<Exiting from updateNationalIdController");
-            model.addAttribute("msg",message);
-
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from updateNationalIdController");
-            model.addAttribute("msg","Something went wrong !");
-            return "update-national-id";
+            redirectAttributes.addFlashAttribute("msg","Something went wrong !");
+            return "redirect:/update-national-id";
         }
-        return "update-national-id";
+        redirectAttributes.addFlashAttribute("msg",message);
+        return "redirect:/update-national-id";
     }
 
     @GetMapping("/update-skills-pricing")
-    public String loadUpdateSkillsForm(Principal principal,Model model) {
-        if(principal==null) {
-            return "redirect:/login";
-        } else  {
-            List<Skill> skills = userService.findByEmail(principal.getName()).getSkills();
-            if(skills==null) {
-                skills = new ArrayList<>();
-            }
-            model.addAttribute("skills",skills);
-
+    public String loadUpdateSkillsForm(Principal principal,Model model,@ModelAttribute("msg") String message) {
+        User active = userService.findByEmail(principal.getName());
+        List<Skill> skills = active.getSkills();
+        if(skills==null) {
+            skills = new ArrayList<>();
         }
+        if(active.getPricing()!=null) {
+            model.addAttribute("pricing",active.getPricing());
+        }
+        model.addAttribute("msg",(message.equals(""))? null: message);
+        model.addAttribute("userType",getRoleForModel(active));
+        model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
+        model.addAttribute("skills",skills);
         return "update-skills-pricing";
     }
 
@@ -260,22 +252,22 @@ public class UserController {
         try {
             message= userService.updateSkillsAndPricing(skillList,pricing,principal);
             LOGGER.info("<<<<<Exiting from updateSkillsController");
-            redirectAttributes.addFlashAttribute("msg", message);
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from updateSkillsController");
-            model.addAttribute("msg","Something went wrong !");
-            return "update-skills-pricing";
+            redirectAttributes.addFlashAttribute("msg","Something went wrong !");
+            return "redirect:/update-skills-pricing";
         }
+        redirectAttributes.addFlashAttribute("msg", message);
         return "redirect:/update-skills-pricing";
     }
 
     @GetMapping("/update-role")
-    public String loadUpdateRole(Principal principal) {
-        if(principal==null) {
-            return "redirect:/login";
-        } else  {
-            return "update-role";
-        }
+    public String loadUpdateRole(Principal principal,Model model,@ModelAttribute("msg") String message) {
+        User active = userService.findByEmail(principal.getName());
+        model.addAttribute("userType",getRoleForModel(active));
+        model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
+        model.addAttribute("msg",(message.equals(""))? null: message);
+        return "update-role";
     }
 
     @PostMapping("/update-role")
@@ -289,28 +281,26 @@ public class UserController {
         try {
             message= userService.updateRole(role,principal);
             LOGGER.info("<<<<<Exiting from updateRoleController");
-            model.addAttribute("msg",message);
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from updateRoleController");
-            model.addAttribute("msg","Something went wrong !");
-            return "update-role";
+            redirectAttributes.addFlashAttribute("msg","Something went wrong !");
+            return "redirect:/update-role";
         }
         redirectAttributes.addFlashAttribute("msg" ,message);
-        return "update-role";
+        return "redirect:/update-role";
     }
 
     @GetMapping("/update-about")
-    public String loadUpdateAbout(Principal principal,Model model) {
-        if(principal==null) {
-            return "redirect:/login";
-        } else  {
-            About about = userService.findByEmail(principal.getName()).getAbout();
-            if(about==null) {
-                about = new About();
-            }
-            model.addAttribute("aboutForm",about);
-
+    public String loadUpdateAbout(Principal principal,Model model,@ModelAttribute("msg") String message) {
+        User active = userService.findByEmail(principal.getName());
+        About about = active.getAbout();
+        if(about==null) {
+            about = new About();
         }
+        model.addAttribute("userType",getRoleForModel(active));
+        model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
+        model.addAttribute("aboutForm",about);
+        model.addAttribute("msg",(message.equals(""))? null: message);
         return "update-about";
     }
 
@@ -325,13 +315,21 @@ public class UserController {
         try {
             message= userService.updateAbout(form,principal);
             LOGGER.info("<<<<<Exiting from updateAboutController");
-            model.addAttribute("msg",message);
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from updateAboutController");
-            model.addAttribute("msg","Something went wrong !");
-            return "update-about";
+            redirectAttributes.addFlashAttribute("msg","Something went wrong !");
+            return "redirect:/update-about";
         }
         redirectAttributes.addFlashAttribute("msg" ,message);
-        return "update-about";
+        return "redirect:/update-about";
+    }
+    public String getRoleForModel(User active){
+        Collection<Role> roles = active.getRoles();
+        List<Role> theList = new ArrayList<>(roles);
+        if(theList.get(0).getName().equals("SERVICE_USER")) {
+           return "sp";
+        } else  {
+           return "";
+        }
     }
 }

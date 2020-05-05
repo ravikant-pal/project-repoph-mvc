@@ -1,5 +1,6 @@
 package com.alok.repoph.web;
 
+import com.alok.repoph.models.Role;
 import com.alok.repoph.models.User;
 import com.alok.repoph.services.AppService;
 import com.alok.repoph.services.UserServiceImpl;
@@ -9,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -31,20 +34,51 @@ public class AppController {
         return "redirect:/home";
     }
     @GetMapping("/home")
-    public String loadHomePage(Model model) {
+    public String loadHomePage(Model model,@ModelAttribute("userType") String userType,Principal principal) {
         List<User> userList = new ArrayList<>();
+        User active = null;
         try {
+            if(principal!=null) {
+                active = userService.findByEmail(principal.getName());
+            }
             userList = appService.getAllUsers();
         } catch (Exception e) {
             LOGGER.info("Something went wrong");
         }
         model.addAttribute("data",userList);
+        assert active != null;
+
+        model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
+        if(userType.equals("")) {
+            Collection<Role> roles = active.getRoles();
+            List<Role> theList = new ArrayList<>(roles);
+            if(theList.get(0).getName().equals("SERVICE_USER")) {
+                model.addAttribute("userType","sp");
+            } else  {
+                model.addAttribute("userType","");
+            }
+        } else  {
+            model.addAttribute("userType",userType);
+        }
         return "home";
     }
     @GetMapping("/public-profile/{id}")
-    public String loadPublicProfilePage(Model model, @PathVariable Long id) {
+    public String loadPublicProfilePage(Model model, @PathVariable Long id,Principal principal) {
         User user = new User();
+        User active;
         try {
+            if(principal!=null) {
+                active = userService.findByEmail(principal.getName());
+                Collection<Role> roles = active.getRoles();
+                List<Role> theList = new ArrayList<>(roles);
+                if(theList.get(0).getName().equals("SERVICE_USER")) {
+                    model.addAttribute("userType","sp");
+                } else  {
+                    model.addAttribute("userType","");
+                }
+                model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
+            }
+
             user = appService.getUserById(id);
         } catch (Exception e) {
             LOGGER.info("Something went wrong");
@@ -56,14 +90,30 @@ public class AppController {
 
     @PostMapping("/add-to-cart")
     public String addToCart(
-            @RequestParam("id") String ids, Model model) {
-
+            @RequestParam("id") String ids, Model model, Principal principal, RedirectAttributes redirectAttributes) {
+        User active;
+        if(principal ==null) {
+            return "redirect:/login";
+        } else  {
+            active = userService.findByEmail(principal.getName());
+            Collection<Role> roles = active.getRoles();
+            List<Role> theList = new ArrayList<>(roles);
+            if(theList.get(0).getName().equals("SERVICE_USER")) {
+                redirectAttributes.addFlashAttribute("userType","sp");
+                return "redirect:/home";
+            }
+            if(ids.contains(active.getId().toString())) {
+                redirectAttributes.addFlashAttribute("userType","can");
+                return "redirect:/home";
+            }
+        }
         List<User> userTobeHire = new ArrayList<>();
         String[] usersIdsList = ids.split(",");
         Arrays.asList(usersIdsList).forEach(id -> {
             userTobeHire.add(appService.getUserById(Long.parseLong(id)));
         });
         model.addAttribute("userTobeHire",userTobeHire);
+        model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
         return "ask-hours";
     }
 
@@ -103,9 +153,16 @@ public class AppController {
                  System.out.println("hired user --> "+user.toString());
                  listOfHiredPeople.add(user);
             });
-            LOGGER.info("<<<<<Exiting from myOrderController");
+            Collection<Role> roles = me.getRoles();
+            List<Role> theList = new ArrayList<>(roles);
+            if(theList.get(0).getName().equals("SERVICE_USER")) {
+                model.addAttribute("userType","sp");
+            } else  {
+                model.addAttribute("userType","");
+            }
             model.addAttribute("listOfHiredPeople",listOfHiredPeople);
             model.addAttribute("me",me);
+            LOGGER.info("<<<<<Exiting from myOrderController");
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from myOrderController");
             model.addAttribute("msg","Something went wrong !");
@@ -123,6 +180,13 @@ public class AppController {
             User user = userService.findByEmail(principal.getName());
             LOGGER.info("<<<<<Exiting from whoHireMeController");
             System.out.println("========>me =>"+user.toString());
+            Collection<Role> roles = user.getRoles();
+            List<Role> theList = new ArrayList<>(roles);
+            if(theList.get(0).getName().equals("SERVICE_USER")) {
+                model.addAttribute("userType","sp");
+            } else  {
+                model.addAttribute("userType","");
+            }
             model.addAttribute("me",user);
             if(user.getConsumerId()!=null) {
                 model.addAttribute("consumer",appService.getUserById(user.getConsumerId()));

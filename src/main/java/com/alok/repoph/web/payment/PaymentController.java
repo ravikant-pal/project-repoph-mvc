@@ -1,6 +1,7 @@
 package com.alok.repoph.web.payment;
 
 
+import com.alok.repoph.models.Role;
 import com.alok.repoph.models.User;
 import com.alok.repoph.pojo.HireHistory;
 import com.alok.repoph.pojo.ServiceHistory;
@@ -11,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,10 +20,7 @@ import java.security.Principal;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Controller
 public class PaymentController {
@@ -44,7 +39,8 @@ public class PaymentController {
 
     @GetMapping("/payment/{id}")
     public String placeOrder(@PathVariable("id") Long userId,
-                             Principal principal, Model model) {
+                             Principal principal, Model model,
+                             @ModelAttribute("userType") String userType) {
 
         double bill;
         User serviceUser = appService.getUserById(userId);
@@ -71,6 +67,14 @@ public class PaymentController {
         model.addAttribute("endTime",end);
         model.addAttribute("duration",hour+" hours "+minutes+" minutes "+seconds+" seconds");
         model.addAttribute("bill",df.format(bill));
+
+        model.addAttribute("activeUsername",endUser.getFirstName()+' '+endUser.getLastName());
+        Collection<Role> roles = endUser.getRoles();
+        List<Role> theList = new ArrayList<>(roles);
+        if(theList.get(0).getName().equals("SERVICE_USER")) {
+            model.addAttribute("userType","sp");
+        }
+        model.addAttribute("userType",userType);
         return "payment/order-details-for-pay";
     }
 
@@ -107,7 +111,7 @@ public class PaymentController {
     }
 
     @PostMapping(value = "/pgresponse")
-    public String getResponseRedirect(HttpServletRequest request, Model model, Principal principal) {
+    public String getResponseRedirect(HttpServletRequest request, Model model, Principal principal,@ModelAttribute("userType") String userType) {
 
         Map<String, String[]> mapData = request.getParameterMap();
         TreeMap<String, String> parameters = new TreeMap<String, String>();
@@ -204,6 +208,15 @@ public class PaymentController {
         model.addAttribute("result",result);
         parameters.remove("CHECKSUMHASH");
         model.addAttribute("parameters",parameters);
+
+
+        model.addAttribute("activeUsername",userService.findByEmail(principal.getName()).getFirstName()+' '+userService.findByEmail(principal.getName()).getLastName());
+        Collection<Role> roles = userService.findByEmail(principal.getName()).getRoles();
+        List<Role> theList = new ArrayList<>(roles);
+        if(theList.get(0).getName().equals("SERVICE_USER")) {
+            model.addAttribute("userType","sp");
+        }
+        model.addAttribute("userType",userType);
         return "payment/report";
     }
 

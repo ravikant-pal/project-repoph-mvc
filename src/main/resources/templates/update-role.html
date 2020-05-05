@@ -12,25 +12,39 @@
     <link rel="stylesheet" href="../static/css/login-register-forget-reset.css">
 </head>
 <body class="my-login-page">
-<nav class="d-flex sticky-top flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-    <a href="/home" class="my-0 mr-md-auto font-weight-normal">
-        <img src="../static/assets/img/repoph_flat_nav_logo.png" height="50" width="200">
-    </a>
-    <!--        <nav class="my-2 my-md-0 mr-md-3">-->
-    <!--            <a class="p-2 text-dark" href="#">Features</a>-->
-    <!--            <a class="p-2 text-dark" href="#">Enterprise</a>-->
-    <!--            <a class="p-2 text-dark" href="#">Support</a>-->
-    <!--            <a class="p-2 text-dark" href="#">Pricing</a>-->
-    <!--        </nav>-->
-    <span sec:authorize="isAuthenticated()">
-                <a href="/profile"><span class="i-circle" th:text="${#authentication.getName().toUpperCase().charAt(0)}"></span></a>
-                <a class="btn btn-outline-danger mr-2 ml-2" href="/logout">Log out</a>
-        </span>
-    <span sec:authorize="!isAuthenticated()">
+    <nav class="navbar d-flex sticky-top flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm navbar-expand-sm text-danger">
+        <a class="navbar-brand my-0 mr-md-auto font-weight-normal" href="/home">
+            <img src="../static/assets/img/repoph_flat_nav_logo.png" height="50" width="200" alt="logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-list-4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <nav class="navbar navbar-expand-sm" sec:authorize="isAuthenticated()">
+            <div class="collapse navbar-collapse dropleft" id="navbar-list-4">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#abd" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-fill-circle-512.png" width="30" height="30" class="rounded-circle bx-border-circle">
+                        </a>
+                        <div class="dropdown-menu" id="abd" aria-labelledby="navbarDropdownMenuLink">
+                            <h6 class="dropdown-header"  th:if="${userType.equals('sp')}" th:text="${activeUsername+' ( Service Provider )'}">Rakul preat singh ( Service Provider )</h6>
+                            <h6 class="dropdown-header"  th:if="${userType.equals('')}" th:text="${activeUsername+' ( Service Consumer )'}">Rakul preat singh ( Service Provider )</h6>
+                            <small class="dropdown-header" th:text="${#authentication.getName()}" >example234@gmail.com</small>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item bx-burst-hover" href="/home">Home</a>
+                            <a class="dropdown-item bx-burst-hover" href="/profile">Dashboard</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item bx-burst-hover text-danger" href="/logout">Log Out</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <span sec:authorize="!isAuthenticated()">
                 <a class="btn btn-outline-primary mr-2" href="/login">Log in</a>
                 <a class="btn btn-outline-primary" href="/registration">Sign up</a>
         </span>
-</nav>
+    </nav>
 <section class="h-100">
     <div class="container h-100">
         <div class="row justify-content-md-center h-100">
@@ -57,14 +71,14 @@
                                 <div class="col-md-12 col-md-offset-12">
                                     <div class="checkbox switcher inline">
                                         <small class="mr-3">
-                                            <a href="#modelServiceP" class="trigger-btn" data-toggle="modal">Service provider</a>
+                                            <a href="#modelServiceP" class="trigger-btn text-success" id="s_p" data-toggle="modal">Service provider</a>
                                         </small>
-                                        <label for="test">
-                                            <input type="checkbox" id="test" name="serviceOrEnd" checked>
+                                        <label for="role">
+                                            <input type="checkbox" id="role" name="serviceOrEnd" checked onclick="checkBoxInfo()">
                                             <span><small></small></span>
                                         </label>
                                         <small>
-                                            <a href="#modelServiceC" class="trigger-btn" data-toggle="modal">Service consumer</a>
+                                            <a href="#modelServiceC" class="trigger-btn text-muted" id="s_c" data-toggle="modal">Service consumer</a>
                                         </small>
                                     </div>
                                 </div>
@@ -129,5 +143,25 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 <script src="../static/js/login-register-forget-reset.js"></script>
+<script>
+    function checkBoxInfo() {
+
+        let checkBox = document.getElementById("role");
+        let sp = document.getElementById("s_p");
+        let sc = document.getElementById("s_c");
+        if (checkBox.checked === true){
+            // text.style.display = "block";
+            sc.classList.remove('text-success');
+            sc.classList.add('text-muted');
+            sp.classList.add('text-success');
+            sp.classList.remove('text-muted');
+        } else {
+            sc.classList.add('text-success');
+            sc.classList.remove('text-muted');
+            sp.classList.remove('text-success');
+            sp.classList.add('text-muted');
+        }
+    }
+</script>
 </body>
 </html>
