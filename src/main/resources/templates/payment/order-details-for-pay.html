@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Payment</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="../static/assets/img/logo.png" rel="icon"/>
+    <link href="../static/assets/img/logo.png" rel="apple-touch-icon"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="../../static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <style>
         .register{
             background: -webkit-linear-gradient(left, #3931af, #00c6ff);
@@ -124,72 +130,74 @@
                 <a class="btn btn-outline-primary" href="/registration">Sign up</a>
         </span>
     </nav>
-<form method="post" th:action="@{/redirect}">
-    <div class="container register">
-        <div class="row">
-            <div class="col-md-3 register-left mt-5">
-                <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt=""/>
-                <h3>Welcome</h3>
-                <p>You are 30 seconds away from your order just two more clicks !</p>
-            </div>
-            <div class="col-md-9 register-right">
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <h3 class="register-heading">Welcome to Paytm Payment</h3>
-                        <div class="row register-form">
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <label for="order-id">Order ID</label>
-                                    <input id="order-id" tabindex="1" maxlength="20" size="20"
-                                           name="ORDER_ID" autocomplete="off" class="form-control" th:value="${transactionId}" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="user-id">User Id</label>
-                                    <input type="text" id="user-id" class="form-control"  placeholder="Customer ID" th:value="${'CXNID_'+userId}" readonly
-                                           name="USER_ID"/>
-                                </div>
-                                <div class="form-group">
-                                    <label for="start-time">Start Time</label>
-                                    <input type="text"  id="start-time" class="form-control"  placeholder="Start Time" th:value="${startTime}" readonly
-                                           name="START_TIME"/>
-                                </div>
-                                <div class="form-group">
-                                    <label for="end-time">End Time</label>
-                                    <input type="text"  id="end-time" class="form-control"  placeholder="End Time" th:value="${endTime}" readonly
-                                           name="END_TIME"/>
-                                </div>
-                                <div class="form-group">
-                                    <label for="duration">Total Duration</label>
-                                    <input type="text" id="duration" class="form-control"  placeholder="Duration" th:value="${duration}" readonly
-                                           name="DURATION"/>
-                                </div>
+<section class="mb-5">
+    <form method="post" th:action="@{/redirect}">
+        <div class="container register">
+            <div class="row">
+                <div class="col-md-3 register-left mt-5">
+                    <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt=""/>
+                    <h3>Welcome</h3>
+                    <p>You are 30 seconds away from your order just two more clicks !</p>
+                </div>
+                <div class="col-md-9 register-right">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <h3 class="register-heading">Welcome to Paytm Payment</h3>
+                            <div class="row register-form">
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="order-id">Order ID</label>
+                                        <input id="order-id" tabindex="1" maxlength="20" size="20"
+                                               name="ORDER_ID" autocomplete="off" class="form-control" th:value="${transactionId}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="user-id">User Id</label>
+                                        <input type="text" id="user-id" class="form-control"  placeholder="Customer ID" th:value="${'CXNID_'+userId}" readonly
+                                               name="USER_ID"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="start-time">Start Time</label>
+                                        <input type="text"  id="start-time" class="form-control"  placeholder="Start Time" th:value="${startTime}" readonly
+                                               name="START_TIME"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="end-time">End Time</label>
+                                        <input type="text"  id="end-time" class="form-control"  placeholder="End Time" th:value="${endTime}" readonly
+                                               name="END_TIME"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="duration">Total Duration</label>
+                                        <input type="text" id="duration" class="form-control"  placeholder="Duration" th:value="${duration}" readonly
+                                               name="DURATION"/>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label for="retail">Retailer</label>
-                                    <input type="text"  id="retail" class="form-control" placeholder="INDUSTRY_TYPE_ID" value="Retail" readonly
-                                           name="INDUSTRY_TYPE_ID"/>
+                                    <div class="form-group">
+                                        <label for="retail">Retailer</label>
+                                        <input type="text"  id="retail" class="form-control" placeholder="INDUSTRY_TYPE_ID" value="Retail" readonly
+                                               name="INDUSTRY_TYPE_ID"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="channel">Channel</label>
+                                        <input type="text" id="channel" class="form-control" placeholder="Channel" value="WEB" readonly
+                                               name="CHANNEL_ID"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bill">Total Bill</label>
+                                        <input type="text"  id="bill" class="form-control" placeholder="Amount" th:value="${bill+' ₹'}" readonly
+                                               name="TXN_AMOUNT"/>
+                                    </div>
+                                    <!--  <input type="submit" class="btnRegister"  value="Pay with Paytm"/>   -->
+                                    <button type="submit" class="btnRegister" style="align : center">Pay with Paytm</button>
                                 </div>
-                                <div class="form-group">
-                                    <label for="channel">Channel</label>
-                                    <input type="text" id="channel" class="form-control" placeholder="Channel" value="WEB" readonly
-                                           name="CHANNEL_ID"/>
-                                </div>
-                                <div class="form-group">
-                                    <label for="bill">Total Bill</label>
-                                    <input type="text"  id="bill" class="form-control" placeholder="Amount" th:value="${bill+' ₹'}" readonly
-                                           name="TXN_AMOUNT"/>
-                                </div>
-                                <!--  <input type="submit" class="btnRegister"  value="Pay with Paytm"/>   -->
-                                <button type="submit" class="btnRegister" style="align : center">Pay with Paytm</button>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</section>
 <footer class="pt-4 home-footer-area border-light">
     <div class="container">
         <div class="row">

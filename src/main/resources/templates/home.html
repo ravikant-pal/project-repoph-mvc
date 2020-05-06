@@ -35,7 +35,6 @@
         .js-is-hidden {
             display: none;
         }
-
     </style>
     <link rel="stylesheet" type="text/css" href="../static/css/home.css" />
 </head>
@@ -317,7 +316,7 @@
                                         </li>
                                         <li th:if="${user.getEstimatedTime()!=null}">
                                             <small>
-                                                <span class="text-info" > Will free in : </span>
+                                                <span class="text-info" > Will be free in : </span>
                                                 <i class="fa fa-clock-o text-warning ml-1" aria-hidden="true"></i>
                                                 <span class="ml-2" th:text="${user.getEstimatedTime()}">100</span> hours
                                             </small>

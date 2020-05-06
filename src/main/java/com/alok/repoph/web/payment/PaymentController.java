@@ -8,6 +8,8 @@ import com.alok.repoph.pojo.ServiceHistory;
 import com.alok.repoph.services.AppService;
 import com.alok.repoph.services.UserServiceImpl;
 import com.paytm.pg.merchant.CheckSumServiceHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,8 @@ import java.util.*;
 
 @Controller
 public class PaymentController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentController.class);
 
     @Autowired
     private PaytmDetails paytmDetails;
@@ -200,7 +204,8 @@ public class PaymentController {
                     result = "Payment failed";
                 }
             } else {
-                result = "Checksum mismatched";
+                result = "Payment failed";
+                LOGGER.info(">>>>>> Checksum mismatched ");
             }
         } catch (Exception e) {
             result = e.toString();

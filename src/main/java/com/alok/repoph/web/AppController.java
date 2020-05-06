@@ -215,9 +215,9 @@ public class AppController {
         } catch (Exception e) {
             LOGGER.info("<<<<<Exiting from declineController");
             model.addAttribute("msg","Something went wrong !");
-            return "redirect:/who-hired-me";
+            return "redirect:/who-hire-me";
         }
-        return "redirect:/who-hired-me";
+        return "redirect:/who-hire-me";
     }
 
     @GetMapping("/accept")
@@ -237,11 +237,11 @@ public class AppController {
             LOGGER.info("<<<<<Exiting from acceptController");
             model.addAttribute("me",user);
         } catch (Exception e) {
-            LOGGER.info("<<<<<Exiting from acceptController");
+            LOGGER.info("<<<<<Exiting from acceptController catch");
             model.addAttribute("msg","Something went wrong !");
-            return "redirect:/who-hired-me";
+            return "redirect:/who-hire-me";
         }
-        return "redirect:/who-hired-me";
+        return "redirect:/who-hire-me";
     }
 
     @GetMapping("/cancel/{id}")

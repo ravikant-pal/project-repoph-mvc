@@ -55,7 +55,7 @@ paytm.payment:
     Website: WEBSTAGING
     industryTypeId: Retail
     paytmUrl: https://securegw-stage.paytm.in/order/process
-    callbackUrl: https://repoph.herokuapp.com/pgresponse
+    callbackUrl: http://localhost:8080/pgresponse #https://repoph.herokuapp.com
     details:
       MID: ${paytm.payment.sandbox.merchantId}
       CHANNEL_ID: ${paytm.payment.sandbox.channelId}
