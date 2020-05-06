@@ -53,7 +53,7 @@ public class AppController {
                 }
                 model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
             }
-            userList = appService.getAllUsers();
+            userList = appService.getAllUserWhichIsServiceProvider();
         } catch (Exception e) {
             LOGGER.info("Something went wrong");
         }

@@ -85,6 +85,9 @@ public class AppService {
     public List<User> getAllUsers() {
         return userDao.findAllByIsProfileCompleted(true);
     }
+    public List<User> getAllUserWhichIsServiceProvider() {
+        return userDao.findAllBySpecificRoles("SERVICE_USER");
+    }
 
     public String hire(Double estTime,String ids, Principal principal){
         LOGGER.info(">>>>Entering into hire ");
