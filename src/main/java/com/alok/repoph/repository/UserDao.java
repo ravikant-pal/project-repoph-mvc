@@ -19,8 +19,8 @@ public interface UserDao extends JpaRepository<User,Long> {
 
     List<User> findAllByIsProfileCompleted(Boolean flag);
 
-    @Query( "select u from User u inner join u.roles r where r.name in :role" )
-    List<User> findAllBySpecificRoles(@Param("role") String role);
+    @Query( "select u from User u inner join u.roles r where r.name in :role and u.isProfileCompleted = :isProfileCompleted" )
+    List<User> findAllBySpecificRoles(@Param("role") String role, @Param("isProfileCompleted") Boolean isProfileCompleted);
 
     @Modifying
     @Query("update User u set u.password = :password where u.id = :id")

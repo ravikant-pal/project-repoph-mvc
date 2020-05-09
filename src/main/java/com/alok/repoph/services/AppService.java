@@ -1,6 +1,5 @@
 package com.alok.repoph.services;
 
-import com.alok.repoph.models.Role;
 import com.alok.repoph.models.User;
 import com.alok.repoph.pojo.HireHistory;
 import com.alok.repoph.pojo.ServiceHistory;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -86,7 +84,7 @@ public class AppService {
         return userDao.findAllByIsProfileCompleted(true);
     }
     public List<User> getAllUserWhichIsServiceProvider() {
-        return userDao.findAllBySpecificRoles("SERVICE_USER");
+        return userDao.findAllBySpecificRoles("SERVICE_USER",true);
     }
 
     public String hire(Double estTime,String ids, Principal principal){
