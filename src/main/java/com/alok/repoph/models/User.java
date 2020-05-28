@@ -50,7 +50,7 @@ public class User implements Serializable {
     private Double pricing;
 
 
-    private Double estimatedTime;
+    private Double estimatedTime=0.0;
 
     private Boolean isProfileCompleted = false;
 

@@ -34,7 +34,11 @@ public class AppController {
         return "redirect:/home";
     }
     @GetMapping("/home")
-    public String loadHomePage(Model model,@ModelAttribute("userType") String userType,Principal principal) {
+    public String loadHomePage(Model model,@ModelAttribute("userType") String userType,
+                               @RequestParam(required = false, name = "q") String keyword,
+                               @RequestParam(required = false, name = "sortBy") String sortBy,
+                               @RequestParam(required = false, name = "price") Double price,
+                               Principal principal) {
         List<User> userList = new ArrayList<>();
         User active;
         try {
@@ -44,16 +48,16 @@ public class AppController {
                     Collection<Role> roles = active.getRoles();
                     List<Role> theList = new ArrayList<>(roles);
                     if(theList.get(0).getName().equals("SERVICE_USER")) {
-                        model.addAttribute("userType","sp");
+                        model.addAttribute("userType","spFh");
                     } else  {
-                        model.addAttribute("userType","");
+                        model.addAttribute("userType","sc");
                     }
                 } else  {
                     model.addAttribute("userType",userType);
                 }
                 model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
             }
-            userList = appService.getAllUserWhichIsServiceProvider();
+            userList = appService.getAllSortedAndFilteredUsers(price,sortBy);
         } catch (Exception e) {
             LOGGER.info("Something went wrong");
         }
@@ -102,10 +106,6 @@ public class AppController {
                 return "redirect:/home";
             } else {
                 model.addAttribute("userType","");
-            }
-            if(ids.contains(active.getId().toString())) {
-                redirectAttributes.addFlashAttribute("userType","can");
-                return "redirect:/home";
             }
         }
         List<User> userTobeHire = new ArrayList<>();

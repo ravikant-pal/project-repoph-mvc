@@ -53,8 +53,8 @@
                         <img src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-fill-circle-512.png" width="30" height="30" class="rounded-circle bx-border-circle">
                     </a>
                     <div class="dropdown-menu" id="abd" aria-labelledby="navbarDropdownMenuLink">
-                        <h6 class="dropdown-header"  th:if="${userType.equals('sp')}" th:text="${activeUsername+' ( Service Provider )'}">Rakul preat singh ( Service Provider )</h6>
-                        <h6 class="dropdown-header"  th:if="!${userType.equals('sp')}" th:text="${activeUsername+' ( Service Consumer )'}">Rakul preat singh ( Service Provider )</h6>
+                        <h6 class="dropdown-header"  th:if="${userType.equals('sp') || userType.equals('spFh')} " th:text="${activeUsername+' ( Service Provider )'}">Rakul preat singh ( Service Provider )</h6>
+                        <h6 class="dropdown-header"  th:if="!${userType.equals('sp') || userType.equals('spFh')}" th:text="${activeUsername+' ( Service Consumer )'}">Rakul preat singh ( Service Provider )</h6>
                         <small class="dropdown-header" th:text="${#authentication.getName()}" >example234@gmail.com</small>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item bx-burst-hover" href="/home">Home</a>
@@ -82,14 +82,16 @@
                                 <header class="card-header"><h6 class="title">Pricing filter</h6></header>
                                 <div class="filter-content">
                                     <div class="list-group list-group-flush">
-                                        <a href="#" class="list-group-item"> < Below 299 &#8377;<span
+                                        <a  href="" onclick="setUrl('price','299')" class="list-group-item"> < Below 299 &#8377;<span
                                                 class="float-right badge badge-light round">142</span> </a>
-                                        <a href="#" class="list-group-item"> < Below 599 &#8377;<span
+                                        <a href="" onclick="setUrl('price','599')" class="list-group-item"> < Below 599 &#8377;<span
                                                 class="float-right badge badge-light round">3</span> </a>
-                                        <a href="#" class="list-group-item"> < Below 999 &#8377;<span
+                                        <a href="" onclick="setUrl('price','999')" class="list-group-item"> < Below 999 &#8377;<span
                                                 class="float-right badge badge-light round">32</span> </a>
-                                        <a href="#" class="list-group-item"> < Below 2999 &#8377;<span
+                                        <a href="" onclick="setUrl('price','2999')" class="list-group-item"> < Below 2999 &#8377;<span
                                                 class="float-right badge badge-light round">12</span> </a>
+                                        <a href="" onclick="setUrl('price','4999')" class="list-group-item"> < Below 4999 &#8377;<span
+                                                class="float-right badge badge-light round">6</span> </a>
                                     </div>  <!-- list-group .// -->
                                 </div>
                             </article>
@@ -100,19 +102,19 @@
                                 <div class="filter-content">
                                     <div class="card-body">
                                         <label class="form-check">
-                                            <input class="form-check-input" type="radio" name="exampleRadio" value="">
+                                            <input class="form-check-input" type="radio" name="exampleRadio" value="" onclick="setUrl('sortBy','price')">
                                             <span class="form-check-label"> Pricing </span>
                                         </label>
                                         <label class="form-check">
-                                            <input class="form-check-input" type="radio" name="exampleRadio" value="">
+                                            <input class="form-check-input" type="radio" name="exampleRadio" value="" onclick="setUrl('sortBy','ratings')">
                                             <span class="form-check-label"> Ratings </span>
                                         </label>
                                         <label class="form-check">
-                                            <input class="form-check-input" type="radio" name="exampleRadio" value="">
+                                            <input class="form-check-input" type="radio" name="exampleRadio" value="" onclick="setUrl('sortBy','free-soon')">
                                             <span class="form-check-label"> Free soon</span>
                                         </label>
                                         <label class="form-check">
-                                            <input class="form-check-input" type="radio" name="exampleRadio" value="">
+                                            <input class="form-check-input" type="radio" name="exampleRadio" value="" onclick="setUrl('sortBy','skills-exp')">
                                             <span class="form-check-label"> Skills & Exp </span>
                                         </label>
                                     </div> <!-- card-body.// -->
@@ -187,9 +189,6 @@
             <div class="alert alert-warning action-alert" role="alert" th:if="${userType.equals('sp')}">
                 <span><strong>Opps!</strong> seems you are not <strong>Service Consumer.</strong></span>
             </div>
-            <div class="alert alert-warning action-alert" role="alert" th:if="${userType.equals('can')}">
-                <span><strong>Opps!</strong> you can't hire <strong>Yourself.</strong></span>
-            </div>
             <form class="input-group mt-1 mb-5">
                 <input type="text" class="form-control" placeholder="Search by name, title, skill....">
                 <div class="input-group-append">
@@ -257,7 +256,7 @@
                                             <small class="ml-2" th:id="'price' + ${user.getId()}"
                                                    th:text="${user.getPricing()}">100</small>/day
                                         </li>
-                                        <li th:if="${user.getEstimatedTime()!=null}">
+                                        <li th:if="${user.getEstimatedTime()!=0.0}">
                                             <small>
                                                 <span class="text-info" > Will be free in : </span>
                                                 <i class="fa fa-clock-o text-warning ml-1" aria-hidden="true"></i>
@@ -503,6 +502,13 @@
         // If user clicks outside the element, hide it!
         alert.classList.add("js-is-hidden");
     });
+
+    function setUrl(param, paramValue) {
+        let params = new URLSearchParams(location.search);
+        params.set(param, paramValue);
+        window.history.replaceState({}, "", location.pathname + '?' + params);
+        location.reload();
+    }
 </script>
 </body>
 </html>

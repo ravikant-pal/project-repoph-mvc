@@ -80,11 +80,28 @@ public class AppService {
         return userDao.findById(id).get();
     }
 
-    public List<User> getAllUsers() {
-        return userDao.findAllByIsProfileCompleted(true);
-    }
-    public List<User> getAllUserWhichIsServiceProvider() {
-        return userDao.findAllBySpecificRoles("SERVICE_USER",true);
+    public List<User> getAllSortedAndFilteredUsers(Double price, String sortBy) {
+        if(price!=null && sortBy==null) {
+            return  userDao.findAllBySpecificRolesAndIsProfileCompletedBelowPricing("SERVICE_USER",true,price);
+        } else if(price==null && sortBy!=null) {
+            if(sortBy.equals("price")) {
+                return userDao.findAllBySpecificRolesAndIsProfileCompletedOrderByPricing("SERVICE_USER",true);
+            } else if(sortBy.equals("free-soon")) {
+                return userDao.findAllBySpecificRolesAndIsProfileCompletedOrderByeOrderByEstimatedTime("SERVICE_USER",true);
+            } else  {
+                return userDao.findAllBySpecificRolesAndIsProfileCompleted("SERVICE_USER",true);
+            }
+        } else if(price!=null && sortBy!=null) {
+            if(sortBy.equals("price")) {
+                return userDao.findAllBySpecificRolesAndIsProfileCompletedBelowPricingOrderByPricing("SERVICE_USER",true,price);
+            } else if(sortBy.equals("free-soon")) {
+                return userDao.findAllBySpecificRolesAndIsProfileCompletedBelowPricingOrderByEstimatedTime("SERVICE_USER",true,price);
+            } else  {
+                return userDao.findAllBySpecificRolesAndIsProfileCompleted("SERVICE_USER",true);
+            }
+        } else  {
+           return userDao.findAllBySpecificRolesAndIsProfileCompleted("SERVICE_USER",true);
+        }
     }
 
     public String hire(Double estTime,String ids, Principal principal){
