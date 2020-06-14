@@ -62,12 +62,14 @@
                 <a href="#" class="google-plus">
                     <i class="bx bx-current-location"></i>
                 </a>
-                <span style="color: antiquewhite;" th:if="${profile.getAddress()!=null}" th:text="${profile.getAddress().getCity()}">Bengaluru</span>
+                <span style="color: antiquewhite;" th:if="${profile.getAddress()!=null}"
+                      th:text="${profile.getAddress().getCity()}">Bengaluru</span>
             </div>
         </div>
 
         <nav class="nav-menu overflow-auto">
-            <li>
+            <ul>
+                <li>
                 <li>
                     <a href="/home"
                     ><i class="bx bx-home"></i> <span>Home</span></a
@@ -167,20 +169,25 @@
                         <div class="card-body">
                             <div th:if="${profile.getAbout()==null}">
                                 <p class="card-text mb-0">
-                                <p >For example I'm mechanic based on bangalore and I love to make some designed architect into reality. </p>
-                                <footer class="blockquote-footer" > Gopalachary Puttashwami <cite title="Source Title"> Construction Mechanic </cite></footer>
+                                <p>For example I'm mechanic based on bangalore and I love to make some designed
+                                    architect into reality. </p>
+                                <footer class="blockquote-footer"> Gopalachary Puttashwami <cite title="Source Title">
+                                    Construction Mechanic </cite></footer>
                                 </p>
                             </div>
                             <div th:if="${profile.getAbout()!=null}">
                                 <p class="card-text mb-0">
-                                <p th:text="${profile.getAbout().getDescription()}">For example I'm mechanic based on bangalore and I love to make some designed architect into reality. </p>
+                                <p th:text="${profile.getAbout().getDescription()}">For example I'm mechanic based on
+                                    bangalore and I love to make some designed architect into reality. </p>
                                 <footer class="blockquote-footer">
                                     <span th:text="${profile.getFirstName()+' '+profile.getLastName()}"> Gopalachary Puttashwami </span>
-                                    <cite title="Source Title" th:text="${profile.getAbout().getTitle()}"> Construction Mechanic </cite>
+                                    <cite title="Source Title" th:text="${profile.getAbout().getTitle()}"> Construction
+                                        Mechanic </cite>
                                 </footer>
                                 </p>
                             </div>
-                            <a href="/update-about" class="btn btn-light float-right m-2 text-success"><i class='fas fa-pen-square' aria-hidden='true'></i></a>
+                            <a href="/update-about" class="btn btn-light float-right m-2 text-success"><i
+                                    class='fas fa-pen-square' aria-hidden='true'></i></a>
                         </div>
                     </div>
                 </div>
@@ -212,34 +219,40 @@
                                     <span class="ml-5"
                                           th:text="${profile.getAddress().getCity()+ ', '+profile.getAddress().getCountry()+' '+profile.getAddress().getPinCode()}">New York, NY 535022</span>
                                 </p>
+                                <p class="card-text">
+                                    <i class='bx bx-current-location h4 text-warning'></i>
+
+                                    <span class="ml-5" th:text="${'lat : '+profile.getAddress().getLocation().getLatitude()}">20.234343434423123123, 90.2353453453134445</span><br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span  class="ml-5 " th:text="${' lan :'+profile.getAddress().getLocation().getLongitude()}">20.234343434423123123, 90.2353453453134445</span>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6 pt-4 pt-lg-0 content" data-aos="fade-left">
                     <div class="card border-light shadow-sm p-3 mb-5 bg-white rounded" style="max-width: 25rem;">
-                      <div class="card-body">
-                        <h5 class="card-title">Contact Details</h5>
-                        <p class="card-text">
-                          Your contact details is here.
-                        </p>
-                        <p class="card-text">
-                          <i class='bx bx-mail-send h4 text-warning'></i>
-                          <span class="ml-5" th:text="${profile.getEmail()}">info@example.com</span>
-                        </p>
-                        <div th:if="${profile.getMobileNumber()==null}">
-                          <p class="card-text">
-                            <i class='bx bxs-phone h4 text-warning'></i>
-                            <small class="text-muted ml-2">When you added, it will show up here</small>
-                          </p>
+                        <div class="card-body">
+                            <h5 class="card-title">Contact Details</h5>
+                            <p class="card-text">
+                                Your contact details is here.
+                            </p>
+                            <p class="card-text">
+                                <i class='bx bx-mail-send h4 text-warning'></i>
+                                <span class="ml-5" th:text="${profile.getEmail()}">info@example.com</span>
+                            </p>
+                            <div th:if="${profile.getMobileNumber()==null}">
+                                <p class="card-text">
+                                    <i class='bx bxs-phone h4 text-warning'></i>
+                                    <small class="text-muted ml-2">When you added, it will show up here</small>
+                                </p>
+                            </div>
+                            <div th:if="${profile.getMobileNumber()!=null}">
+                                <p class="card-text">
+                                    <i class='bx bxs-phone h4 text-warning'></i>
+                                    <span class="ml-5" th:text="${profile.getMobileNumber()}">+1 5589 55488 55s</span>
+                                </p>
+                            </div>
                         </div>
-                        <div th:if="${profile.getMobileNumber()!=null}">
-                          <p class="card-text">
-                            <i class='bx bxs-phone h4 text-warning'></i>
-                            <span class="ml-5" th:text="${profile.getMobileNumber()}">+1 5589 55488 55s</span>
-                          </p>
-                        </div>
-                      </div>
                     </div>
                 </div>
             </div>
@@ -247,28 +260,28 @@
                 <div class="col-lg-6 mt-6" data-aos="fade-right">
                     <div class="card border-light shadow-sm p-3 mb-5 bg-white rounded" style="max-width: 25rem;">
                         <div class="card-body">
-                          <h5 class="card-title">National Id Details</h5>
-                          <div th:if="${profile.getNationalId()==null}">
-                            <p class="card-text">
-                              No National Id available
-                            </p>
-                            <p class="card-text">
-                              <small class="text-muted">When you added, it will show up here</small>
-                            </p>
-                          </div>
-                          <div th:if="${profile.getNationalId()!=null}">
-                            <p class="card-text">
-                              Your National Id details is here.
-                            </p>
-                            <p class="card-text">
-                              <i class='bx bx-id-card h4 text-warning'></i>
-                              <span class="ml-5" th:text="${profile.getNationalId().getType()}">Aadhar</span>
-                            </p>
-                            <p class="card-text">
-                              <i class='bx bx-credit-card-front h4 text-warning'></i>
-                              <span class="ml-5"th:text="${profile.getNationalId().getNumber()}">9067 - 7834 - 9012</span>
-                            </p>
-                          </div>
+                            <h5 class="card-title">National Id Details</h5>
+                            <div th:if="${profile.getNationalId()==null}">
+                                <p class="card-text">
+                                    No National Id available
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">When you added, it will show up here</small>
+                                </p>
+                            </div>
+                            <div th:if="${profile.getNationalId()!=null}">
+                                <p class="card-text">
+                                    Your National Id details is here.
+                                </p>
+                                <p class="card-text">
+                                    <i class='bx bx-id-card h4 text-warning'></i>
+                                    <span class="ml-5" th:text="${profile.getNationalId().getType()}">Aadhar</span>
+                                </p>
+                                <p class="card-text">
+                                    <i class='bx bx-credit-card-front h4 text-warning'></i>
+                                    <span class="ml-5" th:text="${profile.getNationalId().getNumber()}">9067 - 7834 - 9012</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -276,34 +289,34 @@
                     <div class="card border-light shadow-sm p-3 mb-5 bg-white rounded" style="max-width: 25rem;">
                         <div class="card-body">
                             <h5 class="card-title">Skills & Pricing Details</h5>
-                          <div th:if="${profile.getSkills()!=null && profile.getSkills().size()==0}">
-                            <p class="card-text" >
-                              No Skills available
-                            </p>
-                            <p class="card-text">
-                              <small class="text-muted">When you added, it will show up here</small>
-                            </p>
-                          </div>
-                          <div th:if="${profile.getSkills()!=null && profile.getSkills().size()>0}">
-                              <hr/>
-                              <p class="card-text">
-                                  <i class='bx bx-rupee h4 text-warning'></i>
-                                  <span class="float-right"
-                                        th:text="${profile.getPricing()+' '}">100</span>
-                              </p>
-                              <hr/>
-                              <p class="card-text">
-                                  You have below skills :
-                              </p>
-                              <p class="card-text">
+                            <div th:if="${profile.getSkills()!=null && profile.getSkills().size()==0}">
+                                <p class="card-text">
+                                    No Skills available
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">When you added, it will show up here</small>
+                                </p>
+                            </div>
+                            <div th:if="${profile.getSkills()!=null && profile.getSkills().size()>0}">
+                                <hr/>
+                                <p class="card-text">
+                                    <i class='bx bx-rupee h4 text-warning'></i>
+                                    <span class="float-right"
+                                          th:text="${profile.getPricing()+' '}">100</span>
+                                </p>
+                                <hr/>
+                                <p class="card-text">
+                                    You have below skills :
+                                </p>
+                                <p class="card-text">
                                 <span th:each="skill: ${profile.getSkills()}">
                                     <span class="badge badge-pill badge-light mt-1 h6">
                                         <span th:text="${skill.getSkillName()}">Java</span>&nbsp;
                                         <span class="badge badge-pill badge-success" th:text="${skill.getExperience()}">0</span>
                                     </span>
                                 </span>
-                              </p>
-                          </div>
+                                </p>
+                            </div>
 
                         </div>
                     </div>
@@ -313,70 +326,85 @@
     </section>
     <!-- End About Section -->
     <!-- ======= Card  left ======= -->
-  <section id="address" class="dashboard">
-    <div class="container">
-      <div class="section-title">
-        <h2>Address</h2>
-          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-      </div>
-      <div class="row">
-        <div class="col-lg-4 mt-6" data-aos="fade-right">
-          <a href="/update-address" class="custom-card">
-            <div class="card border-light mb-3 shadow p-3 mb-3 bg-white rounded" style="max-width: 18rem;">
-              <div class="card-header">
-                Status
-                <span th:if="${profile.getAddress()!=null}">
-                  <span class="badge badge-pill badge-success"><i class="fas fa-check"></i></span>
-                </span>
-                <span th:if="${profile.getAddress()==null}">
-                  <i class="fas fa-exclamation-triangle text-warning"></i>
-                </span>
-
-                <i class="fas fa-cog float-right"></i>
-              </div>
-                <div class="card-body">
-                    <div th:if="${profile.getAddress()==null}">
-                        <h2 class="text-muted"> Add Address </h2>
-                    </div>
-                    <div th:if="${profile.getAddress()!=null}">
-                        <h5 class="card-title"> Address </h5>
-                        <p class="card-text">
-                            This address is visible to the other users.
-                            On the basis of this they will hire you if you are near them.
-                        </p>
-                        <p class="card-text">
-                            <strong>House No</strong> : <small class="text-muted" th:text="${profile.getAddress().getHouseNumber()}">247/23 V9 Baikunthpur</small>
-                        </p>
-                        <p class="card-text">
-                            <strong>Street</strong> : <small class="text-muted" th:text="${profile.getAddress().getStreet()}">Mangari</small>
-                        </p>
-                        <p class="card-text">
-                            <strong>City</strong> : <small class="text-muted" th:text="${profile.getAddress().getCity()}">Varanasi</small>
-                        </p>
-                        <p class="card-text">
-                            <strong>Pin Code</strong> : <small class="text-muted" th:text="${profile.getAddress().getPinCode()}">221202</small>
-                        </p>
-                        <p class="card-text">
-                            <strong>Country</strong> : <small class="text-muted" th:text="${profile.getAddress().getCountry()}">India</small>
-                        </p>
-                        <p class="card-text">
-                            <small class="text-muted">Last updated 3 mins ago</small>
-                        </p>
-                    </div>
+    <section id="address" class="dashboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>Address</h2>
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 mt-6" data-aos="fade-right">
+                    <a href="/update-address" class="custom-card">
+                        <div class="card border-light mb-3 shadow p-3 mb-3 bg-white rounded" style="max-width: 18rem;">
+                            <div class="card-header">
+                                Status
+                                <span th:if="${profile.getAddress()!=null}">
+                                    <span class="badge badge-pill badge-success">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                </span>
+                                <span th:if="${profile.getAddress()==null}">
+                                <i class="fas fa-exclamation-triangle text-warning"></i>
+                                </span>
+                                <i class="fas fa-cog float-right"></i>
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${profile.getAddress()==null}">
+                                    <h2 class="text-muted"> Add Address </h2>
+                                </div>
+                                <div th:if="${profile.getAddress()!=null}">
+                                    <h5 class="card-title"> Address </h5>
+                                    <p class="card-text">
+                                        This address is visible to the other users.
+                                        On the basis of this they will hire you if you are near them.
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>House No</strong> : <small class="text-muted"
+                                                                           th:text="${profile.getAddress().getHouseNumber()}">247/23
+                                        V9 Baikunthpur</small>
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Street</strong> : <small class="text-muted"
+                                                                         th:text="${profile.getAddress().getStreet()}">Mangari</small>
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>City</strong> : <small class="text-muted"
+                                                                       th:text="${profile.getAddress().getCity()}">Varanasi</small>
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Pin Code</strong> : <small class="text-muted"
+                                                                           th:text="${profile.getAddress().getPinCode()}">221202</small>
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Country</strong> : <small class="text-muted"
+                                                                          th:text="${profile.getAddress().getCountry()}">India</small>
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Latitude</strong> : <small class="text-muted"
+                                                                           th:text="${profile.getAddress().getLocation().getLatitude()}">33.4512376826478</small>
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Longitude</strong> : <small class="text-muted"
+                                                                            th:text="${profile.getAddress().getLocation().getLongitude()}">33.4512376826478</small>
+                                    </p>
+                                    <p class="card-text">
+                                        <small class="text-muted">Last updated 3 mins ago</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
+                    <img
+                            src="https://cdn.droggol.com/web/image/535/web.svg"
+                            class="img-fluid"
+                            alt=""
+                    />
                 </div>
             </div>
-          </a>
         </div>
-        <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-          <img
-                  src="https://cdn.droggol.com/web/image/535/web.svg"
-                  class="img-fluid"
-                  alt=""
-          />
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
     <!-- ======= Card right ======= -->
     <section id="contact" class="dashboard">
@@ -414,10 +442,12 @@
                                     Because you will get notification and call on this email and mobile number.
                                 </p>
                                 <p class="card-text">
-                                    <strong>Email Address</strong> : <small class="text-muted" th:text="${profile.getEmail()}">no-reply@Repoph.com</small>
+                                    <strong>Email Address</strong> : <small class="text-muted"
+                                                                            th:text="${profile.getEmail()}">no-reply@Repoph.com</small>
                                 </p>
                                 <p class="card-text" th:if="${profile.getMobileNumber()!=null}">
-                                    <strong>Mobile No</strong> : <small class="text-muted" th:text="${profile.getMobileNumber()}">India</small>
+                                    <strong>Mobile No</strong> : <small class="text-muted"
+                                                                        th:text="${profile.getMobileNumber()}">India</small>
                                 </p>
                                 <p class="card-text" th:if="${profile.getMobileNumber()==null}">
                                     <strong>Mobile No</strong> : <small class="text-muted">Add Mobile Number</small>
@@ -464,10 +494,12 @@
                                         Please provide the National Id.
                                     </p>
                                     <p class="card-text">
-                                        <strong>Id Type</strong> : <small class="text-muted" th:text="${profile.getNationalId().getType()}">Aadhar</small>
+                                        <strong>Id Type</strong> : <small class="text-muted"
+                                                                          th:text="${profile.getNationalId().getType()}">Aadhar</small>
                                     </p>
                                     <p class="card-text">
-                                        <strong>Id Number</strong> : <small class="text-muted" th:text="${profile.getNationalId().getNumber()}">9067-1278-9034</small>
+                                        <strong>Id Number</strong> : <small class="text-muted"
+                                                                            th:text="${profile.getNationalId().getNumber()}">9067-1278-9034</small>
                                     </p>
                                     <p class="card-text">
                                         <small class="text-muted">Last updated 3 mins ago</small>
@@ -535,8 +567,9 @@
                                     <p class="card-text">
                                         <span th:each="skill: ${profile.getSkills()}">
                                             <span class="badge badge-pill badge-light mt-1 h6">
-                                                <span  th:text="${skill.getSkillName()}" >Java</span>&nbsp;
-                                                <span class="badge badge-pill badge-success" th:text="${skill.getExperience()}">0</span>
+                                                <span th:text="${skill.getSkillName()}">Java</span>&nbsp;
+                                                <span class="badge badge-pill badge-success"
+                                                      th:text="${skill.getExperience()}">0</span>
                                             </span>
                                         </span>
                                     </p>

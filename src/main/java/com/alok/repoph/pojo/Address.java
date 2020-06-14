@@ -18,4 +18,6 @@ public class Address {
     private String pinCode;
     @NotEmpty
     private String country;
+
+    private Location location;
 }

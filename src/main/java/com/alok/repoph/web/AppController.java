@@ -35,10 +35,14 @@ public class AppController {
     }
     @GetMapping("/home")
     public String loadHomePage(Model model,@ModelAttribute("userType") String userType,
+                               @ModelAttribute("msg") String msg,
                                @RequestParam(required = false, name = "q") String keyword,
                                @RequestParam(required = false, name = "sortBy") String sortBy,
                                @RequestParam(required = false, name = "price") Double price,
+                               @RequestParam(required = false, name = "lat") Double lat,
+                               @RequestParam(required = false, name = "lan") Double lan,
                                Principal principal) {
+        System.out.println(keyword+"==============>"+lat+" "+lan);
         List<User> userList = new ArrayList<>();
         User active;
         try {
@@ -57,9 +61,12 @@ public class AppController {
                 }
                 model.addAttribute("activeUsername",active.getFirstName()+' '+active.getLastName());
             }
-            userList = appService.getAllSortedAndFilteredUsers(price,sortBy);
+            userList = appService.getAllSortedAndFilteredUsers(price,sortBy,lat,lan,keyword);
         } catch (Exception e) {
             LOGGER.info("Something went wrong");
+        }
+        if(msg!=null) {
+            model.addAttribute("msg",msg);
         }
         model.addAttribute("data",userList);
         return "home";
@@ -106,6 +113,11 @@ public class AppController {
                 return "redirect:/home";
             } else {
                 model.addAttribute("userType","");
+            }
+
+            if(!active.getIsProfileCompleted()) {
+                redirectAttributes.addFlashAttribute("msg","NA");
+                return "redirect:/home";
             }
         }
         List<User> userTobeHire = new ArrayList<>();
@@ -229,9 +241,6 @@ public class AppController {
             User user = userService.findByEmail(principal.getName());
             user.setStatus("running");
             user.setHireStatus(true);
-//            DateFormat dateFormat = new SimpleDateFormat("yyyy/mm/dd HH:mm:ss");
-//            Date current  = new Date();
-//            dateFormat.format(current);
             user.setHiredStartTime(LocalTime.now());
             userService.save(user);
             LOGGER.info("<<<<<Exiting from acceptController");

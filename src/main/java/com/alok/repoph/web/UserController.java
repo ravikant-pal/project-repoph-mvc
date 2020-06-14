@@ -2,10 +2,7 @@ package com.alok.repoph.web;
 
 import com.alok.repoph.models.Role;
 import com.alok.repoph.models.User;
-import com.alok.repoph.pojo.About;
-import com.alok.repoph.pojo.Address;
-import com.alok.repoph.pojo.NationalId;
-import com.alok.repoph.pojo.Skill;
+import com.alok.repoph.pojo.*;
 import com.alok.repoph.services.UserServiceImpl;
 import com.alok.repoph.web.dto.AboutDto;
 import com.alok.repoph.web.dto.ContactDto;

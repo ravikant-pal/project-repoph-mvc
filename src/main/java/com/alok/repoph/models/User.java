@@ -49,6 +49,8 @@ public class User implements Serializable {
 
     private Double pricing;
 
+    private Rating rating;
+
 
     private Double estimatedTime=0.0;
 

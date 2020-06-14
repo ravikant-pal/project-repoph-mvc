@@ -169,7 +169,7 @@ public class PaymentController {
                     //delete reference from opponent
                     userToRelease.setStatus(null);
                     userToRelease.setHireStatus(false);
-                    userToRelease.setEstimatedTime(null);
+                    userToRelease.setEstimatedTime(0.0);
                     userToRelease.setRequestedForEnd(false);
                     userToRelease.setConsumerId(null);
                     System.out.println(" service history ---->"+serviceHistoryList.toString());

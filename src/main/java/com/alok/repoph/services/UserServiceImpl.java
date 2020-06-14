@@ -1,10 +1,7 @@
 package com.alok.repoph.services;
 
 
-import com.alok.repoph.pojo.About;
-import com.alok.repoph.pojo.Address;
-import com.alok.repoph.pojo.NationalId;
-import com.alok.repoph.pojo.Skill;
+import com.alok.repoph.pojo.*;
 import com.alok.repoph.web.dto.AboutDto;
 import com.alok.repoph.web.dto.ContactDto;
 import com.alok.repoph.web.dto.UserRegistrationDto;
@@ -64,7 +61,7 @@ public class UserServiceImpl implements UserService {
             }
             user.setGender(registration.getGender());
             userDao.save(user);
-            message = "You are successfully Registered! Please login ";
+            message = "You have successfully Registered! Please login ";
         }
         LOGGER.info("<<<<<Exiting from registerController ");
         return message;
@@ -82,7 +79,7 @@ public class UserServiceImpl implements UserService {
             user.setIsProfileCompleted(true);
         }
         userDao.save(user);
-        String message ="You are successfully Updated Address.";
+        String message ="You have successfully Updated Address.";
         LOGGER.info("<<<<<Exiting from saveAddress ");
         return message;
     }
@@ -96,7 +93,7 @@ public class UserServiceImpl implements UserService {
             user.setIsProfileCompleted(true);
         }
         userDao.save(user);
-        String message ="You are successfully Updated Contact.";
+        String message ="You have successfully Updated Contact.";
         LOGGER.info("<<<<<Exiting from saveContact ");
         return message;
     }
@@ -109,8 +106,8 @@ public class UserServiceImpl implements UserService {
             user.setIsProfileCompleted(true);
         }
         userDao.save(user);
-        String message ="You are successfully Updated National Id.";
-        LOGGER.info("<<<<<Exiting from saveContact ");
+        String message ="You have successfully Updated National Id.";
+        LOGGER.info("<<<<<Exiting from saveNationalId ");
         return message;
     }
 
@@ -123,7 +120,7 @@ public class UserServiceImpl implements UserService {
             user.setIsProfileCompleted(true);
         }
         userDao.save(user);
-        String message ="You are successfully Updated Skills.";
+        String message ="You have successfully Updated Skills.";
         LOGGER.info("<<<<<Exiting from saveSkills ");
         return message;
     }
@@ -138,7 +135,7 @@ public class UserServiceImpl implements UserService {
             role.setName("END_USER");
         }
         user.setRoles(Collections.singletonList(role));
-        String message ="You are successfully Updated Role.";
+        String message ="You have successfully Updated Role.";
         LOGGER.info("<<<<<Exiting from updateRole ");
         return message;
     }
@@ -150,7 +147,7 @@ public class UserServiceImpl implements UserService {
         if(user.getSkills().size()>0 && user.getMobileNumber()!=null && user.getAddress()!=null && user.getPricing()!=null && user.getNationalId()!=null) {
             user.setIsProfileCompleted(true);
         }
-        String message ="You are successfully Updated About yourself.";
+        String message ="You have successfully Updated About yourself.";
         LOGGER.info("<<<<<Exiting from updateAbout ");
         return message;
     }

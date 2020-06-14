@@ -2,7 +2,9 @@ package com.alok.repoph.services;
 
 import com.alok.repoph.models.User;
 import com.alok.repoph.pojo.HireHistory;
+import com.alok.repoph.pojo.Location;
 import com.alok.repoph.pojo.ServiceHistory;
+import com.alok.repoph.pojo.Skill;
 import com.alok.repoph.repository.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -80,28 +81,126 @@ public class AppService {
         return userDao.findById(id).get();
     }
 
-    public List<User> getAllSortedAndFilteredUsers(Double price, String sortBy) {
-        if(price!=null && sortBy==null) {
-            return  userDao.findAllBySpecificRolesAndIsProfileCompletedBelowPricing("SERVICE_USER",true,price);
-        } else if(price==null && sortBy!=null) {
-            if(sortBy.equals("price")) {
-                return userDao.findAllBySpecificRolesAndIsProfileCompletedOrderByPricing("SERVICE_USER",true);
-            } else if(sortBy.equals("free-soon")) {
-                return userDao.findAllBySpecificRolesAndIsProfileCompletedOrderByeOrderByEstimatedTime("SERVICE_USER",true);
-            } else  {
-                return userDao.findAllBySpecificRolesAndIsProfileCompleted("SERVICE_USER",true);
-            }
-        } else if(price!=null && sortBy!=null) {
-            if(sortBy.equals("price")) {
-                return userDao.findAllBySpecificRolesAndIsProfileCompletedBelowPricingOrderByPricing("SERVICE_USER",true,price);
-            } else if(sortBy.equals("free-soon")) {
-                return userDao.findAllBySpecificRolesAndIsProfileCompletedBelowPricingOrderByEstimatedTime("SERVICE_USER",true,price);
-            } else  {
-                return userDao.findAllBySpecificRolesAndIsProfileCompleted("SERVICE_USER",true);
-            }
-        } else  {
-           return userDao.findAllBySpecificRolesAndIsProfileCompleted("SERVICE_USER",true);
+    private Comparator<User> compareByPrice = (User o1, User o2) ->
+            o1.getPricing().compareTo( o2.getPricing() );
+
+    private Comparator<User> compareByRating = (User o1, User o2) ->{
+        return Double.compare(o1.getRating().getRat() / o1.getRating().getNoOfPeopleGives(), o2.getRating().getRat() / o2.getRating().getNoOfPeopleGives());
+    };
+    private Comparator<User> compareByEstimatedTime = (User o1, User o2) ->
+            o1.getEstimatedTime().compareTo( o2.getEstimatedTime() );
+
+    private Comparator<User> compareBySkills = (User o1, User o2) ->{
+        return Integer.compare(o1.getSkills().size(), o2.getSkills().size());
+    };
+
+    private double distance(double lat1, double lat2, double lon1,
+                                  double lon2) {
+        final int R = 6371; // Radius of the earth
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c * 1000;
+    }
+
+    private List<User> getUserByLocation(List<User> users,Location currentLocation) {
+        Double locationLat = currentLocation.getLatitude();
+        Double locationLng = currentLocation.getLongitude();
+        return users.stream()                // convert list to stream
+                .filter(u-> {
+                    if (distance(u.getAddress().getLocation().getLatitude(), locationLat, u.getAddress().getLocation().getLongitude(), locationLng) <= 4000) {
+                        System.out.println("in range");
+                        return true;
+                    }
+                    return false;
+                }).collect(Collectors.toList());
+    }
+
+    private List<User> filterList(List<List<User>> listForPerformCalculation) {
+        List<User> filteredList = listForPerformCalculation.get(0);
+        if (listForPerformCalculation.size() == 3) {
+            System.out.println("3==========>");
+            filteredList = filteredList.stream()
+                    .filter(listForPerformCalculation.get(1)::contains)
+                    .collect(Collectors.toList());
+
+            filteredList = filteredList.stream()
+                    .filter(listForPerformCalculation.get(2)::contains)
+                    .collect(Collectors.toList());
+
+        }else if(listForPerformCalculation.size()==2) {
+            System.out.println("2==========>");
+            filteredList = filteredList.stream()
+                    .filter(listForPerformCalculation.get(1)::contains)
+                    .collect(Collectors.toList());
         }
+        System.out.println("1==========>");
+        return filteredList;
+
+    }
+
+    public List<User> getAllSortedAndFilteredUsers(Double price, String sortBy,Double lat,Double lan,String keyword) {
+        List<User> restaurantListByBelowPrice;
+        List<User> restaurantListByKeyword;
+        List<User> restaurantListByLatLng;
+//        List<User> allList = userDao.findAll();
+
+        List<List<User>> content = new ArrayList<>();
+
+        if (price != null) {
+            restaurantListByBelowPrice = userDao.findAllBySpecificRolesAndIsProfileCompletedBelowPricing("SERVICE_USER",true,price);
+            content.add(restaurantListByBelowPrice);
+        }
+        if (keyword !=null && !keyword.trim().equals("")) {
+            String keyword1 = keyword.trim();
+            restaurantListByKeyword = userDao.findAllBySpecificRolesAndIsProfileCompletedWithSearch("SERVICE_USER",true,keyword1);
+            if(restaurantListByKeyword.size()==0) {
+                restaurantListByKeyword = userDao.findAllBySpecificRolesAndIsProfileCompleted("SERVICE_USER",true).stream()                // convert list to stream
+                    .filter(user -> {
+                        boolean flag = false;
+                        for(Skill s :user.getSkills()) {
+                            if(s.getSkillName().toLowerCase().contains(keyword1.toLowerCase())) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        return flag;
+                    })
+                    .collect(Collectors.toList());
+            }
+            content.add(restaurantListByKeyword);
+        }
+        if (lat != null) {
+            restaurantListByLatLng = getUserByLocation(userDao.findAllBySpecificRolesAndIsProfileCompleted("SERVICE_USER",true),new Location(lat,lan));
+            content.add(restaurantListByLatLng);
+        }
+
+        List<User> resultList;
+        if(content.size()>0) {
+            resultList = filterList(content);
+        }
+        else  {
+            resultList = userDao.findAllBySpecificRolesAndIsProfileCompleted("SERVICE_USER",true);
+        }
+
+        if(sortBy!=null) {
+            if(sortBy.equals("price")) {
+                resultList.sort(compareByPrice);
+            }
+            if(sortBy.equals("ratings")) {
+                resultList.sort(compareByRating);
+            }
+            if(sortBy.equals("free-soon")) {
+                resultList.sort(compareByEstimatedTime);
+            }
+            if(sortBy.equals("skills-exp")) {
+                resultList.sort(compareBySkills);
+            }
+        }
+        return resultList;
     }
 
     public String hire(Double estTime,String ids, Principal principal){
@@ -153,7 +252,7 @@ public class AppService {
         //delete reference from opponent
         serviceUser.setStatus(null);
         serviceUser.setHireStatus(false);
-        serviceUser.setEstimatedTime(null);
+        serviceUser.setEstimatedTime(0.0);
         serviceUser.setConsumerId(null);
         System.out.println(" service history ---->"+serviceHistoryList.toString());
         //save the history of end user
@@ -213,7 +312,7 @@ public class AppService {
         //delete reference from opponent
         serviceUser.setStatus(null);
         serviceUser.setHireStatus(false);
-        serviceUser.setEstimatedTime(null);
+        serviceUser.setEstimatedTime(0.0);
         serviceUser.setConsumerId(null);
         System.out.println(" service history ---->"+serviceHistoryList.toString());
         //save the history of end user

@@ -59,7 +59,7 @@
                 <a class="btn btn-outline-primary" href="/registration">Sign up</a>
         </span>
     </nav>
-<section class="h-100" style="margin-bottom: 300px">
+<section class="h-100" style="margin-bottom: 600px">
     <div class="container h-100">
         <div class="row justify-content-md-center h-100">
             <div class="card-wrapper">
@@ -118,6 +118,26 @@
                                 <div class="invalid-feedback">
                                     What's your country?
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="lat">Latitude</label>
+                                <input id="lat" type="text" th:field="*{location.latitude}" class="form-control" required >
+                                <div class="invalid-feedback">
+                                    What's your latitude ?
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="lng">Longitude</label>
+                                <input id="lng" type="text" th:field="*{location.longitude}" class="form-control" required >
+                                <div class="invalid-feedback">
+                                    What's your longitude ?
+                                </div>
+                            </div>
+                            <div class="form-group mb-4 text-center">
+                                <a onclick="getLocation()" class="btn btn-warning btn-sm">
+                                    <i class="fa fa-compass" aria-hidden="true"></i>
+                                    Get location
+                                </a>
                             </div>
                             <div class="form-group m-0">
                                 <button type="submit" class="btn btn-primary btn-block">
@@ -184,5 +204,20 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 <script src="../static/js/login-register-forget-reset.js"></script>
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function showPosition(position) {
+        console.log(position.coords.latitude+' \n'+position.coords.longitude);
+        document.getElementById("lat").value = position.coords.latitude;
+        document.getElementById("lng").value = position.coords.longitude;
+    }
+</script>
 </body>
 </html>
