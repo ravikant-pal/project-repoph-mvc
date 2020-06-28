@@ -1,11 +1,12 @@
 # ===============================
 # = Hibernate datasource
 # ===============================
+#jdbc:postgresql://localhost:5432/app_database
 spring:
   datasource:
-    url: jdbc:postgresql://localhost/postgres?characterEncoding=UTF-8
-    username: postgres
-    password: V0ldm0tbr0
+    url: jdbc:postgresql://localhost/app_database?characterEncoding=UTF-8 #jdbc:postgresql://localhost/postgres?characterEncoding=UTF-8
+    username: app_user
+    password: app_password
     platform: postgres
 
   # ===============================
