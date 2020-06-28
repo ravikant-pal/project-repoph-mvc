@@ -76,7 +76,38 @@ I have used list of below tools and technologies for backend and frontend.
     + Bootstrap
     + Fontawesome
 
+## Screenshots
+![screenshot](release/screenshots/home_page.png "home page screenshot")
 
+![screenshot](release/screenshots/signup.png "sign up page screenshot")
+
+![screenshot](release/screenshots/signin.png "sign in screenshot")
+
+![screenshot](release/screenshots/forgot_pass.png "forget password screenshot")
+
+![screenshot](release/screenshots/user_dashboard.png "user dashboard screenshot")
+
+![screenshot](release/screenshots/request_status.png "request dashboard screenshot")
+
+![screenshot](release/screenshots/payment_dashboard.png "payment dashboard screenshot")
+
+![screenshot](release/screenshots/payment.png "paytm dashboard screenshot")
+
+![screenshot](release/screenshots/successfull_payment.png "paytm dashboard screenshot")
+
+![screenshot](release/screenshots/consumer_hiring_status.png "paytm dashboard screenshot")
+
+![screenshot](release/screenshots/history.png "paytm dashboard screenshot")
+
+
+
+
+
+## License 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Contact
+If you'd like to provide any feedback, my e-mail is on my GitHub profile. You can also use the contact form on [my website](https://pol-alok.github.io/portfolio).
 
 ## Author
 
