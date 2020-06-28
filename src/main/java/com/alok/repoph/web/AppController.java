@@ -42,7 +42,7 @@ public class AppController {
                                @RequestParam(required = false, name = "lat") Double lat,
                                @RequestParam(required = false, name = "lan") Double lan,
                                Principal principal) {
-        System.out.println(keyword+"==============>"+lat+" "+lan);
+        //System.out.println(keyword+"==============>"+lat+" "+lan);
         List<User> userList = new ArrayList<>();
         User active;
         try {
@@ -69,6 +69,16 @@ public class AppController {
             model.addAttribute("msg",msg);
         }
         model.addAttribute("data",userList);
+        if(keyword!=null && !keyword.equals(""))
+            model.addAttribute("keyword",keyword);
+        if(price!=null)
+            model.addAttribute("price",price);
+        if(lan!=null)
+            model.addAttribute("nearme","nearme");
+        if(sortBy!=null)
+            model.addAttribute("sortBy",sortBy);
+        else
+            model.addAttribute("sortBy","");
         return "home";
     }
     @GetMapping("/public-profile/{id}")

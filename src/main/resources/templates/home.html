@@ -92,21 +92,44 @@
                                 <header class="card-header"><h6 class="title">Pricing filter</h6></header>
                                 <div class="filter-content">
                                     <div class="list-group list-group-flush">
-                                        <a href="" onclick="setUrl('price','299')" class="list-group-item"> < Below 299
+                                        <a href="" th:if="${price!=null && price==299}" onclick="setUrl('price','299')" class="list-group-item text-muted"> < Below 299
                                             &#8377;<span
                                                     class="float-right badge badge-light round">142</span> </a>
-                                        <a href="" onclick="setUrl('price','599')" class="list-group-item"> < Below 599
+                                        <a href="" th:if="!${price!=null && price==299}" onclick="setUrl('price','299')" class="list-group-item"> < Below 299
                                             &#8377;<span
-                                                    class="float-right badge badge-light round">3</span> </a>
-                                        <a href="" onclick="setUrl('price','999')" class="list-group-item"> < Below 999
+                                                    class="float-right badge badge-light round">142</span> </a>
+
+
+                                        <a href="" th:if="${price!=null && price==599}" onclick="setUrl('price','599')" class="list-group-item text-muted"> < Below 599
                                             &#8377;<span
                                                     class="float-right badge badge-light round">32</span> </a>
-                                        <a href="" onclick="setUrl('price','2999')" class="list-group-item"> < Below
-                                            2999 &#8377;<span
+                                        <a href="" th:if="!${price!=null && price==599}"onclick="setUrl('price','599')" class="list-group-item"> < Below 599
+                                            &#8377;<span
+                                                    class="float-right badge badge-light round">32</span> </a>
+
+
+                                        <a href="" th:if="${price!=null && price==999}" onclick="setUrl('price','999')" class="list-group-item text-muted"> < Below 999
+                                            &#8377;<span
                                                     class="float-right badge badge-light round">12</span> </a>
-                                        <a href="" onclick="setUrl('price','4999')" class="list-group-item"> < Below
-                                            4999 &#8377;<span
+                                        <a href="" th:if="!${price!=null && price==999}" onclick="setUrl('price','999')" class="list-group-item"> < Below 999
+                                            &#8377;<span
+                                                    class="float-right badge badge-light round">12</span> </a>
+
+
+                                        <a href="" th:if="${price!=null && price==2999}" onclick="setUrl('price','2999')" class="list-group-item text-muted"> < Below
+                                            2999 &#8377;<span
                                                     class="float-right badge badge-light round">6</span> </a>
+                                        <a href="" th:if="!${price!=null && price==2999}" onclick="setUrl('price','2999')" class="list-group-item"> < Below
+                                            2999 &#8377;<span
+                                                    class="float-right badge badge-light round">6</span> </a>
+
+
+                                        <a href="" th:if="${price!=null && price==4999}" onclick="setUrl('price','4999')" class="list-group-item text-muted"> < Below
+                                            4999 &#8377;<span
+                                                    class="float-right badge badge-light round">3</span> </a>
+                                        <a href="" th:if="!${price!=null && price==4999}" onclick="setUrl('price','4999')" class="list-group-item"> < Below
+                                            4999 &#8377;<span
+                                                    class="float-right badge badge-light round">3</span> </a>
                                     </div>  <!-- list-group .// -->
                                 </div>
                             </article>
@@ -117,22 +140,30 @@
                                 <div class="filter-content">
                                     <div class="card-body">
                                         <label class="form-check">
-                                            <input class="form-check-input" type="radio" name="exampleRadio" value=""
+                                            <input th:if="${sortBy.equals('price')}" class="form-check-input" type="radio" name="exampleRadio"
+                                                   onclick="setUrl('sortBy','price')" checked="checked">
+                                            <input th:if="!${sortBy.equals('price')}" class="form-check-input" type="radio" name="exampleRadio"
                                                    onclick="setUrl('sortBy','price')">
                                             <span class="form-check-label"> Pricing </span>
                                         </label>
                                         <label class="form-check">
-                                            <input class="form-check-input" type="radio" name="exampleRadio" value=""
+                                            <input th:if="${sortBy.equals('ratings')}" class="form-check-input" type="radio" name="exampleRadio"
+                                                   onclick="setUrl('sortBy','ratings')" checked="checked">
+                                            <input th:if="!${sortBy.equals('ratings')}" class="form-check-input" type="radio" name="exampleRadio"
                                                    onclick="setUrl('sortBy','ratings')">
                                             <span class="form-check-label"> Ratings </span>
                                         </label>
                                         <label class="form-check">
-                                            <input class="form-check-input" type="radio" name="exampleRadio" value=""
+                                            <input th:if="${sortBy.equals('free-soon')}" class="form-check-input" type="radio" name="exampleRadio"
+                                                   onclick="setUrl('sortBy','free-soon')" checked="checked">
+                                            <input th:if="!${sortBy.equals('free-soon')}" class="form-check-input" type="radio" name="exampleRadio"
                                                    onclick="setUrl('sortBy','free-soon')">
                                             <span class="form-check-label"> Free soon</span>
                                         </label>
                                         <label class="form-check">
-                                            <input class="form-check-input" type="radio" name="exampleRadio" value=""
+                                            <input th:if="${sortBy.equals('skills-exp')}" class="form-check-input" type="radio" name="exampleRadio"
+                                                   onclick="setUrl('sortBy','skills-exp')" checked="checked">
+                                            <input th:if="!${sortBy.equals('skills-exp')}" class="form-check-input" type="radio" name="exampleRadio"
                                                    onclick="setUrl('sortBy','skills-exp')">
                                             <span class="form-check-label"> Skills & Exp </span>
                                         </label>
@@ -212,13 +243,17 @@
                 <span><strong>Opps!</strong> seems your profile is not <strong> Completed.</strong></span>
             </div>
             <form class="input-group mt-1 mb-5">
-
-                <div class="input-group-prepend">
+                <div th:if="${nearme!=null}" class="input-group-prepend">
+                    <button class="btn btn-secondary mr-2 border" type="button" onclick="getLocation()">
+                        <span class="fa fa-location-arrow"></span> Near me
+                    </button>
+                </div>
+                <div th:if="${nearme==null}" class="input-group-prepend">
                     <button class="btn btn-outline-secondary mr-2 border" type="button" onclick="getLocation()">
                         <span class="fa fa-location-arrow"></span> Near me
                     </button>
                 </div>
-                <input type="search" class="form-control py-2 border-right-0 border" id="search-box"
+                <input type="search" class="form-control py-2 border-right-0 border" id="search-box" th:value="${keyword}"
                        placeholder="Search by name, title or skill...."
                        onkeydown="if (event.keyCode === 13) {querySearch(); return false;}">
                 <div class="input-group-append">
