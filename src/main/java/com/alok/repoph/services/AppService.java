@@ -26,73 +26,16 @@ public class AppService {
     @Autowired
     UserDao userDao;
 
-
-
-//    public ResponseEntity<?> generateAuthenticationToken(AuthenticationRequest authenticationRequest) {
-//        LOGGER.info(">>>>> Entering into jwt token generator ");
-//        try {
-//
-//            authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(
-//                            authenticationRequest.getUsername(),
-//                            authenticationRequest.getPassword()
-//                    ));
-//
-//        } catch (BadCredentialsException e) {
-//            LOGGER.error(Arrays.toString(e.getStackTrace()));
-//            LOGGER.info("<<<<< Exiting from jwt token generator ");
-//            return new ResponseEntity<>("Incorrect username or password", HttpStatus.FORBIDDEN);
-//        }
-//
-//
-//        final UserDetails userDetails = utilityUserDetailService
-//                .loadUserByUsername(authenticationRequest.getUsername());
-//
-//        final String jwt = jwtTokenUtil.generateToken(userDetails);
-//        LOGGER.info("<<<<< Exiting from jwt token generator ");
-//        return ResponseEntity.ok(new AuthenticationResponse(jwt));
-//    }
-
-//    public String registerUtilityUser(User user) throws Exception {
-//        LOGGER.info(">>>>Entering into registerServiceUserController ");
-//        User userFromDatabase;
-//        userFromDatabase = userDao.findByEmail(user.getEmail());
-//        String message = "";
-//        if (userFromDatabase != null) {
-//            message = "This username already exists! Please try another ";
-//            return message;
-//        } else {
-//            if(user.getRole().equalsIgnoreCase("service")) {
-//                user.setRole("SERVICE_USER");
-//            }
-//            else  {
-//                user.setRole("END_USER");
-//            }
-//            String encryptedPassword = passwordEncoder.encode(user.getPassword());
-//            user.setPassword(encryptedPassword);
-//            userDao.save(user);
-//            message = "You are successfully Registered! Please login ";
-//        }
-//
-//        LOGGER.info("<<<<<Exiting from registerController ");
-//        return message;
-//    }
     public User getUserById(Long id) {
         return userDao.findById(id).get();
     }
 
-    private Comparator<User> compareByPrice = (User o1, User o2) ->
-            o1.getPricing().compareTo( o2.getPricing() );
+    private Comparator<User> compareByPrice = Comparator.comparing(User::getPricing);
 
-    private Comparator<User> compareByRating = (User o1, User o2) ->{
-        return Double.compare(o1.getRating().getRat() / o1.getRating().getNoOfPeopleGives(), o2.getRating().getRat() / o2.getRating().getNoOfPeopleGives());
-    };
-    private Comparator<User> compareByEstimatedTime = (User o1, User o2) ->
-            o1.getEstimatedTime().compareTo( o2.getEstimatedTime() );
+    private Comparator<User> compareByRating = Comparator.comparingDouble((User o) -> o.getRating().getRat() / o.getRating().getNoOfPeopleGives());
+    private Comparator<User> compareByEstimatedTime = Comparator.comparing(User::getEstimatedTime);
 
-    private Comparator<User> compareBySkills = (User o1, User o2) ->{
-        return Integer.compare(o1.getSkills().size(), o2.getSkills().size());
-    };
+    private Comparator<User> compareBySkills = Comparator.comparingInt((User o) -> o.getSkills().size());
 
     private double distance(double lat1, double lat2, double lon1,
                                   double lon2) {
