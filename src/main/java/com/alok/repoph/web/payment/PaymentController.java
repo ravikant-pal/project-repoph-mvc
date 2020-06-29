@@ -49,9 +49,6 @@ public class PaymentController {
         double bill;
         User serviceUser = appService.getUserById(userId);
         User endUser = userService.findByEmail(principal.getName());
-//        master.getMapOfHiredPeople().remove(id);
-        serviceUser.setRequestedForEnd(true);
-        userService.save(serviceUser);
         LocalTime end = LocalTime.now();
         Duration duration = Duration.between(serviceUser.getHiredStartTime(), end);
         Long seconds = duration.getSeconds();
@@ -71,6 +68,7 @@ public class PaymentController {
         model.addAttribute("endTime",end);
         model.addAttribute("duration",hour+" hours "+minutes+" minutes "+seconds+" seconds");
         model.addAttribute("bill",df.format(bill));
+        model.addAttribute("serviceUserId",userId);
 
         model.addAttribute("activeUsername",endUser.getFirstName()+' '+endUser.getLastName());
         Collection<Role> roles = endUser.getRoles();
@@ -82,19 +80,20 @@ public class PaymentController {
         return "payment/order-details-for-pay";
     }
 
-//    @GetMapping("/payment/{id}")
-//    public String home(@PathVariable Integer id,Model model) {
-//
-//        return "home";
-//    }
-
     @PostMapping("/redirect")
     public ModelAndView pageRedirect(@RequestParam(required = false,name = "USER_ID") String userId,
                                      @RequestParam(name = "TXN_AMOUNT") String transactionAmount,
+                                     @RequestParam(name = "service_user_id") Long serviceUserId,
                                      @RequestParam(name = "ORDER_ID") String orderId) throws Exception {
         System.out.println("#####------------------------------------------------->");
+
         System.out.println(userId);
         System.out.println(transactionAmount);
+        //setting request to end the session
+        User serviceUser = appService.getUserById(serviceUserId);
+        serviceUser.setRequestedForEnd(true);
+        userService.save(serviceUser);
+
         transactionAmount = transactionAmount.trim().substring(0,transactionAmount.length()-2);
         System.out.println(transactionAmount);
         System.out.println(paytmDetails.getPaytmUrl());
@@ -130,18 +129,16 @@ public class PaymentController {
         try {
             isValideChecksum = validateCheckSum(parameters, paytmChecksum);
             if (isValideChecksum && parameters.containsKey("RESPCODE")) {
-                if (parameters.get("RESPCODE").equals("01")) {
-
-
-                    User endUser = userService.findByEmail(principal.getName());
-                    User userToRelease = null;
-                    for (Long id : endUser.getListOfHiredPeople()) {
-                        User temp = appService.getUserById(id);
-                        if(temp.getRequestedForEnd()) {
-                            userToRelease = temp;
-                            break;
-                        }
+                User userToRelease = null;
+                User endUser = userService.findByEmail(principal.getName());
+                for (Long id : endUser.getListOfHiredPeople()) {
+                    User temp = appService.getUserById(id);
+                    if(temp.getRequestedForEnd()) {
+                        userToRelease = temp;
+                        break;
                     }
+                }
+                if (parameters.get("RESPCODE").equals("01")) {
 
                     //firstly put the details in both history and then delete from each other
 
@@ -201,6 +198,7 @@ public class PaymentController {
                     userService.save(endUser);
                     result = "Payment Successful";
                 } else {
+                    userToRelease.setRequestedForEnd(false);
                     result = "Payment failed";
                 }
             } else {
