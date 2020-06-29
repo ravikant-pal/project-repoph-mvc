@@ -206,7 +206,7 @@ public class AppService {
     public String hire(Double estTime,String ids, Principal principal){
         LOGGER.info(">>>>Entering into hire ");
         User endUser = userDao.findByEmail(principal.getName());
-        List<Long> hiredUser = new ArrayList<>();
+        List<Long> hiredUser = endUser.getListOfHiredPeople();
         String[] usersIdsList = ids.split(",");
         Arrays.asList(usersIdsList).forEach(id -> {
             User user = userDao.findById(Long.parseLong(id)).get();
